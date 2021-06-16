@@ -1,3 +1,4 @@
+/*
 const { expect } = require('chai');
 
 const Bond = artifacts.require('Bond');
@@ -22,3 +23,4 @@ contract('Bond', function () {
     })
 
 })
+*/

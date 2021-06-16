@@ -61,10 +61,34 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         _transfer(from, to, tokenId);
     }
 
-    function returnTokensAtMaturity() external onlyOwner {
+    /*
+    function payCoupon() public payable {
+        // Check that there's enough stable coin for the coupons
+        require(msg.value >= _tokenIdTracker.current() * _coupon, "There's not enough stable coin for coupon settlement");
         for(uint i = 0; i < _tokenIdTracker.current(); i++) {
-            address from = ownerOf(i);
-            IssuerTransfer(from, owner(), i);
+            address payable investor = payable(ownerOf(i));
+            investor.transfer(_coupon);
+        }
+    }
+
+    // This should be called by the borrowing company / or the issuer if they have the money back
+    function  returnFaceValue() public payable {
+        require(msg.value == _totalValue, "The amount needs to match the total value");
+        // Money is back on the contract
+        payable(address(this)).transfer(msg.value);
+    }
+    */
+
+    function returnTokensAtMaturity() external onlyOwner {
+        // Check that the contract has the right amount of money to send back to the investors
+        //require(address(this).balance >= _totalValue, "There's not enough stable coin for settlement");
+        for(uint i = 0; i < _tokenIdTracker.current(); i++) {
+            address payable investor = payable(ownerOf(i));
+            // Get the tokens back
+            IssuerTransfer(investor, owner(), i);
+            // Return the stable coin value
+            //investor.transfer(_value);
+            
         }
     }
 

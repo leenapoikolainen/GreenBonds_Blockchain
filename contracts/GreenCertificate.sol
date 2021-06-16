@@ -31,7 +31,6 @@ contract GreenCertificate {
         return _company;
     }
 
-
     function isCertifiedProject(string memory name) public view returns (bool) {
         return (_greenProjects[name]);
     }

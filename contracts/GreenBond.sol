@@ -12,6 +12,10 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     string private _baseTokenURI;
     Counters.Counter private _tokenIdTracker;
 
+    event Invest(address investor, uint256 value);
+
+    mapping (address => uint256) _investedAmountPerInvestor;
+
     address payable _company;
     uint256 _value;
     uint256 _coupon;
@@ -41,13 +45,27 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         return super.supportsInterface(interfaceId);
     }
 
+    function invest(uint256 number) public payable {
+        // Require that the investor has enough coins
+        require(msg.value >= number * _value, "not enough coins for the amount");
+
+        // Deposit the money --> BY DEFAULT ON THE CONTRACT
+        // payable(address(this)).transfer(msg.value);
+        
+        // Register the investment
+        uint256 currentAmount = _investedAmountPerInvestor[msg.sender];
+        _investedAmountPerInvestor[msg.sender] = currentAmount + msg.value;
+        // Emit event
+        emit Invest(msg.sender, msg.value);
+    }
+
     // Requires that the minter has minter role
     // Automatically creates tokenURI with baseURI concatenated with TokenId
     function issueTokens(uint256 numberOfTokens, address to) public payable {
         require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
 
         // Transfer the money to the issuer
-        require(msg.value >= _value * numberOfTokens, "The amount paid does not match");
+        require(msg.value >= _value * numberOfTokens, "Not enough money send for the tokens");
         _company.transfer(msg.value);
         _totalValue = _totalValue + msg.value;
 
@@ -79,6 +97,8 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         payable(address(this)).transfer(msg.value);
     }
     */
+
+  
 
     function returnTokensAtMaturity() external onlyOwner {
         // Check that the contract has the right amount of money to send back to the investors

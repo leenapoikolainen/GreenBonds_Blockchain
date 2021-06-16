@@ -47,7 +47,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
 
         // Transfer the money to the issuer
-        require(msg.value == _value * numberOfTokens, "The amount paid does not match");
+        require(msg.value >= _value * numberOfTokens, "The amount paid does not match");
         _company.transfer(msg.value);
         _totalValue = _totalValue + msg.value;
 
@@ -57,6 +57,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         }
     }
 
+    // WILL NEED TO ADD VALUE TRANSFER NEXT
     function IssuerTransfer(address from, address to, uint256 tokenId) internal {
         _transfer(from, to, tokenId);
     }
@@ -81,13 +82,13 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
 
     function returnTokensAtMaturity() external onlyOwner {
         // Check that the contract has the right amount of money to send back to the investors
-        //require(address(this).balance >= _totalValue, "There's not enough stable coin for settlement");
+        require(address(this).balance >= _totalValue, "There's not enough stable coin for settlement");
         for(uint i = 0; i < _tokenIdTracker.current(); i++) {
             address payable investor = payable(ownerOf(i));
             // Get the tokens back
             IssuerTransfer(investor, owner(), i);
             // Return the stable coin value
-            //investor.transfer(_value);
+            investor.transfer(_value);
             
         }
     }

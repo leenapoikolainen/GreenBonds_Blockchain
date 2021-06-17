@@ -13,6 +13,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     Counters.Counter private _tokenIdTracker;
 
     event Investment(address investor, uint256 value);
+    event CoinRefund(address investor, uint256 value);
     event CouponPayment(address investor, uint256 tokenId);
 
     mapping (address => uint256) _investedAmountPerInvestor;
@@ -81,6 +82,15 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
             address investor = _investors[i];
             uint256 numberOfTokens = _investedAmountPerInvestor[investor] / _value;
             _company.transfer(_value * numberOfTokens); 
+            
+            // If the invested amount would be greated than the amount needed for investment
+            // Return the remainder back to the investor
+            if (_investedAmountPerInvestor[investor] > numberOfTokens * _value) {
+                payable(investor).transfer(_investedAmountPerInvestor[investor] - numberOfTokens * _value);
+                emit CoinRefund(investor, _investedAmountPerInvestor[investor] - numberOfTokens * _value);
+            }
+
+            // Update the records
             _investedAmountPerInvestor[investor] = 0;
             _totalValueRaisedRaised = _totalValueRaisedRaised + _value * numberOfTokens;
 

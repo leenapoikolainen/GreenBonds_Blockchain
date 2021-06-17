@@ -20,6 +20,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
 
     address [] _investors;
 
+    address _owner;
     address payable _company;
     uint256 _value;
     uint256 _coupon;
@@ -31,6 +32,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     // Will need to add pauser address as constructor parameter (financial regulator)
     constructor(string memory name, string memory symbol, string memory baseTokenURI, 
     address company, uint256 value, uint256 coupon) ERC721 (name, symbol) {
+        _owner = msg.sender;
         _baseTokenURI = baseTokenURI;
         _company = payable(company);
         _value = value;
@@ -134,6 +136,22 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         }
     }
 
+    function payBackBond() public payable {
+        require(msg.value >= _totalValueRaisedRaised, "Not enough coins to settle the bond at maturity");
+        
+        // Interate through the tokens
+        for(uint i = 0; i < _tokenIdTracker.current(); i++) {
+            address payable investor = payable(ownerOf(i));
+            // Transfer token
+            tokenTransfer(investor, _owner, i);
+            // Return funds
+            investor.transfer(_value);
+            // Decrement the values
+            _totalValueRaisedRaised = _totalValueRaisedRaised - _value;
+            _tokenIdTracker.decrement();
+        }
+    }
+
     /*
     function payCoupon() public payable {
         // Check that there's enough stable coin for the coupons
@@ -162,7 +180,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         for(uint i = 0; i < _tokenIdTracker.current(); i++) {
             address payable investor = payable(ownerOf(i));
             // Get the tokens back
-            IssuerTransfer(investor, owner(), i);
+            tokenTransfer(investor, owner(), i);
             // Return the stable coin value
             investor.transfer(_value);
             
@@ -170,7 +188,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     }
 
     // WILL NEED TO ADD VALUE TRANSFER NEXT
-    function IssuerTransfer(address from, address to, uint256 tokenId) internal {
+    function tokenTransfer(address from, address to, uint256 tokenId) internal {
         _transfer(from, to, tokenId);
     }
 

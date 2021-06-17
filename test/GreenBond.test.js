@@ -210,6 +210,40 @@ contract('GreenBond' ,function (accounts) {
         const expectedBalance2 = oldBalance2.add(couponPayment)
         assert.equal(newBalance2.toString(), expectedBalance2.toString())
     })
+
+    it('Tokens and money transferred at maturity', async function() {
+        // Make an investment
+        await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1000', 'Wei')})
+
+        // Issue tokens
+        await bond.issueTokens({from: owner})
+
+
+        // Record investor's balance before the principal payback
+        let oldBalance = await web3.eth.getBalance(investor)
+        oldBalance = new web3.utils.BN(oldBalance)
+
+        // Paying back bond
+        let result = await bond.payBackBond({from: company, value: web3.utils.toWei('1000', 'Wei')})
+        const transfer = result.logs[0].args;
+
+        // Check transfer and the right owner of the token 
+        assert.equal(transfer.tokenId, 0)
+        let ownerOfToken = await bond.ownerOf(0)
+        assert.equal(ownerOfToken, owner)
+
+        // Check investor's balance after
+        let newBalance = await web3.eth.getBalance(investor)
+        newBalance = new web3.utils.BN(newBalance)
+
+        let principalPayment = web3.utils.toWei('1000', 'Wei')
+        principalPayment = new web3.utils.BN(principalPayment)
+
+        const expectedBalance = oldBalance.add(principalPayment)
+        assert.equal(newBalance.toString(), expectedBalance.toString())
+        
+
+    })
     /*
     it('Paying coupons', async function () {
         // Make an investments

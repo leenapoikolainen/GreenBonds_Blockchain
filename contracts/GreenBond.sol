@@ -100,7 +100,8 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
             investor.transfer(_coupon);
         }
     }
-
+*/
+    /*
     // This should be called by the borrowing company / or the issuer if they have the money back
     function  returnFaceValue() public payable {
         require(msg.value == _totalValue, "The amount needs to match the total value");

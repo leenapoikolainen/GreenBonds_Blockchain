@@ -36,6 +36,11 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         _setupRole(MINTER_ROLE, _msgSender());
     }
 
+    function getInvestorBalance(address investor) public view returns (uint){
+        require(investor != address(0), "Balance query for the zero address");
+        return _investedAmountPerInvestor[investor];
+    }
+
     function _baseURI() internal view override returns (string memory) {
         return _baseTokenURI;
     }
@@ -65,11 +70,17 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
 
         // Transfer the money to the issuer
-        require(msg.value >= _value * numberOfTokens, "Not enough money send for the tokens");
-        _company.transfer(msg.value);
-        _totalValue = _totalValue + msg.value;
+        //require(msg.value >= _value * numberOfTokens, "Not enough money send for the tokens");
+        require(_investedAmountPerInvestor[to] >= numberOfTokens * _value, "Investor has not enough funds for the tokens");
+        //_company.transfer(msg.value);
+        //_totalValue = _totalValue + msg.value;
 
-        for (uint i = 0; i < numberOfTokens; i++) {
+        // Transfer coins and reduce the investors investment balance
+        _company.transfer(_value * numberOfTokens); 
+        _investedAmountPerInvestor[to] = _investedAmountPerInvestor[to] - numberOfTokens * _value;
+        _totalValue = _totalValue + numberOfTokens * _value;
+
+        for (uint i = 0; i < numberOfTokens; i++) {  
             _mint(to, _tokenIdTracker.current());
             _tokenIdTracker.increment();
         }

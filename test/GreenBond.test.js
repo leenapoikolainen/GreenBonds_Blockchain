@@ -27,16 +27,18 @@ contract('GreenBond' ,function (accounts) {
         assert.equal(symbol, "GREEN")
     })
 
+    /*
     it('Investors can request investment', async function() {
-        // Track balance of the company
-        let oldBalance = await web3.eth.getBalance(investor)
-        oldBalance = new web3.utils.BN(oldBalance)
+
+        // Track the recorded investments
+        let investmentBefore = await bond.getInvestorBalance(investor)
+        investmentBefore = new web3.utils.BN(investmentBefore)
 
         // Investor invokes the method
         let result = await bond.invest(1, {from: investor, value: web3.utils.toWei('1', 'Ether')})
         const event = result.logs[0].args;
 
-        // Check the event details
+        // Check the event details (right investor and right amount logged)
         assert.equal(event.investor, investor)
         
         let paidAmount = web3.utils.toWei('1', 'Ether')
@@ -44,6 +46,32 @@ contract('GreenBond' ,function (accounts) {
         
         let value = new web3.utils.BN(event.value)
         assert.equal(value.toString(), paidAmount.toString())
+
+        // Checking coin transfers 
+        let investedAmount = web3.utils.toWei('1', 'Ether')
+        investedAmount = new web3.utils.BN(investedAmount)
+
+        // Check new investment balance
+        let investmentAfter = await bond.getInvestorBalance(investor)
+        investmentAfter = new web3.utils.BN(investmentAfter)
+
+        // Compare to the expected investment balance
+        const expectedInvestment = investmentBefore.add(investedAmount)
+        assert.equal(investmentAfter.toString(), expectedInvestment.toString())
+        
+    })
+    */
+
+    it('Issuing tokens transfers coins correcty', async function () {
+        // First make the investor request investment
+        let investment = await bond.invest(1, {from: investor, value: web3.utils.toWei('1', 'Ether')})
+        // Track balance of the company
+        let oldBalance = await web3.eth.getBalance(company)
+        oldBalance = new web3.utils.BN(oldBalance)
+
+        // Store the result and get the transfer event
+        let result = await bond.issueTokens(1, investor)
+        const event = result.logs[0].args;
     })
 
     /*

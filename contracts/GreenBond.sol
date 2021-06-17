@@ -12,15 +12,17 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     string private _baseTokenURI;
     Counters.Counter private _tokenIdTracker;
 
-    event Invest(address investor, uint256 value);
+    event Investment(address investor, uint256 value);
     event CouponPayment(address investor, uint256 tokenId);
 
     mapping (address => uint256) _investedAmountPerInvestor;
 
+    address [] _investors;
+
     address payable _company;
     uint256 _value;
     uint256 _coupon;
-    uint256 _totalValue;
+    uint256 _totalValueRaisedRaised;
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
@@ -52,20 +54,43 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     }
 
     // Function to register investment interest (requires staking money on the contract)
-    function invest(uint256 number) public payable {
+    function registerInvestment(uint256 number) public payable {
         // Require that the investor has enough coins
         require(msg.value >= number * _value, "not enough coins for the amount");
 
-        // Deposit the money --> BY DEFAULT ON THE CONTRACT
-        // payable(address(this)).transfer(msg.value);
+        // Check if investor already on the list
+        if (_investedAmountPerInvestor[msg.sender] == 0) {
+            _investors.push(msg.sender);
+        }
         
         // Register the investment
         uint256 currentAmount = _investedAmountPerInvestor[msg.sender];
         _investedAmountPerInvestor[msg.sender] = currentAmount + msg.value;
         // Emit event
-        emit Invest(msg.sender, msg.value);
+        emit Investment(msg.sender, msg.value);
     }
 
+
+    // Function to issue tokens for registered investors
+    // Assumes all investors will get tokens
+    function issueTokens() external {
+        require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
+
+        // Iterate through each investor
+        for (uint i = 0; i < _investors.length; i++) {
+            address investor = _investors[i];
+            uint256 numberOfTokens = _investedAmountPerInvestor[investor] / _value;
+            _company.transfer(_value * numberOfTokens); 
+            _investedAmountPerInvestor[investor] = 0;
+            _totalValueRaisedRaised = _totalValueRaisedRaised + _value * numberOfTokens;
+
+            // Issue tokens
+            for (uint j = 0; j < numberOfTokens; j++) {  
+                _mint(investor, _tokenIdTracker.current());
+                _tokenIdTracker.increment();
+            }
+        }
+    }
     // Requires that the minter has minter role
     // Automatically creates tokenURI with baseURI concatenated with TokenId
     function issueTokens(uint256 numberOfTokens, address to) public payable {
@@ -75,12 +100,12 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         //require(msg.value >= _value * numberOfTokens, "Not enough money send for the tokens");
         require(_investedAmountPerInvestor[to] >= numberOfTokens * _value, "Investor has not enough funds for the tokens");
         //_company.transfer(msg.value);
-        //_totalValue = _totalValue + msg.value;
+        //_totalValueRaisedRaised = _totalValueRaisedRaised + msg.value;
 
         // Transfer coins and reduce the investors investment balance
         _company.transfer(_value * numberOfTokens); 
         _investedAmountPerInvestor[to] = _investedAmountPerInvestor[to] - numberOfTokens * _value;
-        _totalValue = _totalValue + numberOfTokens * _value;
+        _totalValueRaisedRaised = _totalValueRaisedRaised + numberOfTokens * _value;
 
         for (uint i = 0; i < numberOfTokens; i++) {  
             _mint(to, _tokenIdTracker.current());
@@ -113,7 +138,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     /*
     // This should be called by the borrowing company / or the issuer if they have the money back
     function  returnFaceValue() public payable {
-        require(msg.value == _totalValue, "The amount needs to match the total value");
+        require(msg.value == _totalValueRaisedRaised, "The amount needs to match the total value");
         // Money is back on the contract
         payable(address(this)).transfer(msg.value);
     }
@@ -123,7 +148,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
 
     function returnTokensAtMaturity() external onlyOwner {
         // Check that the contract has the right amount of money to send back to the investors
-        require(address(this).balance >= _totalValue, "There's not enough stable coin for settlement");
+        require(address(this).balance >= _totalValueRaisedRaised, "There's not enough stable coin for settlement");
         for(uint i = 0; i < _tokenIdTracker.current(); i++) {
             address payable investor = payable(ownerOf(i));
             // Get the tokens back

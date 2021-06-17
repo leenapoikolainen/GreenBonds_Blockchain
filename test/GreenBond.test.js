@@ -32,13 +32,13 @@ contract('GreenBond' ,function (accounts) {
     })
 
    
-    it('Investors can request investment', async function() {
+    it('Investors can request an investment', async function() {
         // Track the recorded investments
         let investmentBefore = await bond.getInvestorBalance(investor)
         investmentBefore = new web3.utils.BN(investmentBefore)
 
         // Investor invokes the method
-        let result = await bond.invest(1, {from: investor, value: web3.utils.toWei('1', 'Wei')})
+        let result = await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1', 'Wei')})
         const event = result.logs[0].args;
     
         
@@ -69,7 +69,7 @@ contract('GreenBond' ,function (accounts) {
         investmentBefore = new web3.utils.BN(investmentBefore)
 
         // Investor invokes the method
-        let result = await bond.invest(2, {from: investor, value: web3.utils.toWei('2', 'Wei')})
+        let result = await bond.registerInvestment(2, {from: investor, value: web3.utils.toWei('2', 'Wei')})
         const event = result.logs[0].args;
    
         // Check the event details (right investor and right amount logged)
@@ -93,9 +93,10 @@ contract('GreenBond' ,function (accounts) {
         
     })
 
+    /*
     it('Issuing one token transfers coins and token ownership correctly', async function () {
         // First make the investor request investment
-        await bond.invest(1, {from: investor, value: web3.utils.toWei('1', 'Wei')})
+        await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1', 'Wei')})
         
         // Track balance of the company
         let oldBalance = await web3.eth.getBalance(company)
@@ -135,7 +136,7 @@ contract('GreenBond' ,function (accounts) {
 
     it('Issuing multiple tokens transfers coins and token ownership correctly', async function() {
         // First make the investor request investment
-        await bond.invest(2, {from: investor, value: web3.utils.toWei('2', 'Wei')})
+        await bond.registerInvestment(2, {from: investor, value: web3.utils.toWei('2', 'Wei')})
         
         // Track balance of the company before the token issuance
         let oldBalance = await web3.eth.getBalance(company)
@@ -177,11 +178,63 @@ contract('GreenBond' ,function (accounts) {
         assert.equal(investmentBalanceAfter.toString(), expectedInvestment.toString())
     
     })
+    */
+
+    it('Issuing tokens with general function', async function() {
+        // First make the investor request investment
+        await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1', 'Wei')})
+        await bond.registerInvestment(1, {from: investor2, value: web3.utils.toWei('1', 'Wei')})
+        await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1', 'Wei')})
+        
+        // Track balance of the company before the token issuance
+        let oldBalance = await web3.eth.getBalance(company)
+        oldBalance = new web3.utils.BN(oldBalance) 
+
+        // Store the result and get the transfer event
+        let result = await bond.issueTokens()
+        const transfer1 = result.logs[0].args;
+        const transfer2 = result.logs[1].args;
+        const transfer3 = result.logs[2].args;
+
+        // Has the right token id
+        assert.equal(transfer1.tokenId, 0)
+        assert.equal(transfer2.tokenId, 1)
+        assert.equal(transfer3.tokenId, 2)
+
+        // Has the right token owner
+        assert.equal(transfer1.to, investor)
+        assert.equal(transfer2.to, investor)
+        assert.equal(transfer3.to, investor2)
+
+        // Check new balance of the company after the token issue
+        let newBalance = await web3.eth.getBalance(company)
+        newBalance = new web3.utils.BN(newBalance)
+
+        let paidAmount = web3.utils.toWei('3', 'Wei')
+        paidAmount = new web3.utils.BN(paidAmount)
+
+        const expectedBalance = oldBalance.add(paidAmount)
+        assert.equal(newBalance.toString(), expectedBalance.toString())
+
+        
+        // Check the investors balance after the token issue
+        let investmentBalanceAfter1 = await bond.getInvestorBalance(investor)
+        investmentBalanceAfter1 = new web3.utils.BN(investmentBalanceAfter1)
+
+        let investmentBalanceAfter2 = await bond.getInvestorBalance(investor2)
+        investmentBalanceAfter2 = new web3.utils.BN(investmentBalanceAfter2)
+
+        // Compare to the expected investment balance
+        const expectedInvestment = 0
+        assert.equal(investmentBalanceAfter1.toString(), expectedInvestment.toString())
+        assert.equal(investmentBalanceAfter2.toString(), expectedInvestment.toString())
+    
+    })
 
     it('Paying coupons', async function () {
         // Make an investments
-        await bond.invest(1, {from: investor, value: web3.utils.toWei('1', 'Wei')})
-        await bond.invest(1, {from: investor2, value: web3.utils.toWei('1', 'Wei')} )
+        await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1', 'Wei')})
+        await bond.registerInvestment(1, {from: investor2, value: web3.utils.toWei('1', 'Wei')} )
         
         // Issue tokens
         await bond.issueTokens(1, investor)

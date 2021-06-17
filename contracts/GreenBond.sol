@@ -13,6 +13,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     Counters.Counter private _tokenIdTracker;
 
     event Invest(address investor, uint256 value);
+    event CouponPayment(address investor, uint256 tokenId);
 
     mapping (address => uint256) _investedAmountPerInvestor;
 
@@ -50,6 +51,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         return super.supportsInterface(interfaceId);
     }
 
+    // Function to register investment interest (requires staking money on the contract)
     function invest(uint256 number) public payable {
         // Require that the investor has enough coins
         require(msg.value >= number * _value, "not enough coins for the amount");
@@ -86,9 +88,15 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         }
     }
 
-    // WILL NEED TO ADD VALUE TRANSFER NEXT
-    function IssuerTransfer(address from, address to, uint256 tokenId) internal {
-        _transfer(from, to, tokenId);
+    // Function for the borrowing company to pay coupons
+    function payCoupons() public payable {
+        // Message needs to have enough value for the copupon payments
+        require(msg.value >= _coupon * _tokenIdTracker.current(), "Not enough coins for coupons");
+        for (uint i = 0; i < _tokenIdTracker.current(); i++) {
+            address payable investor = payable(ownerOf(i));
+            investor.transfer(_coupon);
+            emit CouponPayment(investor, i);
+        }
     }
 
     /*
@@ -100,7 +108,8 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
             investor.transfer(_coupon);
         }
     }
-*/
+    */
+
     /*
     // This should be called by the borrowing company / or the issuer if they have the money back
     function  returnFaceValue() public payable {
@@ -123,6 +132,11 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
             investor.transfer(_value);
             
         }
+    }
+
+    // WILL NEED TO ADD VALUE TRANSFER NEXT
+    function IssuerTransfer(address from, address to, uint256 tokenId) internal {
+        _transfer(from, to, tokenId);
     }
 
 }

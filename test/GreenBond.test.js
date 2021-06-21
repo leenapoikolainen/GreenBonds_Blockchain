@@ -9,17 +9,19 @@ require('chai')
 
 contract('GreenBond' ,function (accounts) {
     let bond;
-    const owner = accounts[3];
+    const owner = accounts[0];
     const investor = accounts[1];
     const investor2 = accounts[2];
     const regulator = accounts[3];
+    const greenVerifier = accounts[4];
     const company = accounts[8];
 
     beforeEach(async function() {
         bond = await GreenBond.new("Green Bond", "GREEN", "https://storage.cloud.google.com/metadata_platform/",
         company,1000, 1, {from: owner});
-        // Set regulator
+        // Set regulator and green verifier (Can be hard coded for the actual contract)
         await bond.setRegulator(regulator)
+        await bond.setGreenVerifier(greenVerifier)
     });
 
     describe('deployment', async () => {
@@ -267,164 +269,22 @@ contract('GreenBond' ,function (accounts) {
         assert.equal(unpaused.account, regulator) 
     })
     
-    /*
-    it('Paying coupons', async function () {
-        // Make an investments
-        await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1000', 'Wei')})
-        await bond.registerInvestment(1, {from: investor2, value: web3.utils.toWei('1000', 'Wei')} )
-        
-        // Issue tokens
-        await bond.issueTokens(1, investor, {from: owner})
-        await bond.issueTokens(1, investor2, {from: owner})
+    it('Green Verifier can adjust the coupon', async function() {
+        // FAILURE
+        // Only green verifier can adjust the coupons
+        await bond.adjustCoupon(true, 1).should.be.rejected
+        // Can't make coupon payment negative
+        await bond.adjustCoupon(false, 2, {from: greenVerifier}).should.be.rejected
 
-        // Record investor's balance before the coupon payment
-        let oldBalance1 = await web3.eth.getBalance(investor)
-        oldBalance1 = new web3.utils.BN(oldBalance1)
+        // SUCCESS
+        let result = await bond.adjustCoupon(true, 1, {from: greenVerifier})
+        const couponIncrease = result.logs[0].args
+        assert.equal(couponIncrease.adjuster, greenVerifier)
+        assert.equal(couponIncrease.couponRate, 2)
 
-        let oldBalance2 = await web3.eth.getBalance(investor2)
-        oldBalance2 = new web3.utils.BN(oldBalance2)
-
-        // Pay coupon to investors
-        let result = await bond.payCoupons({from: company, value: web3.utils.toWei('2', 'Wei')})
-        const coupon1 = result.logs[0].args;
-        const coupon2 = result.logs[1].args;
-        
-        // Check event details
-        assert.equal(coupon1.investor, investor)
-        assert.equal(coupon1.tokenId, 0)
-
-        assert.equal(coupon2.investor, investor2)
-        assert.equal(coupon2.tokenId, 1)
-
-        // Check new balance of the investor after the coupon payment
-        let newBalance1 = await web3.eth.getBalance(investor)
-        newBalance1 = new web3.utils.BN(newBalance1)
-
-        let newBalance2 = await web3.eth.getBalance(investor2)
-        newBalance2 = new web3.utils.BN(newBalance2)
-
-        // Mock the paid amount
-        let couponPayment = web3.utils.toWei('1', 'Wei')
-        couponPayment = new web3.utils.BN(couponPayment)
-
-        const expectedBalance1 = oldBalance1.add(couponPayment)
-        assert.equal(newBalance1.toString(), expectedBalance1.toString())
-        
-        const expectedBalance2 = oldBalance2.add(couponPayment)
-        assert.equal(newBalance2.toString(), expectedBalance2.toString())
+        result = await bond.adjustCoupon(false, 2, {from: greenVerifier})
+        const couponDecrese = result.logs[0].args
+        assert.equal(couponDecrese.adjuster, greenVerifier)
+        assert.equal(couponDecrese.couponRate, 0)
     })
-*/
-    /*
-    it('Issuing tokens transfers value correctly', async function () {
-        // Track balance of the company
-        let oldBalance = await web3.eth.getBalance(company)
-        oldBalance = new web3.utils.BN(oldBalance)
-       
-        // Store the result and get the transfer event
-        let result = await bond.issueTokens(1, investor, {from: owner, value: web3.utils.toWei('1', 'Ether')})
-        const event = result.logs[0].args;
-
-        // Has the right token id
-        assert.equal(event.tokenId, 0)
-        // Has the right token owner
-        assert.equal(event.to, investor)
-        
-        // Check new balance of the company after the token issue
-        let newBalance = await web3.eth.getBalance(company)
-        newBalance = new web3.utils.BN(newBalance)
-
-        let paidAmount = web3.utils.toWei('1', 'Ether')
-        paidAmount = new web3.utils.BN(paidAmount)
-
-        const expectedBalance = oldBalance.add(paidAmount)
-        assert.equal(newBalance.toString(), expectedBalance.toString())
-    })
-    */
-
-        /*
-    it('Issuing one token transfers coins and token ownership correctly', async function () {
-        // First make the investor request investment
-        await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1', 'Wei')})
-        
-        // Track balance of the company
-        let oldBalance = await web3.eth.getBalance(company)
-        oldBalance = new web3.utils.BN(oldBalance)
-
-        // Track the recorded investments
-        let investmentBalance = await bond.getInvestorBalance(investor)
-        investmentBalance = new web3.utils.BN(investmentBalance)
-      
-        // Store the result and get the transfer event
-        let result = await bond.issueTokens(1, investor)
-        const event = result.logs[0].args;
-
-        // Has the right token id
-        assert.equal(event.tokenId, 0)
-        // Has the right token owner
-        assert.equal(event.to, investor)
-
-        // Check new balance of the company after the token issue
-        let newBalance = await web3.eth.getBalance(company)
-        newBalance = new web3.utils.BN(newBalance)
-
-        let paidAmount = web3.utils.toWei('1', 'Wei')
-        paidAmount = new web3.utils.BN(paidAmount)
-
-        const expectedBalance = oldBalance.add(paidAmount)
-        assert.equal(newBalance.toString(), expectedBalance.toString())
-
-        // Check the investor balance after the token issue
-        let investmentBalanceAfter = await bond.getInvestorBalance(investor)
-        investmentBalanceAfter = new web3.utils.BN(investmentBalanceAfter)
-
-        // Compare to the expected investment balance
-        const expectedInvestment = investmentBalance - paidAmount;
-        assert.equal(investmentBalanceAfter.toString(), expectedInvestment.toString())
-    })
-
-    it('Issuing multiple tokens transfers coins and token ownership correctly', async function() {
-        // First make the investor request investment
-        await bond.registerInvestment(2, {from: investor, value: web3.utils.toWei('2', 'Wei')})
-        
-        // Track balance of the company before the token issuance
-        let oldBalance = await web3.eth.getBalance(company)
-        oldBalance = new web3.utils.BN(oldBalance)
-
-        // Track the recorded investments
-        let investmentBalance = await bond.getInvestorBalance(investor)
-        investmentBalance = new web3.utils.BN(investmentBalance)
-      
-        // Store the result and get the transfer event
-        let result = await bond.issueTokens(2, investor)
-        const transfer1 = result.logs[0].args;
-        const transfer2 = result.logs[1].args;
-
-        // Has the right token id
-        assert.equal(transfer1.tokenId, 0)
-        assert.equal(transfer2.tokenId, 1)
-        // Has the right token owner
-        assert.equal(transfer1.to, investor)
-        assert.equal(transfer2.to, investor)
-
-        
-        // Check new balance of the company after the token issue
-        let newBalance = await web3.eth.getBalance(company)
-        newBalance = new web3.utils.BN(newBalance)
-
-        let paidAmount = web3.utils.toWei('2', 'Wei')
-        paidAmount = new web3.utils.BN(paidAmount)
-
-        const expectedBalance = oldBalance.add(paidAmount)
-        assert.equal(newBalance.toString(), expectedBalance.toString())
-
-        // Check the investor balance after the token issue
-        let investmentBalanceAfter = await bond.getInvestorBalance(investor)
-        investmentBalanceAfter = new web3.utils.BN(investmentBalanceAfter)
-
-        // Compare to the expected investment balance
-        const expectedInvestment = investmentBalance - paidAmount;
-        assert.equal(investmentBalanceAfter.toString(), expectedInvestment.toString())
-    
-    })
-    */
 })

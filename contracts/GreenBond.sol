@@ -13,6 +13,16 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     Counters.Counter private _tokenIdTracker;
     bool private _paused;
 
+    address [] _investors;
+
+    address _owner;
+    address payable _company;
+    address _regulator; // this could be hard coded
+    address _greenVerifier;
+    uint256 _value;
+    uint256 _coupon;
+    uint256 _totalValueRaisedRaised;
+
     /**
      * @dev Emitted when an investor registers initial investment request
      */
@@ -39,22 +49,21 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
      */
     event Unpaused(address account);
 
+    /**
+     * @dev Emmitted when coupon payment is adjusted
+     */
+    event CouponAdjustment(address adjuster, uint256 couponRate);
+
     mapping (address => uint256) _investedAmountPerInvestor;
 
-    address [] _investors;
-
-    address _owner;
-    address payable _company;
-    address _regulator;
-    uint256 _value;
-    uint256 _coupon;
-    uint256 _totalValueRaisedRaised;
+    
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     
     // Will need to add pauser address as constructor parameter (financial regulator)
     constructor(string memory name, string memory symbol, string memory baseTokenURI, 
     address company, uint256 value, uint256 coupon) ERC721 (name, symbol) {
+        require(coupon >= 0, "Coupon payment can't be negative");
         _owner = msg.sender;
         _baseTokenURI = baseTokenURI;
         _company = payable(company);
@@ -65,8 +74,12 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         _setupRole(MINTER_ROLE, _msgSender());    
     }
 
-    function setRegulator(address regulator) public {
+    function setRegulator(address regulator) public onlyOwner {
         _regulator = regulator;
+    }
+
+    function setGreenVerifier(address greenVerifier) public onlyOwner {
+        _greenVerifier = greenVerifier;
     }
 
     function getInvestorBalance(address investor) public view returns (uint){
@@ -239,6 +252,17 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         require(msg.sender == _regulator, "Unpauser can only be the regulator");
         _paused = false;
         emit Unpaused(_msgSender());
+    }
+
+    function adjustCoupon(bool increase, uint256 amount) external {
+        require(msg.sender == _greenVerifier);
+        if (increase){
+            _coupon = _coupon + amount;
+        } else {
+            require(amount <= _coupon, "Coupon payment can't be negative");
+            _coupon = _coupon - amount;
+        }
+        emit CouponAdjustment(msg.sender, _coupon);
     }
 
 }

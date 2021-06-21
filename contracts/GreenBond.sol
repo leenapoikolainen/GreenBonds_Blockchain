@@ -11,10 +11,33 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
 
     string private _baseTokenURI;
     Counters.Counter private _tokenIdTracker;
+    bool private _paused;
 
+    /**
+     * @dev Emitted when an investor registers initial investment request
+     */
     event Investment(address investor, uint256 value);
+    
+    /**
+     * @dev Emitted when coins are refunded to the investor in case there are
+            too many coins for the investment
+     */
     event CoinRefund(address investor, uint256 value);
+    
+    /**
+     * @dev Emitted when a coupon payment has been made
+     */
     event CouponPayment(address investor, uint256 tokenId);
+
+    /**
+     * @dev Emitted when the pause is triggered by a pauser (regulator).
+     */
+    event Paused(address account);
+
+    /**
+     * @dev Emitted when the pause is lifted by a pauser (regulator).
+     */
+    event Unpaused(address account);
 
     mapping (address => uint256) _investedAmountPerInvestor;
 
@@ -22,12 +45,12 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
 
     address _owner;
     address payable _company;
+    address _regulator;
     uint256 _value;
     uint256 _coupon;
     uint256 _totalValueRaisedRaised;
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     
     // Will need to add pauser address as constructor parameter (financial regulator)
     constructor(string memory name, string memory symbol, string memory baseTokenURI, 
@@ -37,9 +60,13 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         _company = payable(company);
         _value = value;
         _coupon = coupon;
+        _paused = false;
 
-        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        _setupRole(MINTER_ROLE, _msgSender());
+        _setupRole(MINTER_ROLE, _msgSender());    
+    }
+
+    function setRegulator(address regulator) public {
+        _regulator = regulator;
     }
 
     function getInvestorBalance(address investor) public view returns (uint){
@@ -136,13 +163,15 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         }
     }
 
+    // This function should be called by the borrowing company
     function payBackBond() public payable {
+        require(msg.sender == _company, "Paying company should be the borrowing company");
         require(msg.value >= _totalValueRaisedRaised, "Not enough coins to settle the bond at maturity");
         
         // Interate through the tokens
         for(uint i = 0; i < _tokenIdTracker.current(); i++) {
             address payable investor = payable(ownerOf(i));
-            // Transfer token
+            // Transfer token from investor to owner
             tokenTransfer(investor, _owner, i);
             // Return funds
             investor.transfer(_value);
@@ -152,28 +181,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         }
     }
 
-    /*
-    function payCoupon() public payable {
-        // Check that there's enough stable coin for the coupons
-        require(msg.value >= _tokenIdTracker.current() * _coupon, "There's not enough stable coin for coupon settlement");
-        for(uint i = 0; i < _tokenIdTracker.current(); i++) {
-            address payable investor = payable(ownerOf(i));
-            investor.transfer(_coupon);
-        }
-    }
-    */
-
-    /*
-    // This should be called by the borrowing company / or the issuer if they have the money back
-    function  returnFaceValue() public payable {
-        require(msg.value == _totalValueRaisedRaised, "The amount needs to match the total value");
-        // Money is back on the contract
-        payable(address(this)).transfer(msg.value);
-    }
-    */
-
-  
-
+    // Not needed anymore
     function returnTokensAtMaturity() external onlyOwner {
         // Check that the contract has the right amount of money to send back to the investors
         require(address(this).balance >= _totalValueRaisedRaised, "There's not enough stable coin for settlement");
@@ -182,14 +190,55 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
             // Get the tokens back
             tokenTransfer(investor, owner(), i);
             // Return the stable coin value
-            investor.transfer(_value);
-            
+            investor.transfer(_value);    
         }
     }
 
     // WILL NEED TO ADD VALUE TRANSFER NEXT
     function tokenTransfer(address from, address to, uint256 tokenId) internal {
         _transfer(from, to, tokenId);
+    }
+
+    // Pauser functions
+    /**
+     * @dev Returns true if the contract is paused, and false otherwise.
+     */
+    function paused() public view returns (bool) {
+        return _paused;
+    }
+
+    /**
+     * @dev Modifier to make a function callable only when the contract is not paused.
+     */
+    modifier whenNotPaused() {
+        require(!_paused, "Pausable: paused");
+        _;
+    }
+
+    /**
+     * @dev Modifier to make a function callable only when the contract is paused.
+     */
+    modifier whenPaused() {
+        require(_paused, "Pausable: not paused");
+        _;
+    }
+
+    /**
+     * @dev Called by a pauser to pause, triggers stopped state.
+     */
+    function pause() public whenNotPaused {
+        require(msg.sender == _regulator, "Pauser can only be the regulator");
+        _paused = true;
+        emit Paused(_msgSender());
+    }
+
+    /**
+     * @dev Called by a pauser to unpause, returns to normal state.
+     */
+    function unpause() public whenPaused {
+        require(msg.sender == _regulator, "Unpauser can only be the regulator");
+        _paused = false;
+        emit Unpaused(_msgSender());
     }
 
 }

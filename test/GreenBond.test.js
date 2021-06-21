@@ -3,16 +3,23 @@ const { default: Web3 } = require('web3')
 
 const GreenBond = artifacts.require('GreenBond');
 
+require('chai')
+  .use(require('chai-as-promised'))
+  .should()
+
 contract('GreenBond' ,function (accounts) {
     let bond;
     const owner = accounts[3];
     const investor = accounts[1];
     const investor2 = accounts[2];
-    const company = accounts[9];
+    const regulator = accounts[3];
+    const company = accounts[8];
 
     beforeEach(async function() {
         bond = await GreenBond.new("Green Bond", "GREEN", "https://storage.cloud.google.com/metadata_platform/",
-        company, 1000, 1, {from: owner});
+        company,1000, 1, {from: owner});
+        // Set regulator
+        await bond.setRegulator(regulator)
     });
 
     describe('deployment', async () => {
@@ -241,9 +248,25 @@ contract('GreenBond' ,function (accounts) {
 
         const expectedBalance = oldBalance.add(principalPayment)
         assert.equal(newBalance.toString(), expectedBalance.toString())
-        
-
     })
+
+    it('Only regulator can pause and unpause the bond', async function () {
+        // Failure
+        await bond.pause().should.be.rejected;
+        await bond.unpause().should.be.rejected;
+        
+        // SUCCESS
+        // Pause the bond
+        let result = await bond.pause({from: regulator})
+        const paused = result.logs[0].args
+        assert.equal(paused.account, regulator) 
+
+        // Pause the bond
+        result = await bond.unpause({from: regulator})
+        const unpaused = result.logs[0].args
+        assert.equal(unpaused.account, regulator) 
+    })
+    
     /*
     it('Paying coupons', async function () {
         // Make an investments

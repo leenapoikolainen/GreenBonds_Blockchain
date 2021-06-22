@@ -9,8 +9,6 @@ NavBtnLink,
 } from './NavbarElements';
 
 const Navbar = () => {
-    const [open, setOpen] = useState(false);
-
     return (
         <>
         <Nav>     

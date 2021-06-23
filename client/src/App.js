@@ -44,14 +44,18 @@ class App extends Component {
     const networkId = await web3.eth.net.getId()
     const networkData = GreenBond.networks[networkId]
     if(networkData) {
-      const abi = GreenBond.abi
-      const address = networkData.address
       // Get the Green bond contract
-      const contract = new web3.eth.Contract(abi, address)
-      this.setState({ contract })
+      const greenBond = new web3.eth.Contract(GreenBond.abi, networkData.address)
+      this.setState({ greenBond })
 
-      console.log("Bond", contract)
+      console.log("Bond", greenBond)
       // There I would need to load anything I want to list
+    
+      // Testing a function call
+      const name = await greenBond.methods.name().call()
+      this.setState({ name })
+      console.log(name)
+      
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
@@ -61,7 +65,6 @@ class App extends Component {
     super(props)
     this.state = { 
       account: '',
-      testFigure: 0
      }
   }
  
@@ -74,7 +77,7 @@ class App extends Component {
           <div>
             <h1>This is the common text part</h1>
             <p>Your account: {this.state.account}</p>
-            <p>Your figure: {this.state.testFigure}</p>
+            <p>Contract Name: {this.state.name}</p>
           </div>
           
           <Switch>

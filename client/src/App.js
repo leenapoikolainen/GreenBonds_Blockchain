@@ -61,6 +61,11 @@ class App extends Component {
     }
   }
 
+  // Testing investing function
+  invest = (numberOfTokens) => {
+    this.state.greenBond.methods.registerInvestment(numberOfTokens).send({from: this.state.account})
+  }
+
   constructor(props) {
     super(props)
     this.state = { 
@@ -74,10 +79,37 @@ class App extends Component {
       <Router>
         <div>
           <Navbar/>
-          <div>
+          <div className="container-fluid mt-5">
+            
             <h1>This is the common text part</h1>
+            
+            
             <p>Your account: {this.state.account}</p>
             <p>Contract Name: {this.state.name}</p>
+            <div className="row">
+              <main role="main" className="col-lg-12 d-flex text-center">
+                <div className="content mr-auto ml-auto">
+                  <h2>Invest</h2>
+                  <form onSubmit={(event) => {
+                    event.preventDefault()
+                    const number = this.number.value
+                    this.invest(number)
+                  }}>
+                  <input
+                    type='number'
+                    className='form-control mb-1'
+                    // TESTING THIS
+                    ref={(input) => {this.number = input}}
+                  />
+                  <input
+                    type='submit'
+                    className='btn btn-block btn-primary'
+                    value='INVEST'
+                  />
+                  </form>
+                </div>
+              </main>
+            </div>
           </div>
           
           <Switch>

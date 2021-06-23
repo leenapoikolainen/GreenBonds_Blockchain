@@ -20,7 +20,6 @@ import GreenBond from './contracts/GreenBond.json';
 
 class App extends Component {
   async componentWillMount() {
-    //await this.loadWeb3()
     await this.loadBlockchainData()
   }
 
@@ -41,13 +40,29 @@ class App extends Component {
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
 
+    // Network connection
     const networkId = await web3.eth.net.getId()
+    const networkData = GreenBond.networks[networkId]
+    if(networkData) {
+      const abi = GreenBond.abi
+      const address = networkData.address
+      // Get the Green bond contract
+      const contract = new web3.eth.Contract(abi, address)
+      this.setState({ contract })
 
+      console.log("Bond", contract)
+      // There I would need to load anything I want to list
+    } else {
+      window.alert('Smart contract not deployed to detected network.')
+    }
   }
 
   constructor(props) {
     super(props)
-    this.state = { account: '' }
+    this.state = { 
+      account: '',
+      testFigure: 0
+     }
   }
  
   render() {
@@ -56,6 +71,12 @@ class App extends Component {
       <Router>
         <div>
           <Navbar/>
+          <div>
+            <h1>This is the common text part</h1>
+            <p>Your account: {this.state.account}</p>
+            <p>Your figure: {this.state.testFigure}</p>
+          </div>
+          
           <Switch>
             <Route path='/' exact component={About} />
             <Route path='/about' component={About} />

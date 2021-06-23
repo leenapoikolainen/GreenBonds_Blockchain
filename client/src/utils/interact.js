@@ -12,7 +12,7 @@ export const connectWallet = async () => {
       } catch (err) {
         return {
           address: "",
-          status: "😥 " + err.message,
+          status: err.message,
         };
       }
     } else {
@@ -43,18 +43,18 @@ export const getCurrentWalletConnected = async () => {
             if (addressArray.length > 0) {
                 return {
                     address: addressArray[0],
-                    status: "👆🏽 Write a message in the text-field above.",
+                    status: "Write a message in the text-field above.",
                 };
             } else {
                 return {
                     address: "",
-                    status: "🦊 Connect to Metamask using the top right button.",
+                    status: "Connect to Metamask using the top right button.",
                 };
             }
         } catch (err) {
             return {
                 address: "",
-                status: "😥 " + err.message,
+                status: err.message,
             };
         }
     } else {

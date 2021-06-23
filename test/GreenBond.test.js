@@ -18,7 +18,7 @@ contract('GreenBond' ,function (accounts) {
 
     beforeEach(async function() {
         bond = await GreenBond.new("Green Bond", "GREEN", "https://storage.cloud.google.com/metadata_platform/",
-        company,1000, 1, {from: owner});
+        company, 1000, 1, {from: owner});
         // Set regulator and green verifier (Can be hard coded for the actual contract)
         await bond.setRegulator(regulator)
         await bond.setGreenVerifier(greenVerifier)
@@ -37,6 +37,12 @@ contract('GreenBond' ,function (accounts) {
             const symbol = await bond.symbol();
             assert.equal(name, 'Green Bond')
             assert.equal(symbol, "GREEN")
+        })
+        it('has the right value and coupon', async function () {
+            const value = await bond.getValue()
+            const coupon = await bond.getCoupon()
+            assert.equal(value.toNumber(), 1000)
+            assert.equal(coupon.toNumber(), 1)
         })
     })
 

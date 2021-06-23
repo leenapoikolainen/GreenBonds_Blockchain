@@ -13,7 +13,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     Counters.Counter private _tokenIdTracker;
     bool private _paused;
 
-    address [] _investors;
+    address [] public _investors;
 
     address _owner;
     address payable _company;
@@ -74,10 +74,26 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         _setupRole(MINTER_ROLE, _msgSender());    
     }
 
+    function getValue() public view returns(uint256) {
+        return _value;
+    }
 
+    function getCoupon() public view returns(uint256) {
+        return _coupon;
+    }
+
+    function numberOfInvestors() public view returns(uint256) {
+        return _investors.length;
+    }
+
+    function numberOfTokens() public view returns(uint256) {
+        return _tokenIdTracker.current();
+    }
+    /*
     function getName() public view returns(string memory) {
         return name();
     }
+    */
 
     function setRegulator(address regulator) public onlyOwner {
         _regulator = regulator;

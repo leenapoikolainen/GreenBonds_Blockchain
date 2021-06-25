@@ -70,7 +70,7 @@ class BuyBonds extends Component {
 			console.log("Value", value)
 			const numberOfTokens = balance / value;
 			console.log("Tokens", numberOfTokens)
-			this.setState( { numberOfTokens })
+			this.setState({ numberOfTokens })
 
 		} else {
 			window.alert('Smart contract not deployed to detected network.')
@@ -95,6 +95,7 @@ class BuyBonds extends Component {
 			balances: [],
 			balance: 0,
 			numberOfTokens: 0,
+			
 		}
 	}
 
@@ -113,8 +114,7 @@ class BuyBonds extends Component {
 								<input
 									type='number'
 									className='form-control mb-1'
-									placeholder='0'
-									// TESTING THIS
+									min='0'
 									ref={(input) => { this.number = input }}
 								/>
 								<input
@@ -131,41 +131,15 @@ class BuyBonds extends Component {
 					</div>
 					<div className="row text-center">
 						<p>Tokens requested: {this.state.numberOfTokens}</p>
-
 					</div>
 					<div className="row text-center">
-
 						<p>Invested amount: {this.state.balance}</p>
 					</div>
 					<hr />
-					<div className="row">
-						<div className="col-12">
-							<h2>Registered investors</h2>
-						</div>
-					</div>
-					<div className="row">
-						<div className="col">
-							<div className="row text-center">
-								{this.state.investors.map((investor, key) => {
-									return (
-										<ul>
-											<li key={key}> {investor} </li>
-										</ul>
-									)
-								})}
-								{this.state.balances.map((balance, key) => {
-									return (
-										<ul>
-											<li key={key}> {balance}  </li>
-										</ul>
-									)
-								})}
-							</div>
-						</div>
-					</div>
+					
 
 				</main>
-			</div>
+			</div >
 		);
 	}
 };

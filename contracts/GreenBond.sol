@@ -56,8 +56,6 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
 
     mapping (address => uint256) _investedAmountPerInvestor;
 
-    
-
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     
     // Will need to add pauser address as constructor parameter (financial regulator)
@@ -74,6 +72,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         _setupRole(MINTER_ROLE, _msgSender());    
     }
 
+    
     function getValue() public view returns(uint256) {
         return _value;
     }

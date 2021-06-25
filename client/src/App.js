@@ -11,6 +11,7 @@ import Test from './pages/test';
 
 import Web3 from 'web3'
 
+
 // import Navbar from './components/Navbar';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -49,16 +50,7 @@ class App extends Component {
       this.setState({ greenBond })
 
       console.log("Bond", greenBond)
-      // There I would need to load anything I want to list
-      const numberOfInvestors = await greenBond.methods.numberOfInvestors().call()
-      this.setState({ numberOfInvestors })
-
-      for (var i = 1; i <= numberOfInvestors; i++) {
-        const investor = await greenBond.methods._investors(i - 1).call()
-        this.setState({
-          investors: [...this.state.investors, investor]
-        })
-      }
+    
       // Testing a function call
       const name = await greenBond.methods.getName().call()
       this.setState({ name })
@@ -69,16 +61,18 @@ class App extends Component {
       this.setState({ tokens })
       console.log(tokens)
       
+      // Bond value and coupon
+      const value = await greenBond.methods.getValue().call()
+      this.setState({ value })
+      const coupon = await greenBond.methods.getCoupon().call()
+      this.setState({ coupon })
 
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
   }
 
-  // Testing investing function
-  invest = (numberOfTokens) => {
-    this.state.greenBond.methods.registerInvestment(numberOfTokens).send({ from: this.state.account, value: Web3.utils.toWei('10000000', 'Wei') })
-  }
+  
 
   // Issuing function
   issue = () => {
@@ -95,6 +89,8 @@ class App extends Component {
       numberOfInvestors: 1,
       investors: [],
       tokens: 0,
+      value: 0,
+      coupon: 0,
     }
   }
 
@@ -109,8 +105,10 @@ class App extends Component {
               <h1>This is the common text part</h1>
               <p>Your account: {this.state.account}</p>
               <p>Contract Name: {this.state.name}</p>
-              <p>Number of tokens issued: {this.state.tokens} </p>
-
+              <p>Bond price: {this.state.value}</p>
+              <p>Coupon: {this.state.coupon}</p>
+              
+              {/*
               <main role="main" className="col-lg-12 d-flex text-center">
                 <div className="row">
                   <div className="content mr-auto ml-auto">
@@ -163,9 +161,10 @@ class App extends Component {
                     )
                   })}
                 </div>
-              </div>       
+              </div> 
+              */}      
             </div>
-
+                
             <Switch>
               <Route path='/' exact component={About} />
               <Route path='/about' component={About} />

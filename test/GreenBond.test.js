@@ -60,7 +60,7 @@ contract('GreenBond' ,function (accounts) {
         
     })
 
-   /*
+   
     it('Investors can request an investment', async function() {
         // Track the recorded investments
         let investmentBefore = await bond.getInvestorBalance(investor)
@@ -307,5 +307,5 @@ contract('GreenBond' ,function (accounts) {
         assert.equal(couponDecrese.adjuster, greenVerifier)
         assert.equal(couponDecrese.couponRate, 0)
     })
-    */
+    
 })

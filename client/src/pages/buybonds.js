@@ -1,5 +1,4 @@
 import React, { Component, useState } from 'react';
-
 import Web3 from 'web3'
 
 // Import smart Contracts
@@ -37,30 +36,10 @@ class BuyBonds extends Component {
 			// Get the Green bond contract
 			const greenBond = new web3.eth.Contract(GreenBond.abi, networkData.address)
 			this.setState({ greenBond })
-
 			console.log("Bond", greenBond)
 
-			// Number of investors
-			const numberOfInvestors = await greenBond.methods.numberOfInvestors().call()
-			this.setState({ numberOfInvestors })
 
-			for (var i = 1; i <= numberOfInvestors; i++) {
-				const investor = await greenBond.methods._investors(i - 1).call()
-				const balance = await greenBond.methods.getInvestorBalance(investor).call()
-				this.setState({
-					investors: [...this.state.investors, investor]
-				})
-				this.setState({
-					balances: [...this.state.balances, balance]
-				})
-			}
-
-			// Testing a function call
-			const name = await greenBond.methods.getName().call()
-			this.setState({ name })
-			console.log(name)
-
-			// Testing mapping 
+			// Getting investor details 
 			const account = accounts[0];
 			const balance = await greenBond.methods.getInvestorBalance(account).call()
 			this.setState({ balance })
@@ -71,6 +50,11 @@ class BuyBonds extends Component {
 			const numberOfTokens = balance / value;
 			console.log("Tokens", numberOfTokens)
 			this.setState({ numberOfTokens })
+
+			// Balance of test
+			const tokensOwned = await greenBond.methods.balanceOf(account).call()
+			console.log("Tokens owned", tokensOwned)
+			this.setState({ tokensOwned })
 
 		} else {
 			window.alert('Smart contract not deployed to detected network.')
@@ -92,10 +76,9 @@ class BuyBonds extends Component {
 			contract: null,
 			numberOfInvestors: 0,
 			investors: [],
-			balances: [],
 			balance: 0,
 			numberOfTokens: 0,
-			
+			tokensOwned: 0,
 		}
 	}
 
@@ -127,15 +110,21 @@ class BuyBonds extends Component {
 					</div>
 					<hr />
 					<div className="row">
-						<h2>Your investments:</h2>
+						<h2>Your investment request:</h2>
 					</div>
 					<div className="row text-center">
 						<p>Tokens requested: {this.state.numberOfTokens}</p>
 					</div>
 					<div className="row text-center">
-						<p>Invested amount: {this.state.balance}</p>
+						<p>Investment balance: {this.state.balance}</p>
 					</div>
 					<hr />
+					<div className="row">
+						<h2>Tokens:</h2>
+					</div>
+					<div className="row text-center">
+						<p>Tokens owned: {this.state.tokensOwned}</p>
+					</div>
 					
 
 				</main>

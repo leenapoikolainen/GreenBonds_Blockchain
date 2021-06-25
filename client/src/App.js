@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // Pages
 import About from './pages/about';
 import BuyBonds from './pages/buybonds';
+import IssueTokens from './pages/issueTokens';
+
 import Test from './pages/test';
 
 import Web3 from 'web3'
@@ -59,7 +61,7 @@ class App extends Component {
       // Token count
       const tokens = await greenBond.methods.tokenCount().call()
       this.setState({ tokens })
-      console.log(tokens)
+      console.log("Number of tokens issued", tokens)
       
       // Bond value and coupon
       const value = await greenBond.methods.getValue().call()
@@ -169,6 +171,7 @@ class App extends Component {
               <Route path='/' exact component={About} />
               <Route path='/about' component={About} />
               <Route path='/buybonds' component={BuyBonds} />
+              <Route path='/issuetokens' component={IssueTokens}></Route>
               <Route path='/test' component={Test} />
             </Switch>
           </div>

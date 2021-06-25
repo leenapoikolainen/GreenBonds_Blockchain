@@ -60,9 +60,15 @@ class App extends Component {
         })
       }
       // Testing a function call
-      const name = await greenBond.methods.name().call()
+      const name = await greenBond.methods.getName().call()
       this.setState({ name })
       console.log(name)
+
+      // Token count
+      const tokens = await greenBond.methods.tokenCount().call()
+      this.setState({ tokens })
+      console.log(tokens)
+      
 
     } else {
       window.alert('Smart contract not deployed to detected network.')
@@ -77,6 +83,8 @@ class App extends Component {
   // Issuing function
   issue = () => {
     this.state.greenBond.methods.issueTokens().send({from: this.state.account})
+    let tokens = this.state.greenBond.methods.tokenCount().call()
+    this.setState({ tokens })
   }
 
   constructor(props) {
@@ -84,8 +92,9 @@ class App extends Component {
     this.state = {
       account: '',
       contract: null,
-      numberOfInvestors: 0,
-      investors: []
+      numberOfInvestors: 1,
+      investors: [],
+      tokens: 0,
     }
   }
 
@@ -100,6 +109,7 @@ class App extends Component {
               <h1>This is the common text part</h1>
               <p>Your account: {this.state.account}</p>
               <p>Contract Name: {this.state.name}</p>
+              <p>Number of tokens issued: {this.state.tokens} </p>
 
               <main role="main" className="col-lg-12 d-flex text-center">
                 <div className="row">
@@ -143,19 +153,17 @@ class App extends Component {
 
               <hr />
               <div className="content mr-auto ml-auto">
-                <h2>Investors</h2>
+                <h2>Registered investors</h2>
                 <div className="row text-center">
                   {this.state.investors.map((investor, key) => {
                     return (
-                      <div className="col">
-                        <div className="row">{investor}</div>
-                      </div>
+                      <ul>
+                        <li key={key}> {investor} </li>
+                      </ul>
                     )
                   })}
                 </div>
-              </div>
-              
-              
+              </div>       
             </div>
 
             <Switch>

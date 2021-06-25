@@ -85,15 +85,16 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     function numberOfInvestors() public view returns(uint256) {
         return _investors.length;
     }
-
-    function numberOfTokens() public view returns(uint256) {
+    
+    function tokenCount() public view returns(uint256) {
         return _tokenIdTracker.current();
     }
-    /*
+    
+    
     function getName() public view returns(string memory) {
         return name();
     }
-    */
+    
 
     function setRegulator(address regulator) public onlyOwner {
         _regulator = regulator;

@@ -46,7 +46,21 @@ contract('GreenBond' ,function (accounts) {
         })
     })
 
-   
+    it('The token counter is correct', async function() {
+        let count = await bond.tokenCount()
+        assert.equal(count.toNumber(), 0)
+
+        // Invest
+        await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1000', 'Wei')})
+        // Issue tokens
+        await bond.issueTokens({from: owner})
+
+        count = await bond.tokenCount()
+        assert.equal(count.toNumber(), 1)
+        
+    })
+
+   /*
     it('Investors can request an investment', async function() {
         // Track the recorded investments
         let investmentBefore = await bond.getInvestorBalance(investor)
@@ -293,4 +307,5 @@ contract('GreenBond' ,function (accounts) {
         assert.equal(couponDecrese.adjuster, greenVerifier)
         assert.equal(couponDecrese.couponRate, 0)
     })
+    */
 })

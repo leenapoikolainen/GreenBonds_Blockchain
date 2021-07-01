@@ -65,8 +65,8 @@ class BuyBonds extends Component {
 	// Testing investing function
 	invest = (numberOfTokens) => {
 		var amount = (numberOfTokens * 100).toString();
-
-		this.state.greenBond.methods.registerInvestment(numberOfTokens).send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
+		const receipt = this.state.greenBond.methods.registerInvestment(numberOfTokens).send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
+		console.log(receipt.events.DataStored.raw)
 	}
 
 	constructor(props) {

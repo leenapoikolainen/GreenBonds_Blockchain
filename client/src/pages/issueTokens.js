@@ -45,6 +45,10 @@ class IssueTokens extends Component {
             this.setState({ tokens })
             console.log("Number of tokens issued", tokens)
 
+            // Set Coupon
+            const coupon = await greenBond.methods.getCoupon().call()
+            this.setState({ coupon })
+
 
 		} else {
 			window.alert('Smart contract not deployed to detected network.')
@@ -54,6 +58,11 @@ class IssueTokens extends Component {
     // Issuing function
     issue = () => {
         this.state.greenBond.methods.issueTokens().send({from: this.state.account})
+    }
+
+    payCoupons = () => {
+        let amount = (this.state.coupon * this.state.tokens).toString()
+        this.state.greenBond.methods.payCoupons().send({from: this.state.account, value: Web3.utils.toWei(amount, 'Wei')})
     }
 
     constructor(props) {
@@ -73,7 +82,7 @@ class IssueTokens extends Component {
         return (
             <>
             <div className="container mr-auto ml-auto">
-                <h1>Issue Tokens</h1>
+                <h2>Issue Tokens</h2>
                 <form onSubmit={(event) => {
                   event.preventDefault()
                   this.issue()
@@ -88,6 +97,20 @@ class IssueTokens extends Component {
             <hr/>
             <div className="container mr-auto ml-auto">
                 <p>Number of tokens issued: {this.state.tokens}</p>
+            </div>
+            <hr/>
+            <div className="container mr-auto ml-auto">
+                <h2>Pay Coupons</h2>
+                <form onSubmit={(event) => {
+                    event.preventDefault()
+                    this.payCoupons();
+                }}>
+                    <input
+                    type='submit'
+                    className='btn btn-block btn-primary'
+                    value='COUPON'
+                  />
+                </form>
             </div>
             </>
         )

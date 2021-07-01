@@ -56,7 +56,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
 
     mapping (address => uint256) _investedAmountPerInvestor;
 
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    //bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     
     // Will need to add pauser address as constructor parameter (financial regulator)
     constructor(string memory name, string memory symbol, string memory baseTokenURI, 
@@ -69,7 +69,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         _coupon = coupon;
         _paused = false;
 
-        _setupRole(MINTER_ROLE, _msgSender());    
+        //_setupRole(MINTER_ROLE, _msgSender());    
     }
 
     
@@ -138,7 +138,8 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     // Function to issue tokens for registered investors
     // Assumes all investors will get tokens
     function issueTokens() external {
-        require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
+        require(msg.sender == _owner, "Only owner can mint tokens");
+        //require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
 
         // Iterate through each investor
         for (uint i = 0; i < _investors.length; i++) {
@@ -167,7 +168,8 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     // Requires that the minter has minter role
     // Automatically creates tokenURI with baseURI concatenated with TokenId
     function issueTokens(uint256 numberOfTokens, address to) public payable {
-        require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
+        require(msg.sender == _owner, "Only owner can mint tokens");
+        //require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
 
         // Transfer the money to the issuer
         //require(msg.value >= _value * numberOfTokens, "Not enough money send for the tokens");

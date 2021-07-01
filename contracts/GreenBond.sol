@@ -2,11 +2,11 @@
 pragma solidity >=0.6.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
+//import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
+contract GreenBond is ERC721, Ownable{
     using Counters for Counters.Counter;
 
     string private _baseTokenURI;
@@ -17,7 +17,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
 
     address _owner;
     address payable _company;
-    address _regulator; // this could be hard coded
+    address _regulator; 
     address _greenVerifier;
     uint256 _value;
     uint256 _coupon;
@@ -30,7 +30,8 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     
     /**
      * @dev Emitted when coins are refunded to the investor in case there are
-            too many coins for the investment
+            too many coins for the investment or to the company if they pay too much 
+            with coupons / principal repayment
      */
     event CoinRefund(address investor, uint256 value);
     
@@ -55,6 +56,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     event CouponAdjustment(address adjuster, uint256 couponRate);
 
     mapping (address => uint256) _investedAmountPerInvestor;
+    mapping (address => uint256) _requestedTokensPerInvestor;
 
     //bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     
@@ -72,13 +74,32 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         //_setupRole(MINTER_ROLE, _msgSender());    
     }
 
+    function setRegulator(address regulator) public onlyOwner {
+        _regulator = regulator;
+    }
     
+    function setGreenVerifier(address greenVerifier) public onlyOwner {
+        _greenVerifier = greenVerifier;
+    }
+
+    function regulator() public view returns(address) {
+        return _regulator;
+    }
+
+    function greenVerifier() public view returns(address) {
+        return _greenVerifier;
+    }
+
     function getValue() public view returns(uint256) {
         return _value;
     }
 
     function getCoupon() public view returns(uint256) {
         return _coupon;
+    }
+
+    function getTotalLoan() public view returns(uint256) {
+        return _totalValueRaisedRaised;
     }
 
     function numberOfInvestors() public view returns(uint256) {
@@ -89,19 +110,9 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         return _tokenIdTracker.current();
     }
     
-    
     function getName() public view returns(string memory) {
         return name();
-    }
-    
-
-    function setRegulator(address regulator) public onlyOwner {
-        _regulator = regulator;
-    }
-
-    function setGreenVerifier(address greenVerifier) public onlyOwner {
-        _greenVerifier = greenVerifier;
-    }
+    } 
 
     function getInvestorBalance(address investor) public view returns (uint){
         require(investor != address(0), "Balance query for the zero address");
@@ -113,7 +124,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     }
 
     // Needed to override this function as two parent classes defined the same function
-    function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControlEnumerable, ERC721) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
@@ -130,6 +141,8 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         // Register the investment
         uint256 currentAmount = _investedAmountPerInvestor[msg.sender];
         _investedAmountPerInvestor[msg.sender] = currentAmount + msg.value;
+        _requestedTokensPerInvestor[msg.sender] = number;
+
         // Emit event
         emit Investment(msg.sender, msg.value);
     }
@@ -137,14 +150,14 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
 
     // Function to issue tokens for registered investors
     // Assumes all investors will get tokens
-    function issueTokens() external {
+    function issueTokens() public {
         require(msg.sender == _owner, "Only owner can mint tokens");
         //require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
 
         // Iterate through each investor
         for (uint i = 0; i < _investors.length; i++) {
             address investor = _investors[i];
-            uint256 numberOfTokens = _investedAmountPerInvestor[investor] / _value;
+            uint256 numberOfTokens = _requestedTokensPerInvestor[investor];
             _company.transfer(_value * numberOfTokens); 
             
             // If the invested amount would be greated than the amount needed for investment
@@ -156,6 +169,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
 
             // Update the records
             _investedAmountPerInvestor[investor] = 0;
+            _requestedTokensPerInvestor[investor] = 0;
             _totalValueRaisedRaised = _totalValueRaisedRaised + _value * numberOfTokens;
 
             // Issue tokens
@@ -167,7 +181,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
     }
     // Requires that the minter has minter role
     // Automatically creates tokenURI with baseURI concatenated with TokenId
-    function issueTokens(uint256 numberOfTokens, address to) public payable {
+    function issueTokens(uint256 numberOfTokens, address to) public {
         require(msg.sender == _owner, "Only owner can mint tokens");
         //require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
 
@@ -197,6 +211,11 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
             investor.transfer(_coupon);
             emit CouponPayment(investor, i);
         }
+
+        // Refund extra coins if paid too much
+        if (msg.value > _coupon * _tokenIdTracker.current()) {
+            payable(msg.sender).transfer(msg.value - _coupon * _tokenIdTracker.current());
+        }
     }
 
     // This function should be called by the borrowing company
@@ -217,6 +236,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         }
     }
 
+    /*
     // Not needed anymore
     function returnTokensAtMaturity() external onlyOwner {
         // Check that the contract has the right amount of money to send back to the investors
@@ -230,7 +250,8 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         }
     }
 
-    // WILL NEED TO ADD VALUE TRANSFER NEXT
+    */
+    // Internal function to transer the tokens
     function tokenTransfer(address from, address to, uint256 tokenId) internal {
         _transfer(from, to, tokenId);
     }
@@ -277,7 +298,7 @@ contract GreenBond is ERC721, AccessControlEnumerable, Ownable{
         emit Unpaused(_msgSender());
     }
 
-    function adjustCoupon(bool increase, uint256 amount) external {
+    function adjustCoupon(bool increase, uint256 amount) public {
         require(msg.sender == _greenVerifier);
         if (increase){
             _coupon = _coupon + amount;

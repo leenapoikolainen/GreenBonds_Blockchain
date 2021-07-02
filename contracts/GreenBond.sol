@@ -21,19 +21,19 @@ contract GreenBond is ERC721, Ownable{
     address _greenVerifier;
     uint256 _value;
     uint256 _coupon;
-    uint256 _totalValueRaisedRaised;
+    uint256 _totalValueRaised;
 
     /**
      * @dev Emitted when an investor registers initial investment request
      */
-    event Investment(address investor, uint256 value);
+    event Investment(address investor, uint256 value, uint256 numberOfTokens);
     
     /**
      * @dev Emitted when coins are refunded to the investor in case there are
             too many coins for the investment or to the company if they pay too much 
             with coupons / principal repayment
      */
-    event CoinRefund(address investor, uint256 value);
+    event CoinRefund(address sender, uint256 value);
     
     /**
      * @dev Emitted when a coupon payment has been made
@@ -99,7 +99,7 @@ contract GreenBond is ERC721, Ownable{
     }
 
     function getTotalLoan() public view returns(uint256) {
-        return _totalValueRaisedRaised;
+        return _totalValueRaised;
     }
 
     function numberOfInvestors() public view returns(uint256) {
@@ -141,10 +141,10 @@ contract GreenBond is ERC721, Ownable{
         // Register the investment
         uint256 currentAmount = _investedAmountPerInvestor[msg.sender];
         _investedAmountPerInvestor[msg.sender] = currentAmount + msg.value;
-        _requestedTokensPerInvestor[msg.sender] = number;
+        _requestedTokensPerInvestor[msg.sender] = _requestedTokensPerInvestor[msg.sender] + number;
 
         // Emit event
-        emit Investment(msg.sender, msg.value);
+        emit Investment(msg.sender, msg.value, number);
     }
 
 
@@ -158,8 +158,16 @@ contract GreenBond is ERC721, Ownable{
         for (uint i = 0; i < _investors.length; i++) {
             address investor = _investors[i];
             uint256 numberOfTokens = _requestedTokensPerInvestor[investor];
+            // Transfer money to the borrowing company
             _company.transfer(_value * numberOfTokens); 
             
+
+            // Issue tokens
+            for (uint j = 0; j < numberOfTokens; j++) {  
+                _mint(investor, _tokenIdTracker.current());
+                _tokenIdTracker.increment();
+            }
+
             // If the invested amount would be greated than the amount needed for investment
             // Return the remainder back to the investor
             if (_investedAmountPerInvestor[investor] > numberOfTokens * _value) {
@@ -170,13 +178,8 @@ contract GreenBond is ERC721, Ownable{
             // Update the records
             _investedAmountPerInvestor[investor] = 0;
             _requestedTokensPerInvestor[investor] = 0;
-            _totalValueRaisedRaised = _totalValueRaisedRaised + _value * numberOfTokens;
-
-            // Issue tokens
-            for (uint j = 0; j < numberOfTokens; j++) {  
-                _mint(investor, _tokenIdTracker.current());
-                _tokenIdTracker.increment();
-            }
+            _totalValueRaised = _totalValueRaised + _value * numberOfTokens;
+  
         }
     }
     // Requires that the minter has minter role
@@ -194,7 +197,7 @@ contract GreenBond is ERC721, Ownable{
         // Transfer coins and reduce the investors investment balance
         _company.transfer(_value * numberOfTokens); 
         _investedAmountPerInvestor[to] = _investedAmountPerInvestor[to] - numberOfTokens * _value;
-        _totalValueRaisedRaised = _totalValueRaisedRaised + numberOfTokens * _value;
+        _totalValueRaised = _totalValueRaised + numberOfTokens * _value;
 
         for (uint i = 0; i < numberOfTokens; i++) {  
             _mint(to, _tokenIdTracker.current());
@@ -214,26 +217,44 @@ contract GreenBond is ERC721, Ownable{
 
         // Refund extra coins if paid too much
         if (msg.value > _coupon * _tokenIdTracker.current()) {
-            payable(msg.sender).transfer(msg.value - _coupon * _tokenIdTracker.current());
+            uint256 extraAmount = msg.value - _coupon * _tokenIdTracker.current();
+            payable(msg.sender).transfer(extraAmount);
+            emit CoinRefund(msg.sender, extraAmount);
         }
     }
 
     // This function should be called by the borrowing company
     function payBackBond() public payable {
         require(msg.sender == _company, "Paying company should be the borrowing company");
-        require(msg.value >= _totalValueRaisedRaised, "Not enough coins to settle the bond at maturity");
+        require(msg.value >= _totalValueRaised, "Not enough coins to settle the bond at maturity");
         
         // Interate through the tokens
-        for(uint i = 0; i < _tokenIdTracker.current(); i++) {
+        uint256 numberOfTokens = _tokenIdTracker.current();
+        for(uint i = 0; i < numberOfTokens; i++) {
             address payable investor = payable(ownerOf(i));
             // Transfer token from investor to owner
             tokenTransfer(investor, _owner, i);
             // Return funds
             investor.transfer(_value);
             // Decrement the values
-            _totalValueRaisedRaised = _totalValueRaisedRaised - _value;
+            _totalValueRaised = _totalValueRaised - _value;
             _tokenIdTracker.decrement();
         }
+        
+
+        // Refund coins there is extra money on the contract
+        if (address(this).balance > 0 && msg.value > _totalValueRaised) {
+            uint256 extraAmount = msg.value - _totalValueRaised;
+            if(address(this).balance < extraAmount) {
+                uint256 amount = address(this).balance;
+                payable(msg.sender).transfer(amount);
+                emit CoinRefund(msg.sender, amount);
+            } else {
+                payable(msg.sender).transfer(extraAmount);
+            emit CoinRefund(msg.sender, extraAmount);
+            }
+        }
+    
     }
 
     /*

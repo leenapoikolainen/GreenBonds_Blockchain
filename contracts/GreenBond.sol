@@ -9,19 +9,45 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 contract GreenBond is ERC721, Ownable{
     using Counters for Counters.Counter;
 
+    /**
+     * @dev Reverts if bidding time is not open
+     */
+    modifier onlyWhileBiddingOpen {
+        require(isOpen(), "Bidding time is not open");
+        _;
+    }
+
+    /**
+     * @dev Reverts if bidding time is still open
+     */
+    modifier onlyWhenBiddingClosed {
+        require(!isOpen(), "Bidding time is still open");
+        _;
+    }
+
     string private _baseTokenURI;
     Counters.Counter private _tokenIdTracker;
     bool private _paused;
 
     address [] public _investors;
 
-    address _owner;
-    address payable _company;
+    address private _owner;
+    address payable private _company;
     address _regulator; 
     address _greenVerifier;
     uint256 _value;
     uint256 _coupon;
     uint256 _totalValueRaised;
+
+    uint256 private _bidClosingTime;
+
+    /**
+     * @return true if the registering investments is open, false otherwise.
+     */
+    function isOpen() public view returns (bool) {
+        return block.timestamp <= _bidClosingTime;
+        //return block.timestamp >= _openingTime && block.timestamp <= _closingTime;
+    }
 
     /**
      * @dev Emitted when an investor registers initial investment request
@@ -57,12 +83,10 @@ contract GreenBond is ERC721, Ownable{
 
     mapping (address => uint256) _investedAmountPerInvestor;
     mapping (address => uint256) _requestedTokensPerInvestor;
-
-    //bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     
     // Will need to add pauser address as constructor parameter (financial regulator)
     constructor(string memory name, string memory symbol, string memory baseTokenURI, 
-    address company, uint256 value, uint256 coupon) ERC721 (name, symbol) {
+    address company, uint256 value, uint256 coupon, uint256 bidClosingTime) ERC721 (name, symbol) {
         require(coupon >= 0, "Coupon payment can't be negative");
         _owner = msg.sender;
         _baseTokenURI = baseTokenURI;
@@ -70,8 +94,15 @@ contract GreenBond is ERC721, Ownable{
         _value = value;
         _coupon = coupon;
         _paused = false;
+        _bidClosingTime = bidClosingTime;  
+    }
 
-        //_setupRole(MINTER_ROLE, _msgSender());    
+    function company() public view returns (address) {
+        return _company;
+    }
+    
+    function closingTime() public view returns (uint256) {
+        return _bidClosingTime;
     }
 
     function setRegulator(address regulator) public onlyOwner {
@@ -128,8 +159,9 @@ contract GreenBond is ERC721, Ownable{
         return super.supportsInterface(interfaceId);
     }
 
-    // Function to register investment interest (requires staking money on the contract)
-    function registerInvestment(uint256 number) public payable {
+    // Function to register investment interest 
+    // Investors specifies the number of tokens they would like to receive 
+    function registerInvestment(uint256 number) public payable onlyWhileBiddingOpen {
         // Require that the investor has enough coins
         require(msg.value >= number * _value, "not enough coins for the amount");
 
@@ -150,7 +182,7 @@ contract GreenBond is ERC721, Ownable{
 
     // Function to issue tokens for registered investors
     // Assumes all investors will get tokens
-    function issueTokens() public {
+    function issueTokens() public onlyWhenBiddingClosed {
         require(msg.sender == _owner, "Only owner can mint tokens");
         //require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
 
@@ -182,6 +214,8 @@ contract GreenBond is ERC721, Ownable{
   
         }
     }
+
+    /*
     // Requires that the minter has minter role
     // Automatically creates tokenURI with baseURI concatenated with TokenId
     function issueTokens(uint256 numberOfTokens, address to) public {
@@ -204,6 +238,7 @@ contract GreenBond is ERC721, Ownable{
             _tokenIdTracker.increment();
         }
     }
+    */
 
     // Function for the borrowing company to pay coupons
     function payCoupons() public payable {

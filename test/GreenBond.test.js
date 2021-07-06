@@ -61,7 +61,7 @@ contract('GreenBond' ,function (accounts) {
             assert.equal(coupon.toNumber(), 1)
         })
         it('has the right bid closing time', async function () {
-            const closingTime = await bond.closingTime()
+            const closingTime = await bond.bidClosingTime()
             assert.equal(closingTime, endTime)
         })
     })
@@ -135,9 +135,69 @@ contract('GreenBond' ,function (accounts) {
             let count = await bond.tokenCount()
             assert.equal(count.toNumber(), 0)
         })
+
+        it('Investors can register bid', async function() {
+            // Can't bid for 0 coupon
+            await bond.registerBid(0, 2, {from: investor, value: web3.utils.toWei('2000', 'Wei')}).should.be.rejected
+            
+            await bond.registerBid(3, 2, {from: investor, value: web3.utils.toWei('2000', 'Wei')})
+            let interest = await bond.getInterestAtCouponLevel(3);
+            assert.equal(interest.toNumber(), 2)
+
+            await bond.registerBid(2, 3, {from: investor2, value: web3.utils.toWei('3000', 'Wei')})
+            interest = await bond.getInterestAtCouponLevel(2);
+            assert.equal(interest.toNumber(), 3)
+        })
+
+        it('Coupon will be 1 when not enough bids', async function() {
+            let coupon = await bond.getCoupon();
+            //console.log(coupon.toNumber())
+            await bond.defineCoupon();
+            coupon = await bond.getCoupon();
+            assert.equal(coupon.toNumber(), 1)
+        })
+
+        it('Coupon will be defined according to highest bid that fullfils the demand', async function() {
+            let coupon = await bond.getCoupon();
+            assert.equal(coupon.toNumber(), 1)
+            //console.log(coupon.toNumber())
+
+            await bond.registerBid(4, 1, {from: investor, value: web3.utils.toWei('1000', 'Wei')})
+
+            await bond.defineCoupon();
+            coupon = await bond.getCoupon();
+            assert.equal(coupon.toNumber(), 2)
+        })
+        /*
+        it('regulator can return investor investments from the contract', async function() {
+            let balance = await web3.eth.getBalance(investor)
+            balance = new web3.utils.BN(balance) 
+
+            // Rejected if contract not paused
+            await bond.returnInvestorMoney().should.be.rejected
+            await bond.pause({from: regulator})
+            // Rejected if not coming from regulator
+            await bond.returnInvestorMoney().should.be.rejected
+            
+            // Return money
+            await bond.returnInvestorMoney({from: regulator})
+
+            let refund = web3.utils.toWei('3000', 'Wei')
+            refund = new web3.utils.BN(refund)
+            
+            
+            let balanceAfter = await web3.eth.getBalance(investor)
+            balanceAfter = new web3.utils.BN(balanceAfter)
+
+            const expectedBalance = balance.add(refund)
+            assert.equal(balanceAfter.toString(), expectedBalance.toString())
+
+            await bond.unpause({from: regulator})         
+        })
+        */
     })
-      
     
+    /*
     describe('After bidding time is over', () => {
         let balanceAfterInvestment
 
@@ -154,6 +214,16 @@ contract('GreenBond' ,function (accounts) {
             await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1000', 'Wei')}).should.be.rejected
         })
 
+        it('issuing tokens is not possible if contract is paused by regulator', async function() {
+            let result = await bond.pause({from: regulator})
+            const paused = result.logs[0].args
+            assert.equal(paused.account, regulator) 
+
+            await bond.issueTokens({from: owner}).should.be.rejected
+            await bond.unpause({from: regulator})
+        })
+
+        
         it('Issuing tokens is possible after bidding time is over', async function() {
             // Track balance of the company before the token issuance
             let oldBalance = await web3.eth.getBalance(company)
@@ -296,7 +366,8 @@ contract('GreenBond' ,function (accounts) {
 
             const refund = result.logs[8].args;
             
-            // Check transfer and the right owner of the token 
+            // Check that tokens are returned to the owner
+
             assert.equal(transfer1.tokenId, 0)
             let ownerOfToken = await bond.ownerOf(0)
             assert.equal(ownerOfToken, owner)
@@ -334,11 +405,16 @@ contract('GreenBond' ,function (accounts) {
             principalPayment = new web3.utils.BN(principalPayment)
     
             expectedBalance = oldBalance2.add(principalPayment)
-            assert.equal(newBalance2.toString(), expectedBalance.toString())
-            
+            assert.equal(newBalance2.toString(), expectedBalance.toString())  
         })
-        
+        it('The token count is 0 after all tokens returned to owner', async function() {
+            let count = await bond.tokenCount()
+            assert.equal(count.toNumber(), 0)
+        })
+       
     })
+    */
+
 
     /*
 

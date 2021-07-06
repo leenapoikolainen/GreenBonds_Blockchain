@@ -25,19 +25,35 @@ contract GreenBond is ERC721, Ownable{
         _;
     }
 
+     /**
+     * @dev Modifier to make a function callable only when the contract is not paused.
+     */
+    modifier whenNotPaused() {
+        require(!_paused, "Pausable: paused");
+        _;
+    }
+
+    /**
+     * @dev Modifier to make a function callable only when the contract is paused.
+     */
+    modifier whenPaused() {
+        require(_paused, "Pausable: not paused");
+        _;
+    }
+
     string private _baseTokenURI;
     Counters.Counter private _tokenIdTracker;
     bool private _paused;
 
-    address [] public _investors;
+    address [] private _investors;
 
     address private _owner;
     address payable private _company;
-    address _regulator; 
-    address _greenVerifier;
-    uint256 _value;
-    uint256 _coupon;
-    uint256 _totalValueRaised;
+    address private _regulator; 
+    address private _greenVerifier;
+    uint256 private _value;
+    uint256 private _coupon;
+    uint256 private _totalValueRaised;
 
     uint256 private _bidClosingTime;
 
@@ -95,13 +111,14 @@ contract GreenBond is ERC721, Ownable{
         _coupon = coupon;
         _paused = false;
         _bidClosingTime = bidClosingTime;  
+        
     }
 
     function company() public view returns (address) {
         return _company;
     }
-    
-    function closingTime() public view returns (uint256) {
+
+    function bidClosingTime() public view returns (uint256) {
         return _bidClosingTime;
     }
 
@@ -150,6 +167,7 @@ contract GreenBond is ERC721, Ownable{
         return _investedAmountPerInvestor[investor];
     }
 
+
     function _baseURI() internal view override returns (string memory) {
         return _baseTokenURI;
     }
@@ -179,13 +197,62 @@ contract GreenBond is ERC721, Ownable{
         emit Investment(msg.sender, msg.value, number);
     }
 
+    // Mapping from owner to operator approvals
+    mapping (address => uint256) _investorsCoupon;
+    uint256 [5] _couponMatrix;
+    uint256 private _seekedNumberOfBonds = 6;
+    
 
-    // Function to issue tokens for registered investors
-    // Assumes all investors will get tokens
-    function issueTokens() public onlyWhenBiddingClosed {
+    function registerBid(uint256 coupon, uint256 numberOfTokens) public payable {
+        require(coupon > 0 && coupon < 6 , "Coupon needs to be between 1 and 5");
+        require(msg.value >= numberOfTokens * _value, "not enough coins for the amount");
+        // Check if investor already on the list
+        if (_investedAmountPerInvestor[msg.sender] == 0) {
+            _investors.push(msg.sender);
+        }
+
+        // Register the investment
+        uint256 currentAmount = _investedAmountPerInvestor[msg.sender];
+        _investedAmountPerInvestor[msg.sender] = currentAmount + msg.value;
+        _requestedTokensPerInvestor[msg.sender] = _requestedTokensPerInvestor[msg.sender] + numberOfTokens;
+        _investorsCoupon[msg.sender] = coupon;
+        
+        // Update the coupon record
+        uint256 index = coupon - 1;
+        uint256 currentInterest = _couponMatrix[index];
+        _couponMatrix[index] = currentInterest + numberOfTokens;
+    }
+
+    function getInterestAtCouponLevel(uint256 coupon) public view returns (uint256){
+        return _couponMatrix[coupon - 1];
+    }
+
+    function defineCoupon() public {
+        uint256 numberOfInterests = 0;
+
+        // Default coupon is 1
+        _coupon = 1;
+
+        for(uint i = 4; i > 0 ; i--) {
+            numberOfInterests += _couponMatrix[i];
+            // If enough interest at this copupn level, set coupon and break the loop
+            if (numberOfInterests >= _seekedNumberOfBonds) {
+                _coupon = i+1;
+                break;
+            }
+        }
+
+    }
+
+
+    /**
+     * @dev Function to issue tokens for investors who have registered 
+        Assumes all investors will get the requested investment
+        Can be called only when bidding time is closed and the contract is unpaused
+     */
+    function issueTokens() public onlyWhenBiddingClosed whenNotPaused {
         require(msg.sender == _owner, "Only owner can mint tokens");
-        //require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
-
+       
         // Iterate through each investor
         for (uint i = 0; i < _investors.length; i++) {
             address investor = _investors[i];
@@ -215,34 +282,22 @@ contract GreenBond is ERC721, Ownable{
         }
     }
 
-    /*
-    // Requires that the minter has minter role
-    // Automatically creates tokenURI with baseURI concatenated with TokenId
-    function issueTokens(uint256 numberOfTokens, address to) public {
-        require(msg.sender == _owner, "Only owner can mint tokens");
-        //require(hasRole(MINTER_ROLE, _msgSender()), "Minter must have minter role to mint");
-
-        // Transfer the money to the issuer
-        //require(msg.value >= _value * numberOfTokens, "Not enough money send for the tokens");
-        require(_investedAmountPerInvestor[to] >= numberOfTokens * _value, "Investor has not enough funds for the tokens");
-        //_company.transfer(msg.value);
-        //_totalValueRaisedRaised = _totalValueRaisedRaised + msg.value;
-
-        // Transfer coins and reduce the investors investment balance
-        _company.transfer(_value * numberOfTokens); 
-        _investedAmountPerInvestor[to] = _investedAmountPerInvestor[to] - numberOfTokens * _value;
-        _totalValueRaised = _totalValueRaised + numberOfTokens * _value;
-
-        for (uint i = 0; i < numberOfTokens; i++) {  
-            _mint(to, _tokenIdTracker.current());
-            _tokenIdTracker.increment();
+    /**
+     * @dev Function for regulator to return all money to investors
+        if there are any issues with the borrowing company
+     */
+    function returnInvestorMoney() public whenPaused {
+        require(msg.sender == _regulator, "Only regulator can return investments");
+        for (uint i = 0; i < _investors.length; i++) {
+            address investor = _investors[i];
+            payable(investor).transfer(_investedAmountPerInvestor[investor]);
         }
     }
-    */
 
     // Function for the borrowing company to pay coupons
     function payCoupons() public payable {
         // Message needs to have enough value for the copupon payments
+        require(msg.sender == _company, "Coupon payment should come from the borrowing company");
         require(msg.value >= _coupon * _tokenIdTracker.current(), "Not enough coins for coupons");
         for (uint i = 0; i < _tokenIdTracker.current(); i++) {
             address payable investor = payable(ownerOf(i));
@@ -292,21 +347,6 @@ contract GreenBond is ERC721, Ownable{
     
     }
 
-    /*
-    // Not needed anymore
-    function returnTokensAtMaturity() external onlyOwner {
-        // Check that the contract has the right amount of money to send back to the investors
-        require(address(this).balance >= _totalValueRaisedRaised, "There's not enough stable coin for settlement");
-        for(uint i = 0; i < _tokenIdTracker.current(); i++) {
-            address payable investor = payable(ownerOf(i));
-            // Get the tokens back
-            tokenTransfer(investor, owner(), i);
-            // Return the stable coin value
-            investor.transfer(_value);    
-        }
-    }
-
-    */
     // Internal function to transer the tokens
     function tokenTransfer(address from, address to, uint256 tokenId) internal {
         _transfer(from, to, tokenId);
@@ -320,21 +360,7 @@ contract GreenBond is ERC721, Ownable{
         return _paused;
     }
 
-    /**
-     * @dev Modifier to make a function callable only when the contract is not paused.
-     */
-    modifier whenNotPaused() {
-        require(!_paused, "Pausable: paused");
-        _;
-    }
-
-    /**
-     * @dev Modifier to make a function callable only when the contract is paused.
-     */
-    modifier whenPaused() {
-        require(_paused, "Pausable: not paused");
-        _;
-    }
+   
 
     /**
      * @dev Called by a pauser to pause, triggers stopped state.

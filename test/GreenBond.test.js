@@ -61,7 +61,7 @@ contract('GreenBond' ,function (accounts) {
             assert.equal(coupon.toNumber(), 1)
         })
         it('has the right bid closing time', async function () {
-            const closingTime = await bond.bidClosingTime()
+            const closingTime = await bond.getInvestmentWindowClosingTime()
             assert.equal(closingTime, endTime)
         })
     })
@@ -136,6 +136,7 @@ contract('GreenBond' ,function (accounts) {
             assert.equal(count.toNumber(), 0)
         })
 
+        /*
         it('Investors can register bid', async function() {
             // Can't bid for 0 coupon
             await bond.registerBid(0, 2, {from: investor, value: web3.utils.toWei('2000', 'Wei')}).should.be.rejected
@@ -168,6 +169,7 @@ contract('GreenBond' ,function (accounts) {
             coupon = await bond.getCoupon();
             assert.equal(coupon.toNumber(), 2)
         })
+        */
         /*
         it('regulator can return investor investments from the contract', async function() {
             let balance = await web3.eth.getBalance(investor)

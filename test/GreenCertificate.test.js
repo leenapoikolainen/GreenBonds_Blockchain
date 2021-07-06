@@ -32,7 +32,6 @@ require('chai')
         const event1 = result.logs[0].args
         assert.equal(event1.name.toString(), "Project A")
         
-        
         let date = new Date(event1.timestamp.toNumber() * 1000)
         console.log(date)
         /*
@@ -54,9 +53,10 @@ require('chai')
         assert.isFalse(isCertified)
     })
 
+    
     it('can set deadline', async function() {
-        await certificate.setDeadline(1625558400)
+        await certificate.setDeadline(1628236762)
         let endDate = await certificate.getEndDate()
-        assert.equal(endDate, 1625558400)
+        assert.equal(endDate, 1628236762)
     })
 })

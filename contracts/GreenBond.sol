@@ -2,26 +2,26 @@
 pragma solidity >=0.6.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-//import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract GreenBond is ERC721, Ownable{
     using Counters for Counters.Counter;
 
+
     /**
      * @dev Reverts if bidding time is not open
      */
-    modifier onlyWhileBiddingOpen {
-        require(isOpen(), "Bidding time is not open");
+    modifier onlyWhileInvestmentWindowOpen {
+        require(isOpen(), "Investment window is not open");
         _;
     }
 
     /**
      * @dev Reverts if bidding time is still open
      */
-    modifier onlyWhenBiddingClosed {
-        require(!isOpen(), "Bidding time is still open");
+    modifier onlyWhileInvestmentWindowClosed {
+        require(!isOpen(), "Investment window is still open");
         _;
     }
 
@@ -45,6 +45,7 @@ contract GreenBond is ERC721, Ownable{
     Counters.Counter private _tokenIdTracker;
     bool private _paused;
 
+    // Array of initial investors
     address [] private _investors;
 
     address private _owner;
@@ -55,14 +56,13 @@ contract GreenBond is ERC721, Ownable{
     uint256 private _coupon;
     uint256 private _totalValueRaised;
 
-    uint256 private _bidClosingTime;
+    uint256 private _investmentWindowClosingTime;
 
     /**
-     * @return true if the registering investments is open, false otherwise.
+     * @return true if the investment window is open, false otherwise.
      */
     function isOpen() public view returns (bool) {
-        return block.timestamp <= _bidClosingTime;
-        //return block.timestamp >= _openingTime && block.timestamp <= _closingTime;
+        return block.timestamp <= _investmentWindowClosingTime;
     }
 
     /**
@@ -102,7 +102,7 @@ contract GreenBond is ERC721, Ownable{
     
     // Will need to add pauser address as constructor parameter (financial regulator)
     constructor(string memory name, string memory symbol, string memory baseTokenURI, 
-    address company, uint256 value, uint256 coupon, uint256 bidClosingTime) ERC721 (name, symbol) {
+    address company, uint256 value, uint256 coupon, uint256 investmentWindowClosingTime) ERC721 (name, symbol) {
         require(coupon >= 0, "Coupon payment can't be negative");
         _owner = msg.sender;
         _baseTokenURI = baseTokenURI;
@@ -110,16 +110,15 @@ contract GreenBond is ERC721, Ownable{
         _value = value;
         _coupon = coupon;
         _paused = false;
-        _bidClosingTime = bidClosingTime;  
-        
+        _investmentWindowClosingTime = investmentWindowClosingTime;     
     }
 
-    function company() public view returns (address) {
+    function getCompany() public view returns (address) {
         return _company;
     }
 
-    function bidClosingTime() public view returns (uint256) {
-        return _bidClosingTime;
+    function getInvestmentWindowClosingTime() public view returns (uint256) {
+        return _investmentWindowClosingTime;
     }
 
     function setRegulator(address regulator) public onlyOwner {
@@ -130,11 +129,11 @@ contract GreenBond is ERC721, Ownable{
         _greenVerifier = greenVerifier;
     }
 
-    function regulator() public view returns(address) {
+    function getRegulator() public view returns(address) {
         return _regulator;
     }
 
-    function greenVerifier() public view returns(address) {
+    function getGreenVerifier() public view returns(address) {
         return _greenVerifier;
     }
 
@@ -179,7 +178,7 @@ contract GreenBond is ERC721, Ownable{
 
     // Function to register investment interest 
     // Investors specifies the number of tokens they would like to receive 
-    function registerInvestment(uint256 number) public payable onlyWhileBiddingOpen {
+    function registerInvestment(uint256 number) public payable onlyWhileInvestmentWindowOpen {
         // Require that the investor has enough coins
         require(msg.value >= number * _value, "not enough coins for the amount");
 
@@ -197,60 +196,13 @@ contract GreenBond is ERC721, Ownable{
         emit Investment(msg.sender, msg.value, number);
     }
 
-    // Mapping from owner to operator approvals
-    mapping (address => uint256) _investorsCoupon;
-    uint256 [5] _couponMatrix;
-    uint256 private _seekedNumberOfBonds = 6;
-    
-
-    function registerBid(uint256 coupon, uint256 numberOfTokens) public payable {
-        require(coupon > 0 && coupon < 6 , "Coupon needs to be between 1 and 5");
-        require(msg.value >= numberOfTokens * _value, "not enough coins for the amount");
-        // Check if investor already on the list
-        if (_investedAmountPerInvestor[msg.sender] == 0) {
-            _investors.push(msg.sender);
-        }
-
-        // Register the investment
-        uint256 currentAmount = _investedAmountPerInvestor[msg.sender];
-        _investedAmountPerInvestor[msg.sender] = currentAmount + msg.value;
-        _requestedTokensPerInvestor[msg.sender] = _requestedTokensPerInvestor[msg.sender] + numberOfTokens;
-        _investorsCoupon[msg.sender] = coupon;
-        
-        // Update the coupon record
-        uint256 index = coupon - 1;
-        uint256 currentInterest = _couponMatrix[index];
-        _couponMatrix[index] = currentInterest + numberOfTokens;
-    }
-
-    function getInterestAtCouponLevel(uint256 coupon) public view returns (uint256){
-        return _couponMatrix[coupon - 1];
-    }
-
-    function defineCoupon() public {
-        uint256 numberOfInterests = 0;
-
-        // Default coupon is 1
-        _coupon = 1;
-
-        for(uint i = 4; i > 0 ; i--) {
-            numberOfInterests += _couponMatrix[i];
-            // If enough interest at this copupn level, set coupon and break the loop
-            if (numberOfInterests >= _seekedNumberOfBonds) {
-                _coupon = i+1;
-                break;
-            }
-        }
-
-    }
-
 
     /**
      * @dev Function to issue tokens for investors who have registered 
         Assumes all investors will get the requested investment
         Can be called only when bidding time is closed and the contract is unpaused
      */
-    function issueTokens() public onlyWhenBiddingClosed whenNotPaused {
+    function issueTokens() public onlyWhileInvestmentWindowClosed whenNotPaused {
         require(msg.sender == _owner, "Only owner can mint tokens");
        
         // Iterate through each investor

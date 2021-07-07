@@ -8,6 +8,8 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 contract GreenBond is ERC721, Ownable {
     using Counters for Counters.Counter;
 
+    // MODIFIERS
+
     /**
      * @dev Reverts if bidding time is not open
      */
@@ -40,13 +42,12 @@ contract GreenBond is ERC721, Ownable {
         _;
     }
 
-    string private _baseBondURI;
+    // MEMBER VARIABLES
+    
     Counters.Counter private _bondIdTracker;
+    string private _baseBondURI;
     bool private _paused;
-
-    // Array of initial investors
-    address[] private _investors;
-
+    address[] private _initialInvestors;
     address private _owner;
     address payable private _company;
     address private _regulator;
@@ -54,10 +55,19 @@ contract GreenBond is ERC721, Ownable {
     uint256 private _value;
     uint256 private _coupon;
     uint256 private _term;
+    uint256 private _totalCouponPayments;
+    uint256 private _couponsPaid = 0; // Zero in the beginning
+    uint256 private _totalDebt;
+    uint256 private _issueDate;
+    uint256 private _maturityDate;
+    uint256 private _actualPrincipalPaymentDate = 0; // Initialise to 0
     uint256 private _couponsPerYear;
-    uint256 private _totalValueRaised;
-
-    uint256 private _investmentWindowClosingTime;
+    uint256 [] private _couponPaymentDates;
+    uint256 [] private _actualCouponPaymentDates;
+    
+   
+    mapping(address => uint256) _investedAmountPerInvestor;
+    mapping(address => uint256) _requestedBondsPerInvestor;
 
     /**
      * @dev Emitted when an investor registers initial investment request
@@ -74,7 +84,7 @@ contract GreenBond is ERC721, Ownable {
     /**
      * @dev Emitted when a coupon payment has been made
      */
-    event CouponPayment(address investor, uint256 BondId);
+    event CouponPayment(address investor, uint256 bondId);
 
     /**
      * @dev Emitted when the pause is triggered by a pauser (regulator).
@@ -90,9 +100,7 @@ contract GreenBond is ERC721, Ownable {
      * @dev Emmitted when coupon payment is adjusted
      */
     event CouponAdjustment(address adjuster, uint256 couponRate);
-
-    mapping(address => uint256) _investedAmountPerInvestor;
-    mapping(address => uint256) _requestedBondsPerInvestor;
+ 
 
     /**
      * @dev constructor, requires name and symbol for the bond,
@@ -106,35 +114,60 @@ contract GreenBond is ERC721, Ownable {
         address company,
         uint256 value,
         uint256 coupon,
-        uint256 investmentWindowClosingTime,
-        uint256 term
-        //uint256 couponsPerYear
+        uint256 issueDate,
+        uint256 term,
+        uint256 couponsPerYear
     ) ERC721(name, symbol) {
         require(company != address(0), "Company address can not be 0x0");
         require(value > 0, "Value can not be 0");
         require(coupon >= 0, "Coupon payment can't be negative");
-        require(investmentWindowClosingTime > block.timestamp, "Closing time can't be in the past");
+        require(issueDate > block.timestamp, "Closing time can't be in the past");
         _owner = msg.sender;
         _baseBondURI = baseBondURI;
         _company = payable(company);
         _value = value;
         _coupon = coupon;
         _paused = false;
-        _investmentWindowClosingTime = investmentWindowClosingTime;
+        _issueDate = issueDate;
         _term = term;
-        //_couponsPerYear = couponsPerYear;
+        _couponsPerYear = couponsPerYear;
+        _totalCouponPayments = couponsPerYear * term;
+        
+        _maturityDate = _issueDate + term * 365 days;
+
+        uint256 timeBetweenpayments = 365 days / couponsPerYear;
+        
+        // Setting up the coupon payment dates
+        for (uint i = 1; i <= _totalCouponPayments; i++) {
+            _couponPaymentDates.push(_issueDate + timeBetweenpayments * i);
+            _actualCouponPaymentDates.push(0);
+        }    
+    }
+
+    // Getter functions
+    function getIssueDate() public view returns (uint256) {
+        return _issueDate;
     }
 
     function getMaturityDate() public view returns (uint256) {
-        return _investmentWindowClosingTime + _term;
+        return _maturityDate;
+    }
+
+    function getTerm() public view returns (uint256) {
+        return _term;
+    }
+    
+    function getCouponDate(uint256 number) public view returns (uint256) {
+        require(number > 0 && number <= _totalCouponPayments, "No such coupon payment, check the number of coupon payments");
+        return _couponPaymentDates[number - 1];
+    }
+
+    function getCouponDates() public view returns (uint256 [] memory) {
+        return _couponPaymentDates;
     }
 
     function getCompany() public view returns (address) {
         return _company;
-    }
-
-    function getInvestmentWindowClosingTime() public view returns (uint256) {
-        return _investmentWindowClosingTime;
     }
 
     function setRegulator(address regulator) public onlyOwner {
@@ -162,11 +195,11 @@ contract GreenBond is ERC721, Ownable {
     }
 
     function getTotalLoan() public view returns (uint256) {
-        return _totalValueRaised;
+        return _totalDebt;
     }
 
     function numberOfInvestors() public view returns (uint256) {
-        return _investors.length;
+        return _initialInvestors.length;
     }
     /**
         * @dev Function to return the number of bonds issued
@@ -193,7 +226,7 @@ contract GreenBond is ERC721, Ownable {
      * @return true if the investment window is open, false otherwise.
      */
     function isOpen() public view returns (bool) {
-        return block.timestamp <= _investmentWindowClosingTime;
+        return block.timestamp <= _issueDate;
     }
 
     function _baseURI() internal view override returns (string memory) {
@@ -211,6 +244,32 @@ contract GreenBond is ERC721, Ownable {
         return super.supportsInterface(interfaceId);
     }
 
+    function couponPaymentsMadeOnTime() public view returns (bool){
+        for (uint i = 0; i < _couponPaymentDates.length; i++) {
+            if (block.timestamp < _couponPaymentDates[i]) {
+                // Break the loop if the coupon payment has not been due yet
+                return true;
+            } else {
+                // The actual coupon payment date was later than the agreed date 
+                // Includes 24 hours to make the coupon payment
+                if (_actualCouponPaymentDates[i] > _couponPaymentDates[i] + 1 days ||
+                    _actualCouponPaymentDates[i] == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    function principalPaymentMadeOnTime() public view returns (bool) {
+        require(block.timestamp > _maturityDate, "Bond has not matured yet");
+        if (_actualPrincipalPaymentDate > _maturityDate + 1 days) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     // Function to register investment interest
     // Investors specifies the number of bonds they would like to receive
     function registerInvestment(uint256 number)
@@ -226,7 +285,7 @@ contract GreenBond is ERC721, Ownable {
 
         // Check if investor already on the list
         if (_investedAmountPerInvestor[msg.sender] == 0) {
-            _investors.push(msg.sender);
+            _initialInvestors.push(msg.sender);
         }
 
         // Register the investment
@@ -253,8 +312,8 @@ contract GreenBond is ERC721, Ownable {
         require(msg.sender == _owner, "Only owner can issue bonds");
 
         // Iterate through each investor
-        for (uint256 i = 0; i < _investors.length; i++) {
-            address investor = _investors[i];
+        for (uint256 i = 0; i < _initialInvestors.length; i++) {
+            address investor = _initialInvestors[i];
             uint256 numberOfBonds = _requestedBondsPerInvestor[investor];
             // Transfer money to the borrowing company
             _company.transfer(_value * numberOfBonds);
@@ -286,7 +345,7 @@ contract GreenBond is ERC721, Ownable {
             // Update the records
             _investedAmountPerInvestor[investor] = 0;
             _requestedBondsPerInvestor[investor] = 0;
-            _totalValueRaised = _totalValueRaised + _value * numberOfBonds;
+            _totalDebt = _totalDebt + _value * numberOfBonds;
         }
     }
 
@@ -299,8 +358,8 @@ contract GreenBond is ERC721, Ownable {
             msg.sender == _regulator,
             "Only regulator can return investments"
         );
-        for (uint256 i = 0; i < _investors.length; i++) {
-            address investor = _investors[i];
+        for (uint256 i = 0; i < _initialInvestors.length; i++) {
+            address investor = _initialInvestors[i];
             payable(investor).transfer(_investedAmountPerInvestor[investor]);
         }
     }
@@ -316,11 +375,22 @@ contract GreenBond is ERC721, Ownable {
             msg.value >= _coupon * _bondIdTracker.current(),
             "Not enough coins for coupons"
         );
+
+        require(
+            _couponsPaid < _totalCouponPayments, 
+            "All coupon payments already made"
+        );
+
+
         for (uint256 i = 0; i < _bondIdTracker.current(); i++) {
             address payable investor = payable(ownerOf(i));
             investor.transfer(_coupon);
             emit CouponPayment(investor, i);
         }
+
+        
+        _actualCouponPaymentDates[_couponsPaid] = block.timestamp;
+        _couponsPaid++;
 
         // Refund extra coins if paid too much
         if (msg.value > _coupon * _bondIdTracker.current()) {
@@ -339,7 +409,7 @@ contract GreenBond is ERC721, Ownable {
             "Paying company should be the borrowing company"
         );
         require(
-            msg.value >= _totalValueRaised,
+            msg.value >= _totalDebt,
             "Not enough coins to settle the bond at maturity"
         );
 
@@ -352,13 +422,16 @@ contract GreenBond is ERC721, Ownable {
             // Return funds
             investor.transfer(_value);
             // Decrement the values
-            _totalValueRaised = _totalValueRaised - _value;
+            _totalDebt = _totalDebt - _value;
             _bondIdTracker.decrement();
         }
 
+        // Set the payment date
+        _actualPrincipalPaymentDate = block.timestamp;
+
         // Refund coins there is extra money on the contract
-        if (address(this).balance > 0 && msg.value > _totalValueRaised) {
-            uint256 extraAmount = msg.value - _totalValueRaised;
+        if (address(this).balance > 0 && msg.value > _totalDebt) {
+            uint256 extraAmount = msg.value - _totalDebt;
             if (address(this).balance < extraAmount) {
                 uint256 amount = address(this).balance;
                 payable(msg.sender).transfer(amount);

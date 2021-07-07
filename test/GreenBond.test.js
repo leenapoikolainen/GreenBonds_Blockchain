@@ -26,8 +26,12 @@ contract('GreenBond' ,function (accounts) {
     let baseURI = "https://storage.cloud.google.com/metadata_platform/";
     let faceValue = 1000;
     let couponRate = 1;
-    let endTime = Math.floor(new Date().getTime() / 1000) + duration.days(2)
-    let term = 31557600 * 2 // 2 years
+    let issueDate = Math.floor(new Date().getTime() / 1000) + duration.days(2)
+    //let term = 31557600 * 2 // 2 years
+    let term = 2;
+    //let maturity = issueDate + duration.years(term)
+    
+    let couponsPerYear = 2 // semiannual
     const owner = accounts[0];
     const investor = accounts[1];
     const investor2 = accounts[2];
@@ -38,7 +42,7 @@ contract('GreenBond' ,function (accounts) {
     // Changed from beforeEach to before
     before(async function() {
         bond = await GreenBond.new(bondName, bondSymbol, baseURI,
-        company, faceValue, couponRate, endTime, term, {from: owner});
+        company, faceValue, couponRate, issueDate, term, couponsPerYear, {from: owner});
         // Set regulator and green verifier (Can be hard coded for the actual contract)
         await bond.setRegulator(regulator)
         await bond.setGreenVerifier(greenVerifier)
@@ -67,19 +71,33 @@ contract('GreenBond' ,function (accounts) {
             assert.equal(coupon.toNumber(), 1)
         })
         it('has the right bid closing time', async function () {
-            const closingTime = await bond.getInvestmentWindowClosingTime()
-            assert.equal(closingTime, endTime)
+            const closingTime = await bond.getIssueDate()
+            assert.equal(closingTime, issueDate)
         })
-        it('has the right maturity date', async function() {
-            const maturityDate = await bond.getMaturityDate();
-            assert.equal(maturityDate, endTime + term)
-            let date = new Date(maturityDate * 1000)
+        it('Has the right issue date, maturity date and coupon dates', async function() {
+            const maturityDate = await bond.getMaturityDate()
+            const issuingDay = await bond.getIssueDate()
+            assert.equal(maturityDate.toNumber(), issueDate + duration.years(term))
+            assert.equal(issueDate, issueDate)
+           
+            /*
+            let date = new Date(issuingDay * 1000)
             console.log(date)
+
+            date = new Date(maturityDate * 1000)
+            console.log(date)
+            */
+
+            let couponDate = await bond.getCouponDate(1);
+            assert.equal(couponDate, issueDate + duration.years(0.5))
+            couponDate = await bond.getCouponDate(2);
+            assert.equal(couponDate, issueDate + duration.years(1))
+          
         })
     })
 
-    describe('Before bidding time is closed', () => { 
-        it('Investor can register investment while bidding time is open', async function() {
+    describe('Before investment window is closed', () => { 
+        it('Investor can register investment while investment window is open', async function() {
             // Track the recorded investments
             let investmentBefore = await bond.getInvestorBalance(investor)
             investmentBefore = new web3.utils.BN(investmentBefore)
@@ -108,7 +126,7 @@ contract('GreenBond' ,function (accounts) {
             assert.equal(investmentAfter.toString(), expectedInvestment.toString()) 
         })
 
-        it('Issuing bonds is not possible when bidding time is still open', async function() {
+        it('Issuing bonds is not possible when investment window is still open', async function() {
             // Test issuing tokens
             await bond.issueBonds({from: owner}).should.be.rejected
         })
@@ -149,40 +167,6 @@ contract('GreenBond' ,function (accounts) {
         })
 
         /*
-        it('Investors can register bid', async function() {
-            // Can't bid for 0 coupon
-            await bond.registerBid(0, 2, {from: investor, value: web3.utils.toWei('2000', 'Wei')}).should.be.rejected
-            
-            await bond.registerBid(3, 2, {from: investor, value: web3.utils.toWei('2000', 'Wei')})
-            let interest = await bond.getInterestAtCouponLevel(3);
-            assert.equal(interest.toNumber(), 2)
-
-            await bond.registerBid(2, 3, {from: investor2, value: web3.utils.toWei('3000', 'Wei')})
-            interest = await bond.getInterestAtCouponLevel(2);
-            assert.equal(interest.toNumber(), 3)
-        })
-
-        it('Coupon will be 1 when not enough bids', async function() {
-            let coupon = await bond.getCoupon();
-            //console.log(coupon.toNumber())
-            await bond.defineCoupon();
-            coupon = await bond.getCoupon();
-            assert.equal(coupon.toNumber(), 1)
-        })
-
-        it('Coupon will be defined according to highest bid that fullfils the demand', async function() {
-            let coupon = await bond.getCoupon();
-            assert.equal(coupon.toNumber(), 1)
-            //console.log(coupon.toNumber())
-
-            await bond.registerBid(4, 1, {from: investor, value: web3.utils.toWei('1000', 'Wei')})
-
-            await bond.defineCoupon();
-            coupon = await bond.getCoupon();
-            assert.equal(coupon.toNumber(), 2)
-        })
-        */
-        /*
         it('regulator can return investor investments from the contract', async function() {
             let balance = await web3.eth.getBalance(investor)
             balance = new web3.utils.BN(balance) 
@@ -211,7 +195,7 @@ contract('GreenBond' ,function (accounts) {
         */
     })
     
-    /*
+    
     describe('After bidding time is over', () => {
         let balanceAfterInvestment
 
@@ -222,12 +206,13 @@ contract('GreenBond' ,function (accounts) {
             balanceAfterInvestment = new web3.utils.BN(balanceAfterInvestment) 
 
             // Advance time
-            await timeMachine.advanceTimeAndBlock(duration.weeks(1));
+            await timeMachine.advanceTimeAndBlock(duration.weeks(1)); // + 1 week
         })
         it('bidding not possible after bidding time is closed', async function() {
             await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1000', 'Wei')}).should.be.rejected
         })
 
+        /*
         it('issuing tokens is not possible if contract is paused by regulator', async function() {
             let result = await bond.pause({from: regulator})
             const paused = result.logs[0].args
@@ -236,15 +221,15 @@ contract('GreenBond' ,function (accounts) {
             await bond.issueTokens({from: owner}).should.be.rejected
             await bond.unpause({from: regulator})
         })
-
+        */
         
-        it('Issuing tokens is possible after bidding time is over', async function() {
+        it('Issuing bonds is possible after investment window is closed', async function() {
             // Track balance of the company before the token issuance
             let oldBalance = await web3.eth.getBalance(company)
             oldBalance = new web3.utils.BN(oldBalance) 
     
             // Store the result and get the transfer event
-            let result = await bond.issueTokens({from: owner})
+            let result = await bond.issueBonds({from: owner})
             const transfer1 = result.logs[0].args;
             const transfer2 = result.logs[1].args;
             const transfer3 = result.logs[2].args;
@@ -290,6 +275,7 @@ contract('GreenBond' ,function (accounts) {
             
         })
 
+        
         it('Extra investment amount is returned to the investor', async function() {    
             // Check investors balance after the investment
             let newBalance = await web3.eth.getBalance(investor2)
@@ -303,20 +289,21 @@ contract('GreenBond' ,function (accounts) {
             assert.equal(newBalance.toString(), expectedBalance.toString())
         })
 
+        
         it('The token count is correct after issuing tokens', async function() {
-            let count = await bond.tokenCount()
+            let count = await bond.bondCount()
             assert.equal(count.toNumber(), 4)
         })
 
-        it('Paying coupons', async function() {
+        it('Investors get coupons', async function() {
             // Record investor's balance before the coupon payment
             let oldBalance1 = await web3.eth.getBalance(investor)
             oldBalance1 = new web3.utils.BN(oldBalance1)
     
             let oldBalance2 = await web3.eth.getBalance(investor2)
             oldBalance2 = new web3.utils.BN(oldBalance2)
-    
-            // Pay coupon to investors
+
+            // Pay coupons
             let result = await bond.payCoupons({from: company, value: web3.utils.toWei('4', 'Wei')})
             const coupon1 = result.logs[0].args;
             const coupon2 = result.logs[1].args;
@@ -325,17 +312,17 @@ contract('GreenBond' ,function (accounts) {
     
             // Check event details
             assert.equal(coupon1.investor, investor)
-            assert.equal(coupon1.tokenId, 0)
-    
+            assert.equal(coupon1.bondId, 0)
+            
             assert.equal(coupon2.investor, investor)
-            assert.equal(coupon2.tokenId, 1)
+            assert.equal(coupon2.bondId, 1)
 
             assert.equal(coupon3.investor, investor)
-            assert.equal(coupon3.tokenId, 2)
+            assert.equal(coupon3.bondId, 2)
 
             assert.equal(coupon4.investor, investor2)
-            assert.equal(coupon4.tokenId, 3)
-    
+            assert.equal(coupon4.bondId, 3)
+
             // Check new balance of the investor after the coupon payment
             let newBalance1 = await web3.eth.getBalance(investor)
             newBalance1 = new web3.utils.BN(newBalance1)
@@ -356,9 +343,31 @@ contract('GreenBond' ,function (accounts) {
             const expectedBalance2 = oldBalance2.add(couponPayment)
             assert.equal(newBalance2.toString(), expectedBalance2.toString())
         })
-    
+
+        it('Payment check returns true, when coupons paid on time', async function() {
+            // Advance time to after the first coupon payment was die
+            await timeMachine.advanceTimeAndBlock(duration.years(0.5)); // +6 mth & 1 week
+            let result = await bond.couponPaymentsMadeOnTime()
+            assert.isTrue(result)
+        })
+        it('Payment check returns false, when coupons not paid on time', async function() {
+            // Advance time to after the first coupon payment was die
+            await timeMachine.advanceTimeAndBlock(duration.years(0.5)); // +1 year & 1 week
+            let result = await bond.couponPaymentsMadeOnTime()
+            assert.isFalse(result)
+        })
+        it('Borrowing company can not make extra coupon payments', async function() {
+            // Second coupon
+            await bond.payCoupons({from: company, value: web3.utils.toWei('4', 'Wei')}) 
+            // Third coupon
+            await bond.payCoupons({from: company, value: web3.utils.toWei('4', 'Wei')})
+            // Fourth and final coupon
+            await bond.payCoupons({from: company, value: web3.utils.toWei('4', 'Wei')})
+            // This should be rejected
+            await bond.payCoupons({from: company, value: web3.utils.toWei('4', 'Wei')}).should.be.rejected
+        })
         
-        it('Tokens and money transferred at maturity', async function() {
+        it('Tokens and principal transferred at maturity', async function() {
             // Record investors' balances before the principal payback
             let oldBalance1 = await web3.eth.getBalance(investor)
             oldBalance1 = new web3.utils.BN(oldBalance1)
@@ -369,16 +378,17 @@ contract('GreenBond' ,function (accounts) {
             // Paying back bond
             let result = await bond.payBackBond({from: company, value: web3.utils.toWei('4500', 'Wei')})
             
+            
             // First event is approval
             const transfer1 = result.logs[1].args; 
             // Next event is approval
             const transfer2 = result.logs[3].args;
-            //
+            // Next event is approval
             const transfer3 = result.logs[5].args;
-            //
+            // Next event is approval
             const transfer4 = result.logs[7].args;
-
             const refund = result.logs[8].args;
+            
             
             // Check that tokens are returned to the owner
 
@@ -386,6 +396,7 @@ contract('GreenBond' ,function (accounts) {
             let ownerOfToken = await bond.ownerOf(0)
             assert.equal(ownerOfToken, owner)
     
+            
             assert.equal(transfer2.tokenId, 1)
             ownerOfToken = await bond.ownerOf(1)
             assert.equal(ownerOfToken, owner)
@@ -420,14 +431,24 @@ contract('GreenBond' ,function (accounts) {
     
             expectedBalance = oldBalance2.add(principalPayment)
             assert.equal(newBalance2.toString(), expectedBalance.toString())  
+            
         })
-        it('The token count is 0 after all tokens returned to owner', async function() {
-            let count = await bond.tokenCount()
+        
+        it('the bond count is 0 after all tokens returned to owner', async function() {
+            let count = await bond.bondCount()
             assert.equal(count.toNumber(), 0)
         })
-       
+        
+        it('can not call principal payment check before maturity date', async function() {
+            await bond.principalPaymentMadeOnTime().should.be.rejected
+        })
+        it('if principal is paid on time, check returns true', async function() {
+            await timeMachine.advanceTimeAndBlock(duration.years(1)); // +2 year & 1 week
+            let result = await bond.principalPaymentMadeOnTime()
+            assert.isTrue(result)
+        })
     })
-    */
+    
 
 
     /*

@@ -21,7 +21,13 @@ require('chai')
 
 contract('GreenBond' ,function (accounts) {
     let bond;
+    let bondName = "Green Bond";
+    let bondSymbol = "GREEN";
+    let baseURI = "https://storage.cloud.google.com/metadata_platform/";
+    let faceValue = 1000;
+    let couponRate = 1;
     let endTime = Math.floor(new Date().getTime() / 1000) + duration.days(2)
+    let term = 31557600 * 2 // 2 years
     const owner = accounts[0];
     const investor = accounts[1];
     const investor2 = accounts[2];
@@ -31,8 +37,8 @@ contract('GreenBond' ,function (accounts) {
 
     // Changed from beforeEach to before
     before(async function() {
-        bond = await GreenBond.new("Green Bond", "GREEN", "https://storage.cloud.google.com/metadata_platform/",
-        company, 1000, 1, endTime, {from: owner});
+        bond = await GreenBond.new(bondName, bondSymbol, baseURI,
+        company, faceValue, couponRate, endTime, term, {from: owner});
         // Set regulator and green verifier (Can be hard coded for the actual contract)
         await bond.setRegulator(regulator)
         await bond.setGreenVerifier(greenVerifier)
@@ -64,6 +70,12 @@ contract('GreenBond' ,function (accounts) {
             const closingTime = await bond.getInvestmentWindowClosingTime()
             assert.equal(closingTime, endTime)
         })
+        it('has the right maturity date', async function() {
+            const maturityDate = await bond.getMaturityDate();
+            assert.equal(maturityDate, endTime + term)
+            let date = new Date(maturityDate * 1000)
+            console.log(date)
+        })
     })
 
     describe('Before bidding time is closed', () => { 
@@ -79,7 +91,7 @@ contract('GreenBond' ,function (accounts) {
             // Check the event details (right investor and right amount logged)
             assert.equal(event.value.toNumber(), 1000)
             assert.equal(event.investor, investor)
-            assert.equal(event.numberOfTokens, 1)
+            assert.equal(event.numberOfBonds, 1)
     
             let paidAmount = web3.utils.toWei('1000', 'Wei')
             paidAmount = new web3.utils.BN(paidAmount)
@@ -96,9 +108,9 @@ contract('GreenBond' ,function (accounts) {
             assert.equal(investmentAfter.toString(), expectedInvestment.toString()) 
         })
 
-        it('Issuing tokens is not possible when bidding time is still open', async function() {
+        it('Issuing bonds is not possible when bidding time is still open', async function() {
             // Test issuing tokens
-            await bond.issueTokens({from: owner}).should.be.rejected
+            await bond.issueBonds({from: owner}).should.be.rejected
         })
 
         it('Investors can request multiple investments', async function() {
@@ -113,7 +125,7 @@ contract('GreenBond' ,function (accounts) {
             // Check the event details (right investor and right amount logged)
             assert.equal(event.value.toNumber(), 2000)
             assert.equal(event.investor, investor) 
-            assert.equal(event.numberOfTokens, 2)
+            assert.equal(event.numberOfBonds, 2)
     
             let paidAmount = web3.utils.toWei('2000', 'Wei')
             paidAmount = new web3.utils.BN(paidAmount)
@@ -132,7 +144,7 @@ contract('GreenBond' ,function (accounts) {
         })
     
         it('The token count is 0 before issuing tokens', async function() {
-            let count = await bond.tokenCount()
+            let count = await bond.bondCount()
             assert.equal(count.toNumber(), 0)
         })
 

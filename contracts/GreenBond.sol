@@ -14,7 +14,7 @@ contract GreenBond is ERC721, Ownable {
      * @dev Reverts if bidding time is not open
      */
     modifier onlyWhileInvestmentWindowOpen {
-        require(isOpen(), "Investment window is not open");
+        require(investmentWindowisOpen(), "Investment window is not open");
         _;
     }
 
@@ -22,7 +22,7 @@ contract GreenBond is ERC721, Ownable {
      * @dev Reverts if bidding time is still open
      */
     modifier onlyWhileInvestmentWindowClosed {
-        require(!isOpen(), "Investment window is still open");
+        require(!investmentWindowisOpen(), "Investment window is still open");
         _;
     }
 
@@ -144,7 +144,18 @@ contract GreenBond is ERC721, Ownable {
         }    
     }
 
+    // Setter functions - these could be hard coded to be the same for all bonds
+
+    function setRegulator(address regulator) public onlyOwner {
+        _regulator = regulator;
+    }
+
+    function setGreenVerifier(address greenVerifier) public onlyOwner {
+        _greenVerifier = greenVerifier;
+    }
+
     // Getter functions
+
     function getIssueDate() public view returns (uint256) {
         return _issueDate;
     }
@@ -170,14 +181,6 @@ contract GreenBond is ERC721, Ownable {
         return _company;
     }
 
-    function setRegulator(address regulator) public onlyOwner {
-        _regulator = regulator;
-    }
-
-    function setGreenVerifier(address greenVerifier) public onlyOwner {
-        _greenVerifier = greenVerifier;
-    }
-
     function getRegulator() public view returns (address) {
         return _regulator;
     }
@@ -186,7 +189,7 @@ contract GreenBond is ERC721, Ownable {
         return _greenVerifier;
     }
 
-    function getValue() public view returns (uint256) {
+    function getFaceValue() public view returns (uint256) {
         return _value;
     }
 
@@ -194,17 +197,14 @@ contract GreenBond is ERC721, Ownable {
         return _coupon;
     }
 
-    function getTotalLoan() public view returns (uint256) {
+    function getTotalDebt() public view returns (uint256) {
         return _totalDebt;
     }
 
     function numberOfInvestors() public view returns (uint256) {
         return _initialInvestors.length;
     }
-    /**
-        * @dev Function to return the number of bonds issued
-        and in circulation
-     */
+
     function bondCount() public view returns (uint256) {
         return _bondIdTracker.current();
     }
@@ -213,6 +213,11 @@ contract GreenBond is ERC721, Ownable {
         return name();
     }
 
+    function _baseURI() internal view override returns (string memory) {
+        return _baseBondURI;
+    }
+
+    // Just for testing 
     function getInvestorBalance(address investor)
         public
         view
@@ -222,16 +227,11 @@ contract GreenBond is ERC721, Ownable {
         return _investedAmountPerInvestor[investor];
     }
 
-    /**
-     * @return true if the investment window is open, false otherwise.
-     */
-    function isOpen() public view returns (bool) {
+    // Return true if the investment window is open, false otherwise.
+    function investmentWindowisOpen() public view returns (bool) {
         return block.timestamp <= _issueDate;
     }
 
-    function _baseURI() internal view override returns (string memory) {
-        return _baseBondURI;
-    }
 
     // Needed to override this function as two parent classes defined the same function
     function supportsInterface(bytes4 interfaceId)
@@ -244,6 +244,8 @@ contract GreenBond is ERC721, Ownable {
         return super.supportsInterface(interfaceId);
     }
 
+    // Returns true if either no coupon payments have been due yet
+    // or when all the coupon payments have been made on time
     function couponPaymentsMadeOnTime() public view returns (bool){
         for (uint i = 0; i < _couponPaymentDates.length; i++) {
             if (block.timestamp < _couponPaymentDates[i]) {
@@ -261,6 +263,7 @@ contract GreenBond is ERC721, Ownable {
         return true;
     }
 
+    // Checks if the principal amount was paid back on time
     function principalPaymentMadeOnTime() public view returns (bool) {
         require(block.timestamp > _maturityDate, "Bond has not matured yet");
         if (_actualPrincipalPaymentDate > _maturityDate + 1 days) {
@@ -283,7 +286,7 @@ contract GreenBond is ERC721, Ownable {
             "not enough coins for the amount"
         );
 
-        // Check if investor already on the list
+        // If investor is not on the list, add to the list
         if (_investedAmountPerInvestor[msg.sender] == 0) {
             _initialInvestors.push(msg.sender);
         }
@@ -302,7 +305,7 @@ contract GreenBond is ERC721, Ownable {
     /**
      * @dev Function to issue bonds for investors who have registered 
         Assumes all investors will get the requested investment
-        Can be called only when bidding time is closed and the contract is unpaused
+        Can be called only when investment window is closed and the contract is unpaused
      */
     function issueBonds()
         public
@@ -378,7 +381,7 @@ contract GreenBond is ERC721, Ownable {
 
         require(
             _couponsPaid < _totalCouponPayments, 
-            "All coupon payments already made"
+            "All coupon payments have already been made"
         );
 
 
@@ -478,6 +481,9 @@ contract GreenBond is ERC721, Ownable {
         emit Unpaused(_msgSender());
     }
 
+    /**
+     * Function for the greenVerifier to adjust the bond
+     */
     function adjustCoupon(bool increase, uint256 amount) public {
         require(msg.sender == _greenVerifier);
         if (increase) {

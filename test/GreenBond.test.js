@@ -65,7 +65,7 @@ contract('GreenBond' ,function (accounts) {
             assert.equal(symbol, "GREEN")
         })
         it('has the right value and coupon', async function () {
-            const value = await bond.getValue()
+            const value = await bond.getFaceValue()
             const coupon = await bond.getCoupon()
             assert.equal(value.toNumber(), 1000)
             assert.equal(coupon.toNumber(), 1)

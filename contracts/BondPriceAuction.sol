@@ -177,6 +177,7 @@ contract BondPriceAuction {
         }
     }
 
+    // Find the lowest possible coupon that fulfills the demand
     function defineCoupon2() public returns (uint256) {
         require(msg.sender == _owner, "Only owner can define the coupon");
         // Variable for the total demand for tokens
@@ -184,8 +185,8 @@ contract BondPriceAuction {
 
         // Iterate each coupon level, and count the token demand to
         // determine the coupon level which will fulfill the seeked number of tokens
-        for(uint i = _maxCoupon; i > 0 ; i--) {
-            // Increase the token 
+        for(uint i = 1; i <= _maxCoupon ; i++) {
+            // Increase the tokendemand
             tokenDemand += _couponMatrix[i-1];
             // If enough interest at this copupn level, set coupon and break the loop
             if (tokenDemand >= _seekedNumberOfBonds) {
@@ -193,6 +194,7 @@ contract BondPriceAuction {
                 break;
             }
         }
+        
         if (_coupon > 0) {
             emit CouponSet(_coupon);
         } else {

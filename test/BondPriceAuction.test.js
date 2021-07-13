@@ -59,8 +59,6 @@ contract('BondPriceAuction', function (accounts) {
         // 0 by default
         let coupon = await auction.getCoupon()
         assert.equal(coupon, 0)
-
-
         
         // Only owner can define coupon
         await auction.defineCoupon2({from: investor}).should.be.rejected
@@ -74,15 +72,15 @@ contract('BondPriceAuction', function (accounts) {
         
     })
 
-    /*
-    it('testing the issuing function', async function() {
-        await auction.registerBid2(5, 3, {from: investor, value: web3.utils.toWei('300', 'Wei')})
-        await auction.registerBid2(4, 7, {from: investor2, value: web3.utils.toWei('700', 'Wei')})
+    
+    it('issuing tokens for successful bidders, refunding unsuccessful', async function() {
+        await auction.registerBid2(1, 3, {from: investor, value: web3.utils.toWei('300', 'Wei')})
+        await auction.registerBid2(2, 7, {from: investor2, value: web3.utils.toWei('700', 'Wei')})
         await auction.registerBid2(3, 2, {from: investor2, value: web3.utils.toWei('200', 'Wei')})
         
         let result = await auction.defineCoupon2({from: owner}) 
         coupon = await auction.getCoupon()
-        assert.equal(coupon, 4)
+        assert.equal(coupon, 2)
 
         result = await auction.issueTokens()
         
@@ -96,12 +94,11 @@ contract('BondPriceAuction', function (accounts) {
         assert.equal(issue2.investor, investor2)
         assert.equal(issue2.amount, 7)  
 
-        
         assert.equal(refund.investor, investor2)
         assert.equal(refund.amount, 200)
         
     })
-*/
+
     /*
     it('deploys successfully', async function () {
         const address = await auction.address

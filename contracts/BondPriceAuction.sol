@@ -123,6 +123,8 @@ contract BondPriceAuction {
 
     // NEW
 
+    
+
     function registerBid2(uint256 coupon, uint256 numberOfBonds) public payable {
         require(coupon >= _minCoupon && coupon <= _maxCoupon, "Coupon needs to be between the set range");
         require(msg.value >= _faceValue * numberOfBonds,"Not enough eth deposited for the bid");
@@ -148,7 +150,7 @@ contract BondPriceAuction {
     event Refund(address investor, uint256 amount);
 
     function issueTokens() public {
-        for(uint i = _maxCoupon; i >= _coupon; i--) {
+        for(uint i = _minCoupon; i <= _coupon; i++) {
             address[] memory investors = getInvestorsAtCoupon(i);
             for(uint j = 0; j < investors.length; j++) {
                 address investor = investors[j];
@@ -163,10 +165,12 @@ contract BondPriceAuction {
                 emit BondIssue(investor, amount);
             }
         }
+        // Refund other investors
+        refundInvestorsAboveCouponLevel(_coupon);
+    }
 
-        
-        // Return balance for investors who bid lower
-        for(uint i = _coupon - 1; i >= 1; i--) {
+    function refundInvestorsAboveCouponLevel(uint256 coupon) internal {
+        for (uint i = coupon + 1; i <= _maxCoupon; i++) {
             address[] memory investors = getInvestorsAtCoupon(i);
             for(uint j = 0; j < investors.length; j++) {
                 address investor = investors[j];
@@ -194,7 +198,7 @@ contract BondPriceAuction {
                 break;
             }
         }
-        
+
         if (_coupon > 0) {
             emit CouponSet(_coupon);
         } else {

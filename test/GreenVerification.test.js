@@ -100,7 +100,7 @@ contract('GreenVerification', function (accounts) {
         let verified = await verification.isVerified()
         assert.isFalse(verified)
 
-        await verification.verify()
+        await verification.verify({from: verifier})
         verified = await verification.isVerified()
         assert.isTrue(verified)
     })
@@ -114,7 +114,7 @@ contract('GreenVerification', function (accounts) {
         let verified = await verification.isVerified()
         assert.isFalse(verified)
 
-        await verification.verify()
+        await verification.verify({from: verifier})
         verified = await verification.isVerified()
         assert.isFalse(verified)
     })

@@ -6,6 +6,14 @@ contract GreenVerification {
     enum Vote{BELOW, PAR, ABOVE, UNDEFINED}
 
     /**
+     * @dev Modified for function that can only be called by the green verifier
+     */
+    modifier onlyGreenVerifier {
+        require(msg.sender == _greenVerifier, "Only green verifier can call the function");
+        _;
+    }
+
+    /**
      * @dev Event to emit when investor of verifier votes
      */
     event Voted(address voter, Vote vote);
@@ -69,8 +77,7 @@ contract GreenVerification {
     }
 
 
-    function greenVerifierVote(uint256 verifierVote) external {
-        require(msg.sender == _greenVerifier, "Only green verifier can specify verifier vote");
+    function greenVerifierVote(uint256 verifierVote) external onlyGreenVerifier {
         require(verifierVote >=0 && verifierVote <=2, "Vote must be between 0-2");
         _verifierVote = Vote(verifierVote); 
         emit Voted(msg.sender, Vote(verifierVote));
@@ -87,11 +94,8 @@ contract GreenVerification {
         emit Voted(msg.sender, Vote(investorVote));
     }
 
-
-    function verify() external {
-        // Require that green verifier has voted
-        require(_verifierVote != Vote.UNDEFINED, "Green verifier vote has not been defined");
-        uint256 totalVotes = _investorVotes[0] + _investorVotes[1] + _investorVotes[2];
+    function verify() external onlyGreenVerifier  {
+       uint256 totalVotes = _investorVotes[0] + _investorVotes[1] + _investorVotes[2];
         uint256 verifierVote = uint256(_verifierVote);
         if((_investorVotes[verifierVote] * 100)/totalVotes >= 50) {
             _verified = true;

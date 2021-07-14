@@ -7,33 +7,66 @@ import "@openzeppelin/contracts/utils/Address.sol";
 contract GreenCertifier {
     using Address for address;
 
-    // Event to be emmitted when a company certificate is created
-    event CompanyCertification(GreenCertificate certificate);
-
-    // Event to be emmitted when a project is added
-    event ProjectCertification(address company, string project);
-
-
-    // Owner of this contract
-    address public _owner;
-
-
-    // function modifier
+    /**
+     * @dev Modifier to allow function to be called only by the contract owner
+     */
     modifier onlyOwner() {
         require(msg.sender == _owner);
         _;
     }
 
-    // Maps company address to a green certificate
-    mapping(address => GreenCertificate) public _greenCertificates;
-    mapping(address => bool) public _certifiedCompanies;
-    // Two options for mapping
-    //mapping (uint256 => GreenCertificate) private _greenCertificates;
-    //mapping (uint256 => address) private _greenCertificates;
+    /**
+     * @dev Event to be emmitted when a company certificate is created
+     */
+    event CompanyCertification(address certificate);
+
+    /**
+     * @dev Event to be emmitted when a project is added
+     */
+    event ProjectCertification(address company, string project);
+
+
+    // Owner of this contract
+    address private _owner;
+
+    // Mapping of company to a green certificate
+    mapping(address => GreenCertificate) private _greenCertificates;
+    // Mapping of certified companies
+    mapping(address => bool) private _certifiedCompanies;
+
 
     constructor() {
         _owner = msg.sender;
     }
+
+    // Getter functions
+    function getOwner() external view returns (address) {
+        return _owner;
+    }
+
+    // Function to check if a company is certified
+    function isCertifiedCompany(address company) public view returns (bool) {
+        return _certifiedCompanies[company];
+    }
+
+    // Function to get the address of the company's certificate
+    function getCompanyCertificateAddress(address company) public view returns (address) {
+        require(isCertifiedCompany(company), "Given company is not certified");
+        return address(_greenCertificates[company]);     
+    }
+
+    // Function to get a list of certified projects
+    function getCertifiedProjects(address company) external view returns (string[] memory) {
+        require(isCertifiedCompany(company), "Given company is not certified");
+        return _greenCertificates[company].getProjects();
+    }
+
+    function isCeritifiedProject(address company, string memory project) external view returns (bool) {
+        require(isCertifiedCompany(company), "Given company is not certified");
+        GreenCertificate certificate = _greenCertificates[company];
+        return certificate.isCertifiedProject(project);
+    }
+
 
     function createCertificate(address company, string memory project) external onlyOwner {
         // Create certificate for the company if it already does not exist
@@ -44,7 +77,7 @@ contract GreenCertifier {
             _greenCertificates[company] = newCertificate;
 
             // Create an event
-            emit CompanyCertification(newCertificate);
+            emit CompanyCertification(address(newCertificate));
         } 
 
         // Add project to the list
@@ -52,11 +85,6 @@ contract GreenCertifier {
         certificate.addProject(project);   
         emit ProjectCertification(company, project);      
     }
-
-    function isCertified(address company, string memory project) public view returns(bool) {
-        require(_certifiedCompanies[company], "Company is not certified");
-        GreenCertificate certificate = _greenCertificates[company];
-        return certificate.isCertifiedProject(project);
-    }
+ 
 }
 

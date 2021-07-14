@@ -3,11 +3,14 @@ pragma solidity >=0.6.0;
 
 contract GreenCertificate {
 
-    event ProjectAdded(string name, uint256 timestamp);
+    /** 
+    * @dev Event to be emitted when a project is added
+    */
+    event ProjectAdded(string name);
+    /** 
+    * @dev Event to be emitted when a project is removed
+    */
     event ProjectRemoved(string name);
-
-    // Owner
-    address public _owner;
 
     // function modifier
     modifier onlyOwner() {
@@ -15,9 +18,10 @@ contract GreenCertificate {
         _;
     }
 
-    // Company address
-    address public _company;
-    uint256 private _endDate;
+    // Member variables
+    address private _owner;
+    address private _company;
+    string[] private _projectList;
 
     // Mapping for certified projects
     mapping(string => bool) _greenProjects;
@@ -27,31 +31,28 @@ contract GreenCertificate {
         _owner = msg.sender;
     }
 
-    function setDeadline(uint256 time) external onlyOwner {
-        require(time >= block.timestamp, "Deadline time is before current time");
-        _endDate = time;
+    // Getter functions
+    function getOwner() external view returns (address) {
+        return _owner;
     }
 
-    function getEndDate() public view returns (uint256) {
-        return _endDate;
-    }
-
-    function addProject(string memory name) external onlyOwner {
-        _greenProjects[name] = true;
-        emit ProjectAdded(name, block.timestamp);
-    }
-
-    function removeProject(string memory name) external onlyOwner {
-        _greenProjects[name] = false;
-        emit ProjectRemoved(name);
-    }
-
-    function getCompany() public view returns (address){
+    function getCompany() external view returns (address) {
         return _company;
     }
 
-    function isCertifiedProject(string memory name) public view returns (bool) {
+    function getProjects() public view returns (string[] memory) {
+        return _projectList;
+    }
+
+    // Function to check if a project is certified
+    function isCertifiedProject(string memory name) external view returns (bool) {
         return (_greenProjects[name]);
     }
 
+    // Functions to add and remove certified projects
+    function addProject(string memory name) external onlyOwner {
+        _greenProjects[name] = true;
+        _projectList.push(name);
+        emit ProjectAdded(name);
+    }
 }

@@ -31,7 +31,7 @@ contract('GreenVerification', function (accounts) {
 
     // Changed from beforeEach to before
     beforeEach(async function() {
-        verification = await GreenVerification.new(verifier, company, project, votingClosingTime);  
+        verification = await GreenVerification.new(company, project, votingClosingTime, {from: verifier});  
     });
 
     it('deploys successfully', async function() {
@@ -117,5 +117,21 @@ contract('GreenVerification', function (accounts) {
         await verification.verify({from: verifier})
         verified = await verification.isVerified()
         assert.isFalse(verified)
+    })
+    it('can reset the votes', async function() {
+        await verification.vote(0, {from: investor})
+        await verification.vote(0, {from: investor2})
+        await verification.vote(1, {from: investor3})
+
+        assert.equal(await verification.getVoterCount(), 3)
+        await verification.greenVerifierVote(1, {from: verifier})
+        assert.equal(await verification.getVerifierVote(), 1)
+    
+        let result = await verification.reset("test", {from: verifier})
+        let event = result.logs[0].args;
+
+        assert.equal(event.reason, "test");
+        assert.equal(await verification.getVoterCount(), 0)
+        assert.equal(await verification.getVerifierVote(), 3)
     })
 })

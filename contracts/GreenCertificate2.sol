@@ -27,7 +27,7 @@ contract GreenCertificate {
     // Mapping for certified projects
     mapping(string => bool) _greenProjects;
 
-    constructor(address company) public {
+    constructor(address company) {
         _company = company;
         _owner = msg.sender;
     }

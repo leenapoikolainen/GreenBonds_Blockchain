@@ -39,6 +39,7 @@ contract GreenVerification {
     // Test members for resetting
     address[] _voterList;
     uint256 _voterCount;
+    bool _openForVoting;
 
     /**
      * Constructor, takes company address, project name and voting close time as parameters
@@ -55,6 +56,9 @@ contract GreenVerification {
         _votingClosingTime = votingClosingTime;
         _verified = false;
         _verifierVote = Vote.UNDEFINED;
+        
+        // WHAT SHOULD BE THE DEFAULT
+        _openForVoting = false;
     }
 
     // TESTING
@@ -71,6 +75,13 @@ contract GreenVerification {
         // Reset verifier's vote
         _verifierVote = Vote.UNDEFINED;
         emit Reset(reason);
+    }
+
+    function openVoting() external onlyGreenVerifier {
+        _openForVoting = true;
+    }
+    function closeVoting() external onlyGreenVerifier {
+        _openForVoting = false;
     }
 
     function getVoterCount() external view returns (uint256) {
@@ -153,7 +164,8 @@ contract GreenVerification {
     }
 
     function verify() external onlyGreenVerifier {
-        uint256 totalVotes = _investorVotes[0] +
+        uint256 totalVotes = 
+            _investorVotes[0] +
             _investorVotes[1] +
             _investorVotes[2];
         uint256 verifierVote = uint256(_verifierVote);

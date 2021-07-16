@@ -16,23 +16,24 @@ const duration = {
 const GreenBond = artifacts.require('GreenBond');
 
 require('chai')
-  .use(require('chai-as-promised'))
-  .should()
+    .use(require('chai-as-promised'))
+    .should()
 
-contract('GreenBond' ,function (accounts) {
+contract('GreenBond', function (accounts) {
     let bond;
     let bondName = "Green Bond";
     let bondSymbol = "GREEN";
     let baseURI = "https://storage.cloud.google.com/metadata_platform/";
     let faceValue = 1000;
-    let couponRate = 1;
+    let minCoupon = 1;
+    let maxCoupon = 5;
     let bidClosingTime = Math.floor(new Date().getTime() / 1000) + duration.days(2)
     let issueDate = bidClosingTime + duration.weeks(1)
     //let issueDate = Math.floor(new Date().getTime() / 1000) + duration.days(2)
     //let term = 31557600 * 2 // 2 years
     let term = 2;
     //let maturity = issueDate + duration.years(term)
-    
+
     let couponsPerYear = 2 // semiannual
     const owner = accounts[0];
     const investor = accounts[1];
@@ -42,46 +43,47 @@ contract('GreenBond' ,function (accounts) {
     const company = accounts[8];
 
     // Changed from beforeEach to before
-    before(async function() {
-        bond = await GreenBond.new(bondName, bondSymbol, baseURI,
-        company, regulator, faceValue, couponRate, bidClosingTime, term, couponsPerYear, {from: owner});
-        // Set regulator and green verifier (Can be hard coded for the actual contract)
-        //await bond.setRegulator(regulator)
-        
-        
+    before(async function () {
+        bond = await GreenBond.new(company, bondName, bondSymbol, faceValue, minCoupon, maxCoupon,
+            bidClosingTime, term, couponsPerYear, baseURI,
+            regulator, { from: owner });
     });
-    
-    
+
+
     describe('deployment', async () => {
-        it('deploys successfully', async function() {
+        it('deploys successfully', async function () {
             const address = await bond.address
             assert.notEqual(address, 0x0)
-            assert.notEqual(address,"")
+            assert.notEqual(address, "")
             assert.notEqual(address, null)
             assert.notEqual(address, undefined)
-        }) 
+        })
         it('has the right name and symbol', async function () {
             const name = await bond.name();
             const symbol = await bond.symbol();
             assert.equal(name, 'Green Bond')
             assert.equal(symbol, "GREEN")
         })
-        it('has the right value and coupon', async function () {
-            const value = await bond.getFaceValue()
-            const coupon = await bond.getCoupon()
-            assert.equal(value.toNumber(), 1000)
-            assert.equal(coupon.toNumber(), 1)
+        it('has the right value and coupons', async function () {
+            const _value = await bond.getFaceValue()
+            const _coupon = await bond.getCoupon()
+            const _minCoupon = await bond.getMinCoupon()
+            const _maxCoupon = await bond.getMaxCoupon()
+            assert.equal(_value.toNumber(), 1000)
+            assert.equal(_coupon.toNumber(), 0)
+            assert.equal(_minCoupon.toNumber(), 1)
+            assert.equal(_maxCoupon.toNumber(), 5)
         })
         it('has the right bid closing time', async function () {
             const closingTime = await bond.getBidClosingTime()
             assert.equal(closingTime, bidClosingTime)
         })
-        it('Has the right issue date, maturity date and coupon dates', async function() {
+        it('Has the right issue date, maturity date and coupon dates', async function () {
             const maturityDate = await bond.getMaturityDate()
             const issuingDay = await bond.getIssueDate()
             assert.equal(maturityDate.toNumber(), issueDate + duration.years(term))
             assert.equal(issueDate, issuingDay)
-           
+
             /*
             let date = new Date(issuingDay * 1000)
             console.log(date)
@@ -94,12 +96,48 @@ contract('GreenBond' ,function (accounts) {
             assert.equal(couponDate, issueDate + duration.years(0.5))
             couponDate = await bond.getCouponDate(2);
             assert.equal(couponDate, issueDate + duration.years(1))
-          
+
         })
     })
 
+
+    describe('Before bidding window is closed', () => {
+        it('investors can bid when the bidding window is open', async function() {
+            // Tracking the invested amount before the bid
+            let investmentBefore = await bond.getInvestedAmountPerInvestor(investor)
+            investmentBefore = new web3.utils.BN(investmentBefore)
+
+            // Bidding outside the range is rejected
+            await bond.registerBid(6, 1, {from: investor, value: web3.utils.toWei('1000', 'Wei')}).should.be.rejected
+            // Bid without enough eth should be rejected
+            await bond.registerBid(5, 2, {from: investor, value: web3.utils.toWei('1000', 'Wei')}).should.be.rejected
+            
+            // Register investment during bidding time  
+            let result = await bond.registerBid(1, 2, {from: investor, value: web3.utils.toWei('2000', 'Wei')})
+            const bid = result.logs[0].args;
+            assert.equal(bid.bidder, investor)
+            assert.equal(bid.coupon, 1)
+            assert.equal(bid.numberOfBonds, 2)
+
+            // Check the investment balance
+            let investedAmount = web3.utils.toWei('2000', 'Wei')
+            investedAmount = new web3.utils.BN(investedAmount)
+
+            let investmentAfter = await bond.getInvestedAmountPerInvestor(investor)
+            investmentAfter = new web3.utils.BN(investmentAfter)
     
-    describe('Before investment window is closed', () => { 
+            // Compare to the expected investment balance
+            const expectedInvestment = investmentBefore.add(investedAmount)
+            assert.equal(investmentAfter.toString(), expectedInvestment.toString())    
+        })
+        it('Issuing bonds is not possible when investment window is still open', async function() {
+            // Test issuing tokens
+            await bond.issueBonds({from: owner}).should.be.rejected
+        })
+        it('The bond count is 0 before issuing bonds', async function() {
+            let count = await bond.bondCount()
+            assert.equal(count.toNumber(), 0)
+        })
         /*
         it('Investor can register investment while investment window is open', async function() {
             // Track the recorded investments
@@ -200,7 +238,7 @@ contract('GreenBond' ,function (accounts) {
         })
         */
     })
-    
+
     /*
     describe('After bidding time is over', () => {
         let balanceAfterInvestment

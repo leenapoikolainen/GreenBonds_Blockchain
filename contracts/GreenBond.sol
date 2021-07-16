@@ -52,6 +52,8 @@ contract GreenBond is ERC721, Ownable {
     address private _regulator;
     uint256 private _value;
     uint256 private _coupon;
+    uint256 private _minCoupon;
+    uint256 private _maxCoupon;
     uint256 private _term;
     uint256 private _totalCouponPayments;
     uint256 private _couponsPaid = 0; // Zero in the beginning
@@ -107,27 +109,31 @@ contract GreenBond is ERC721, Ownable {
      * coupon amount, investment window closing time
      */
     constructor(
+        address company,
         string memory name,
         string memory symbol,
-        string memory baseBondURI,
-        address regulator,
-        address company,
         uint256 value,
-        uint256 coupon,
+        uint256 minCoupon,
+        uint256 maxCoupon,
         uint256 bidClosingTime,
         uint256 term,
-        uint256 couponsPerYear
+        uint256 couponsPerYear,
+        string memory baseBondURI,
+        address regulator
     ) ERC721(name, symbol) {
         require(company != address(0), "Company address can not be 0x0");
         require(value > 0, "Value can not be 0");
-        require(coupon >= 0, "Coupon payment can't be negative");
+        require(minCoupon >= 0, "coupon can't be negative");
+        require(maxCoupon > minCoupon,"max coupon needs to be greater than min coupon");
         require(bidClosingTime > block.timestamp, "Closing time can't be in the past");
         _owner = msg.sender;
         _baseBondURI = baseBondURI;
         _company = payable(company);
         _regulator = regulator;
         _value = value;
-        _coupon = coupon;
+        _coupon = 0;
+        _minCoupon = minCoupon;
+        _maxCoupon = maxCoupon;
         _paused = false;
         _bidClosingTime = bidClosingTime;
         _issueDate = _bidClosingTime + 1 weeks;
@@ -183,7 +189,6 @@ contract GreenBond is ERC721, Ownable {
     }
 
     
-
     function getFaceValue() public view returns (uint256) {
         return _value;
     }
@@ -195,6 +200,14 @@ contract GreenBond is ERC721, Ownable {
 
     function getCoupon() public view returns (uint256) {
         return _coupon;
+    }
+
+    function getMinCoupon() public view returns (uint256) {
+        return _minCoupon;
+    }
+
+    function getMaxCoupon() public view returns (uint256) {
+        return _maxCoupon;
     }
 
     function getTotalDebt() public view returns (uint256) {
@@ -215,6 +228,42 @@ contract GreenBond is ERC721, Ownable {
 
     function _baseURI() internal view override returns (string memory) {
         return _baseBondURI;
+    }
+
+    
+
+    function getInvestedAmountPerInvestor(address investor) external view returns (uint256) {
+        return _investedAmounPerInvestor[investor];
+    }
+
+    mapping(uint256 => uint256) _bidsPerCoupon;
+    mapping (uint256 => address[]) _investorListAtCouponLevel;
+    mapping (address => mapping(uint256 => uint256)) _bidsPerInvestorAtCouponLevel;
+    mapping (address => uint256) _investedAmounPerInvestor;
+
+    event Bid(address bidder, uint256 coupon, uint256 numberOfBonds);
+
+    // Function for investors to register their bids
+    function registerBid(uint256 coupon, uint256 numberOfBonds) external payable onlyWhileBiddingWindowOpen {
+        require(coupon >= _minCoupon && coupon <= _maxCoupon, "Coupon needs to be between the set range");
+        require(msg.value >= _value * numberOfBonds, "Not enough coins deposited for the bid");
+        
+        // Update the demand for the coupon level
+        uint256 currentDemand = _bidsPerCoupon[coupon];
+        _bidsPerCoupon[coupon] = currentDemand + numberOfBonds;
+
+        // Add the investor to the list
+        _investorListAtCouponLevel[coupon].push(msg.sender);
+
+        // Update the mapping
+        uint256 currentAmount = _bidsPerInvestorAtCouponLevel[msg.sender][coupon];
+        _bidsPerInvestorAtCouponLevel[msg.sender][coupon] = numberOfBonds + currentAmount;
+
+        uint256 balance = _investedAmounPerInvestor[msg.sender];
+        _investedAmounPerInvestor[msg.sender] = balance + msg.value;
+
+        // Emit event
+        emit Bid(msg.sender, coupon, numberOfBonds);
     }
 
     // Just for testing 

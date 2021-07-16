@@ -59,12 +59,12 @@ class App extends Component {
       console.log(name)
 
       // Token count
-      const tokens = await greenBond.methods.tokenCount().call()
+      const tokens = await greenBond.methods.bondCount().call()
       this.setState({ tokens })
       console.log("Number of tokens issued", tokens)
       
       // Bond value and coupon
-      const value = await greenBond.methods.getValue().call()
+      const value = await greenBond.methods.getFaceValue().call()
       this.setState({ value })
       const coupon = await greenBond.methods.getCoupon().call()
       this.setState({ coupon })

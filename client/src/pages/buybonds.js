@@ -45,7 +45,7 @@ class BuyBonds extends Component {
 			this.setState({ balance })
 			console.log("Balance", balance)
 
-			const value = await greenBond.methods.getValue().call()
+			const value = await greenBond.methods.getFaceValue().call()
 			console.log("Value", value)
 			const numberOfTokens = balance / value;
 			console.log("Tokens", numberOfTokens)

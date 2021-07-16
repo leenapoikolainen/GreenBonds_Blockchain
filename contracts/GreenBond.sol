@@ -49,7 +49,7 @@ contract GreenBond is ERC721, Ownable {
     string private _baseBondURI;
     bool private _paused;
     // Boolean variable that is only set true if there is not enough demand for bond
-    bool private _cancelled = false;
+    bool private _coupondefined = false;
     address[] private _initialInvestors;
     address private _owner;
     address payable private _company;
@@ -271,8 +271,7 @@ contract GreenBond is ERC721, Ownable {
         // Update the mapping
         _bidsPerInvestorAtCouponLevel[msg.sender][coupon] = numberOfBonds + currentAmountInvested;
 
-        uint256 balance = _investedAmountPerInvestor[msg.sender];
-        _investedAmountPerInvestor[msg.sender] = balance + msg.value;
+        _investedAmountPerInvestor[msg.sender] = _value * numberOfBonds;
 
         // Emit event
         emit Bid(msg.sender, coupon, numberOfBonds);
@@ -312,10 +311,10 @@ contract GreenBond is ERC721, Ownable {
 
         if (_coupon > 0) {
             emit CouponSet(_coupon);
+            _coupondefined = true;
             setInvestroArray();
         } else {
             emit CancelBondIssue(tokenDemand, _numberOfBondsSeeked);
-            _cancelled = true;
         } 
 
         // Refund unsuccessful investors
@@ -332,7 +331,6 @@ contract GreenBond is ERC721, Ownable {
             }
         }
     }
-
 
 
     function getBiddersAtCoupon(uint256 coupon) public view returns (address[] memory) {
@@ -454,45 +452,47 @@ contract GreenBond is ERC721, Ownable {
         whenNotPaused 
         onlyOwner
     {
-        require(_cancelled == false, "can not issue bonds if the issue was cancelled");
+        require(_coupondefined == true, "can not issue bonds if the coupon has not been defined");
+        
         uint256 bondsAvailable = _numberOfBondsSeeked;
         
         // Go through the investors
-        for(uint256 i = 0; i < _initialInvestors.length; i++) {
+        for(uint i = 0; i < _initialInvestors.length; i++) {
             address investor = _initialInvestors[i];
             uint256 numberOfBonds = _requestedBondsPerInvestor[investor];
             
-            // If there is enough bonds to cover the demand
-            // Mint all bonds
-            if(bondsAvailable - numberOfBonds > 0) {
-                // Transfer the value to company
-                _company.transfer(_value * numberOfBonds);
-
-                for (uint256 j = 0; j < numberOfBonds; j++) {
-                    _mint(investor, _bondIdTracker.current());
-                    _bondIdTracker.increment();
-                }
-                bondsAvailable -= numberOfBonds;
-
-                // Update Investor balance to 0
-                _investedAmountPerInvestor[investor] = 0;
-            } else {
-                // Transfer the value to company
+            // If the demanded amount is more than bonds available
+            if(numberOfBonds > bondsAvailable) { 
+                 // Transfer the value to company
                 _company.transfer(_value * bondsAvailable);
 
-                for (uint256 j = 0; j < numberOfBonds; j++) {
+                for (uint256 j = 0; j < bondsAvailable; j++) {
                     _mint(investor, _bondIdTracker.current());
                     _bondIdTracker.increment();
                 }
-
-                bondsAvailable = 0;
 
                 // Refund extra amount
                 uint256 balance = _investedAmountPerInvestor[investor];
                 _investedAmountPerInvestor[investor] = balance - _value * bondsAvailable;
                 uint256 refund = _investedAmountPerInvestor[investor];
-                payable(investor).transfer(refund);          
-            }
+                payable(investor).transfer(refund); 
+                emit CoinRefund(investor, refund); 
+
+                // Set bonds available to 0
+                bondsAvailable = 0;
+
+            // Else, fulfill the whole demans    
+            } else {
+                _company.transfer(_value * numberOfBonds);
+                for (uint j = 0; j < numberOfBonds; j++) {
+                    _mint(investor, _bondIdTracker.current());
+                    _bondIdTracker.increment();  
+                }
+                // Update Investor balance to 0
+                _investedAmountPerInvestor[investor] = 0;
+
+                bondsAvailable -= numberOfBonds;
+            }   
         }
     }
                

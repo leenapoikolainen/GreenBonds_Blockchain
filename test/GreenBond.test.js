@@ -222,7 +222,7 @@ contract('GreenBond', function (accounts) {
 
         before(async () => {
             // Make another investments
-            await bond.registerBid(2, 9, {from: investor2, value: web3.utils.toWei('900', 'Wei')})
+            await bond.registerBid(2, 10, {from: investor2, value: web3.utils.toWei('1000', 'Wei')})
             await bond.registerBid(3, 2, {from: investor3, value: web3.utils.toWei('200', 'Wei')})
             
             // Record investor balance
@@ -249,8 +249,35 @@ contract('GreenBond', function (accounts) {
             // check refunds
             let refund = result.logs[1].args
             assert.equal(refund.account, investor3)
-            assert.equal(refund.value, 200)
+            assert.equal(refund.value, 200) 
+        })
+
+        it('bonds are issued correctly, last investor will get less', async function() {
+            // Track balance of the company before the token issuance
+            let oldBalance = await web3.eth.getBalance(company)
+            oldBalance = new web3.utils.BN(oldBalance) 
+
             
+            let result = await bond.issueBonds({from: owner})
+     
+            // first two transfers are for investor 1
+            const transfer1 = result.logs[0].args;
+            
+            // remaining 8 are for investor 2
+            const transfer3 = result.logs[2].args;
+
+            // Has the right token id
+            assert.equal(transfer1.tokenId, 0)
+            assert.equal(transfer3.tokenId, 2)
+        
+            // Has the right token owner
+            assert.equal(transfer1.to, investor)
+            assert.equal(transfer3.to, investor2)
+            
+            // Refund
+            const refund = result.logs[10].args
+            assert.equal(refund.account, investor2)
+            assert.equal(refund.value.toNumber(), 200)       
         })
         
          

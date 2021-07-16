@@ -48,6 +48,8 @@ contract GreenBond is ERC721, Ownable {
     Counters.Counter private _bondIdTracker;
     string private _baseBondURI;
     bool private _paused;
+    // Boolean variable that is only set true if there is not enough demand for bond
+    bool private _cancelled = false;
     address[] private _initialInvestors;
     address private _owner;
     address payable private _company;
@@ -83,7 +85,7 @@ contract GreenBond is ERC721, Ownable {
             too many coins for the investment or to the company if they pay too much 
             with coupons / principal repayment
      */
-    event CoinRefund(address sender, uint256 value);
+    event CoinRefund(address account, uint256 value);
 
     /**
      * @dev Emitted when a coupon payment has been made
@@ -236,13 +238,14 @@ contract GreenBond is ERC721, Ownable {
     
 
     function getInvestedAmountPerInvestor(address investor) external view returns (uint256) {
-        return _investedAmounPerInvestor[investor];
+        return _investedAmountPerInvestor[investor];
     }
 
-    mapping(uint256 => uint256) _bidsPerCoupon;
+    mapping (uint256 => uint256) _bidsPerCoupon;
     mapping (uint256 => address[]) _investorListAtCouponLevel;
     mapping (address => mapping(uint256 => uint256)) _bidsPerInvestorAtCouponLevel;
-    mapping (address => uint256) _investedAmounPerInvestor;
+    mapping (address => bool) _biddedInvestors;
+    
 
     event Bid(address bidder, uint256 coupon, uint256 numberOfBonds);
 
@@ -250,28 +253,43 @@ contract GreenBond is ERC721, Ownable {
     function registerBid(uint256 coupon, uint256 numberOfBonds) external payable onlyWhileBiddingWindowOpen {
         require(coupon >= _minCoupon && coupon <= _maxCoupon, "Coupon needs to be between the set range");
         require(msg.value >= _value * numberOfBonds, "Not enough coins deposited for the bid");
+        require(_biddedInvestors[msg.sender] == false, "Only one bid per investor");
         
+        _biddedInvestors[msg.sender] = true;
+        _requestedBondsPerInvestor[msg.sender] = numberOfBonds;
+
         // Update the demand for the coupon level
         uint256 currentDemand = _bidsPerCoupon[coupon];
         _bidsPerCoupon[coupon] = currentDemand + numberOfBonds;
 
-        // Add the investor to the list
-        _investorListAtCouponLevel[coupon].push(msg.sender);
+        // Add the investor to the list if not already on the list
+        uint256 currentAmountInvested = _bidsPerInvestorAtCouponLevel[msg.sender][coupon];
+        if(currentAmountInvested == 0) {
+            _investorListAtCouponLevel[coupon].push(msg.sender);
+        }
 
         // Update the mapping
-        uint256 currentAmount = _bidsPerInvestorAtCouponLevel[msg.sender][coupon];
-        _bidsPerInvestorAtCouponLevel[msg.sender][coupon] = numberOfBonds + currentAmount;
+        _bidsPerInvestorAtCouponLevel[msg.sender][coupon] = numberOfBonds + currentAmountInvested;
 
-        uint256 balance = _investedAmounPerInvestor[msg.sender];
-        _investedAmounPerInvestor[msg.sender] = balance + msg.value;
+        uint256 balance = _investedAmountPerInvestor[msg.sender];
+        _investedAmountPerInvestor[msg.sender] = balance + msg.value;
 
         // Emit event
         emit Bid(msg.sender, coupon, numberOfBonds);
+
+        // Refund if overpaid
+        if(msg.value > _value * numberOfBonds) {
+            uint256 extraAmount = msg.value -
+                _value * numberOfBonds;
+            payable(msg.sender).transfer(extraAmount);
+            emit CoinRefund(msg.sender, extraAmount);
+        }
+        
     }
 
 
     event CouponSet(uint256 coupon);
-    event DemandNotMet(uint256 actualDemand, uint256 requestedDemand);
+    event CancelBondIssue(uint256 actualDemand, uint256 requestedDemand);
 
     // Function for issuer to define coupon
     // Finds the lowest coupon that fullfills the demand
@@ -294,11 +312,44 @@ contract GreenBond is ERC721, Ownable {
 
         if (_coupon > 0) {
             emit CouponSet(_coupon);
+            setInvestroArray();
         } else {
-            emit DemandNotMet(tokenDemand, _numberOfBondsSeeked);
-        }   
+            emit CancelBondIssue(tokenDemand, _numberOfBondsSeeked);
+            _cancelled = true;
+        } 
+
+        // Refund unsuccessful investors
+        refundBiddersFromCouponLevel(_coupon + 1);  
 
         return _coupon;
+    }
+
+    function setInvestroArray() internal {
+        for (uint i = _minCoupon; i <= _coupon; i++) {
+            address[] memory investors = getBiddersAtCoupon(i);
+            for(uint j = 0; j < investors.length; j++) {
+                _initialInvestors.push(investors[j]);
+            }
+        }
+    }
+
+
+
+    function getBiddersAtCoupon(uint256 coupon) public view returns (address[] memory) {
+        require(coupon >= _minCoupon && coupon <= _maxCoupon, "Coupon not in range");
+        return _investorListAtCouponLevel[coupon];
+    }
+
+    function refundBiddersFromCouponLevel(uint256 coupon) internal {
+        for (uint i = coupon; i <= _maxCoupon; i++) {
+            address[] memory investors = getBiddersAtCoupon(i);
+            for(uint j = 0; j < investors.length; j++) {
+                address investor = investors[j];
+                uint256 amount = _bidsPerInvestorAtCouponLevel[investor][i];
+                payable(investor).transfer(_value * amount);
+                emit CoinRefund(investor, amount * _value);
+            }
+        }
     }
 
 
@@ -358,6 +409,8 @@ contract GreenBond is ERC721, Ownable {
         }
     }
 
+    /*
+
     // Function to register investment interest
     // Investors specifies the number of bonds they would like to receive
     function registerInvestment(uint256 number)
@@ -387,12 +440,64 @@ contract GreenBond is ERC721, Ownable {
         emit Investment(msg.sender, msg.value, number);
     }
 
+    */
     /**
      * @dev Function to issue bonds for investors who have registered 
         Assumes all investors will get the requested investment
         Can be called only when investment window is closed and the contract is unpaused
      */
-    function issueBonds()
+
+    
+    function issueBonds() 
+        public
+        onlyWhileBiddingWindowClosed
+        whenNotPaused 
+        onlyOwner
+    {
+        require(_cancelled == false, "can not issue bonds if the issue was cancelled");
+        uint256 bondsAvailable = _numberOfBondsSeeked;
+        
+        // Go through the investors
+        for(uint256 i = 0; i < _initialInvestors.length; i++) {
+            address investor = _initialInvestors[i];
+            uint256 numberOfBonds = _requestedBondsPerInvestor[investor];
+            
+            // If there is enough bonds to cover the demand
+            // Mint all bonds
+            if(bondsAvailable - numberOfBonds > 0) {
+                // Transfer the value to company
+                _company.transfer(_value * numberOfBonds);
+
+                for (uint256 j = 0; j < numberOfBonds; j++) {
+                    _mint(investor, _bondIdTracker.current());
+                    _bondIdTracker.increment();
+                }
+                bondsAvailable -= numberOfBonds;
+
+                // Update Investor balance to 0
+                _investedAmountPerInvestor[investor] = 0;
+            } else {
+                // Transfer the value to company
+                _company.transfer(_value * bondsAvailable);
+
+                for (uint256 j = 0; j < numberOfBonds; j++) {
+                    _mint(investor, _bondIdTracker.current());
+                    _bondIdTracker.increment();
+                }
+
+                bondsAvailable = 0;
+
+                // Refund extra amount
+                uint256 balance = _investedAmountPerInvestor[investor];
+                _investedAmountPerInvestor[investor] = balance - _value * bondsAvailable;
+                uint256 refund = _investedAmountPerInvestor[investor];
+                payable(investor).transfer(refund);          
+            }
+        }
+    }
+               
+    /*
+    function issueBonds2()
         public
         onlyWhileBiddingWindowClosed
         whenNotPaused
@@ -436,11 +541,13 @@ contract GreenBond is ERC721, Ownable {
             _totalDebt = _totalDebt + _value * numberOfBonds;
         }
     }
-
+    */
     /**
      * @dev Function for regulator to return all money to investors
         if there are any issues with the borrowing company
      */
+
+     /*
     function returnInvestorMoney() public whenPaused {
         require(
             msg.sender == _regulator,
@@ -452,6 +559,7 @@ contract GreenBond is ERC721, Ownable {
         }
     }
 
+*/
     // Function for the borrowing company to pay coupons
     function payCoupons() public payable {
         // Message needs to have enough value for the copupon payments

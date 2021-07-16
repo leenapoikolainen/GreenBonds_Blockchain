@@ -48,9 +48,9 @@ contract('GreenBond', function (accounts) {
     before(async function () {
         bond = await GreenBond.new(company, bondName, bondSymbol, numberOfBondsSeeked, minCoupon, maxCoupon,
             bidClosingTime, term, couponsPerYear, baseURI,
-            regulator, { from: owner });
+            regulator, { from: owner});
+            
     });
-
 
     describe('deployment', async () => {
         it('deploys successfully', async function () {
@@ -175,6 +175,49 @@ contract('GreenBond', function (accounts) {
 
     
     describe('After bidding time is over', () => {
+
+        // SCENARIO WHEN DEMAND IS NOT MET
+
+        /*
+        before(async () => {
+            // Make another investments
+            await bond.registerBid(3, 2, {from: investor3, value: web3.utils.toWei('200', 'Wei')})
+            
+            // Record investor balance
+            //balanceAfterInvestment = await web3.eth.getBalance(investor2)
+            //balanceAfterInvestment = new web3.utils.BN(balanceAfterInvestment) 
+            
+            // Advance time
+            await timeMachine.advanceTimeAndBlock(duration.days(2)); // + 2 week
+        })
+        
+        it('coupon is 0 and all investors refunded when not enough demand', async function() {
+            let result = await bond.defineCoupon({from: owner})
+            let cancel = result.logs[0].args
+
+            assert.equal(cancel.actualDemand, 4)
+            assert.equal(cancel.requestedDemand, 10)
+
+            const _coupon = await bond.getCoupon()
+            assert.equal(_coupon.toNumber(), 0)
+
+            let refund = result.logs[1].args
+            assert.equal(refund.account, investor)
+            assert.equal(refund.value, 200)
+
+            refund = result.logs[2].args
+            assert.equal(refund.account, investor3)
+            assert.equal(refund.value, 200)
+        })
+        it('can not issue bonds, when issue has been cancelled', async function() {
+            await bond.issueBonds({from: owner}).should.be.rejected
+        })
+
+        */
+
+
+        // SCENARIO WHEN DEMAND IS  MET
+        
         let balanceAfterInvestment
 
         before(async () => {
@@ -193,28 +236,27 @@ contract('GreenBond', function (accounts) {
             await bond.registerBid(1, 1, {from: investor, value: web3.utils.toWei('100', 'Wei')}).should.be.rejected
         })
         
-        it('coupon is set correctly', async function() {
+        
+        it('coupon is set correctly and unsuccesful bidders are refunded', async function() {
             let result = await bond.defineCoupon({from: owner})
             let couponSet = result.logs[0].args
-
             assert.equal(couponSet.coupon, 2)
+
             let _coupon = await bond.getCoupon()
             assert.equal(_coupon.toNumber(), 2)
+
+            
+            // check refunds
+            let refund = result.logs[1].args
+            assert.equal(refund.account, investor3)
+            assert.equal(refund.value, 200)
+            
         })
         
+         
         
-        /*
-        it('coupon is 0, when not enough demand', async function() {
-            let result = await bond.defineCoupon({from: owner})
-            let couponSet = result.logs[0].args
-
-            assert.equal(couponSet.actualDemand, 4)
-            assert.equal(couponSet.requestedDemand, 10)
-
-            const _coupon = await bond.getCoupon()
-            assert.equal(_coupon.toNumber(), 0)
-        })
-        */
+       
+        
 
         /*
         

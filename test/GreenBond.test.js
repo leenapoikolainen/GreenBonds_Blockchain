@@ -26,7 +26,9 @@ contract('GreenBond' ,function (accounts) {
     let baseURI = "https://storage.cloud.google.com/metadata_platform/";
     let faceValue = 1000;
     let couponRate = 1;
-    let issueDate = Math.floor(new Date().getTime() / 1000) + duration.days(2)
+    let bidClosingTime = Math.floor(new Date().getTime() / 1000) + duration.days(2)
+    let issueDate = bidClosingTime + duration.weeks(1)
+    //let issueDate = Math.floor(new Date().getTime() / 1000) + duration.days(2)
     //let term = 31557600 * 2 // 2 years
     let term = 2;
     //let maturity = issueDate + duration.years(term)
@@ -42,10 +44,10 @@ contract('GreenBond' ,function (accounts) {
     // Changed from beforeEach to before
     before(async function() {
         bond = await GreenBond.new(bondName, bondSymbol, baseURI,
-        company, faceValue, couponRate, issueDate, term, couponsPerYear, {from: owner});
+        company, regulator, faceValue, couponRate, bidClosingTime, term, couponsPerYear, {from: owner});
         // Set regulator and green verifier (Can be hard coded for the actual contract)
-        await bond.setRegulator(regulator)
-        await bond.setGreenVerifier(greenVerifier)
+        //await bond.setRegulator(regulator)
+        
         
     });
     
@@ -71,14 +73,14 @@ contract('GreenBond' ,function (accounts) {
             assert.equal(coupon.toNumber(), 1)
         })
         it('has the right bid closing time', async function () {
-            const closingTime = await bond.getIssueDate()
-            assert.equal(closingTime, issueDate)
+            const closingTime = await bond.getBidClosingTime()
+            assert.equal(closingTime, bidClosingTime)
         })
         it('Has the right issue date, maturity date and coupon dates', async function() {
             const maturityDate = await bond.getMaturityDate()
             const issuingDay = await bond.getIssueDate()
             assert.equal(maturityDate.toNumber(), issueDate + duration.years(term))
-            assert.equal(issueDate, issueDate)
+            assert.equal(issueDate, issuingDay)
            
             /*
             let date = new Date(issuingDay * 1000)
@@ -96,7 +98,9 @@ contract('GreenBond' ,function (accounts) {
         })
     })
 
+    
     describe('Before investment window is closed', () => { 
+        /*
         it('Investor can register investment while investment window is open', async function() {
             // Track the recorded investments
             let investmentBefore = await bond.getInvestorBalance(investor)
@@ -125,6 +129,7 @@ contract('GreenBond' ,function (accounts) {
             const expectedInvestment = investmentBefore.add(paidAmount)
             assert.equal(investmentAfter.toString(), expectedInvestment.toString()) 
         })
+
 
         it('Issuing bonds is not possible when investment window is still open', async function() {
             // Test issuing tokens
@@ -166,6 +171,7 @@ contract('GreenBond' ,function (accounts) {
             assert.equal(count.toNumber(), 0)
         })
 
+        */
         /*
         it('regulator can return investor investments from the contract', async function() {
             let balance = await web3.eth.getBalance(investor)
@@ -195,7 +201,7 @@ contract('GreenBond' ,function (accounts) {
         */
     })
     
-    
+    /*
     describe('After bidding time is over', () => {
         let balanceAfterInvestment
 
@@ -212,7 +218,7 @@ contract('GreenBond' ,function (accounts) {
             await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1000', 'Wei')}).should.be.rejected
         })
 
-        /*
+        
         it('issuing tokens is not possible if contract is paused by regulator', async function() {
             let result = await bond.pause({from: regulator})
             const paused = result.logs[0].args
@@ -221,7 +227,7 @@ contract('GreenBond' ,function (accounts) {
             await bond.issueTokens({from: owner}).should.be.rejected
             await bond.unpause({from: regulator})
         })
-        */
+        
         
         it('Issuing bonds is possible after investment window is closed', async function() {
             // Track balance of the company before the token issuance

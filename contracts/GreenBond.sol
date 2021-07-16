@@ -9,20 +9,19 @@ contract GreenBond is ERC721, Ownable {
     using Counters for Counters.Counter;
 
     // MODIFIERS
-
     /**
      * @dev Reverts if bidding time is not open
      */
-    modifier onlyWhileInvestmentWindowOpen {
-        require(investmentWindowisOpen(), "Investment window is not open");
+    modifier onlyWhileBiddingWindowOpen {
+        require(biddingWindowisOpen(), "Investment window is not open");
         _;
     }
 
     /**
      * @dev Reverts if bidding time is still open
      */
-    modifier onlyWhileInvestmentWindowClosed {
-        require(!investmentWindowisOpen(), "Investment window is still open");
+    modifier onlyWhileBiddingWindowClosed {
+        require(!biddingWindowisOpen(), "Investment window is still open");
         _;
     }
 
@@ -51,13 +50,13 @@ contract GreenBond is ERC721, Ownable {
     address private _owner;
     address payable private _company;
     address private _regulator;
-    address private _greenVerifier;
     uint256 private _value;
     uint256 private _coupon;
     uint256 private _term;
     uint256 private _totalCouponPayments;
     uint256 private _couponsPaid = 0; // Zero in the beginning
     uint256 private _totalDebt;
+    uint256 private _bidClosingTime;
     uint256 private _issueDate;
     uint256 private _maturityDate;
     uint256 private _actualPrincipalPaymentDate = 0; // Initialise to 0
@@ -111,24 +110,27 @@ contract GreenBond is ERC721, Ownable {
         string memory name,
         string memory symbol,
         string memory baseBondURI,
+        address regulator,
         address company,
         uint256 value,
         uint256 coupon,
-        uint256 issueDate,
+        uint256 bidClosingTime,
         uint256 term,
         uint256 couponsPerYear
     ) ERC721(name, symbol) {
         require(company != address(0), "Company address can not be 0x0");
         require(value > 0, "Value can not be 0");
         require(coupon >= 0, "Coupon payment can't be negative");
-        require(issueDate > block.timestamp, "Closing time can't be in the past");
+        require(bidClosingTime > block.timestamp, "Closing time can't be in the past");
         _owner = msg.sender;
         _baseBondURI = baseBondURI;
         _company = payable(company);
+        _regulator = regulator;
         _value = value;
         _coupon = coupon;
         _paused = false;
-        _issueDate = issueDate;
+        _bidClosingTime = bidClosingTime;
+        _issueDate = _bidClosingTime + 1 weeks;
         _term = term;
         _couponsPerYear = couponsPerYear;
         _totalCouponPayments = couponsPerYear * term;
@@ -144,17 +146,12 @@ contract GreenBond is ERC721, Ownable {
         }    
     }
 
-    // Setter functions - these could be hard coded to be the same for all bonds
-
-    function setRegulator(address regulator) public onlyOwner {
-        _regulator = regulator;
-    }
-
-    function setGreenVerifier(address greenVerifier) public onlyOwner {
-        _greenVerifier = greenVerifier;
-    }
 
     // Getter functions
+
+    function getBidClosingTime() external view returns (uint256) {
+        return _bidClosingTime;
+    }
 
     function getIssueDate() public view returns (uint256) {
         return _issueDate;
@@ -185,12 +182,15 @@ contract GreenBond is ERC721, Ownable {
         return _regulator;
     }
 
-    function getGreenVerifier() public view returns (address) {
-        return _greenVerifier;
-    }
+    
 
     function getFaceValue() public view returns (uint256) {
         return _value;
+    }
+
+    // TESTING PRICE
+    function getCurrentPrice() public view returns(uint256) {
+        return _value - _coupon * _couponsPaid;
     }
 
     function getCoupon() public view returns (uint256) {
@@ -228,7 +228,7 @@ contract GreenBond is ERC721, Ownable {
     }
 
     // Return true if the investment window is open, false otherwise.
-    function investmentWindowisOpen() public view returns (bool) {
+    function biddingWindowisOpen() public view returns (bool) {
         return block.timestamp <= _issueDate;
     }
 
@@ -278,7 +278,7 @@ contract GreenBond is ERC721, Ownable {
     function registerInvestment(uint256 number)
         public
         payable
-        onlyWhileInvestmentWindowOpen
+        onlyWhileBiddingWindowOpen
     {
         // Require that the investor has enough coins
         require(
@@ -309,7 +309,7 @@ contract GreenBond is ERC721, Ownable {
      */
     function issueBonds()
         public
-        onlyWhileInvestmentWindowClosed
+        onlyWhileBiddingWindowClosed
         whenNotPaused
     {
         require(msg.sender == _owner, "Only owner can issue bonds");
@@ -482,10 +482,9 @@ contract GreenBond is ERC721, Ownable {
     }
 
     /**
-     * Function for the greenVerifier to adjust the bond
+     * Function to adjust the coupon
      */
-    function adjustCoupon(bool increase, uint256 amount) public {
-        require(msg.sender == _greenVerifier);
+    function adjustCoupon(bool increase, uint256 amount) external onlyOwner {
         if (increase) {
             _coupon = _coupon + amount;
         } else {

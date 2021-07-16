@@ -27,6 +27,7 @@ contract('GreenVerification', function (accounts) {
     const investor = accounts[1];
     const investor2 = accounts[2];
     const investor3 = accounts[3];
+    const investor4 = accounts[6];
     
 
     // Changed from beforeEach to before
@@ -131,7 +132,40 @@ contract('GreenVerification', function (accounts) {
         let event = result.logs[0].args;
 
         assert.equal(event.reason, "test");
+        // Number of voters is zero
         assert.equal(await verification.getVoterCount(), 0)
+        // Verifier vote is undefined
         assert.equal(await verification.getVerifierVote(), 3)
+    })
+    it('highest number of votes calculated correctly', async function() {
+        await verification.vote(0, {from: investor})
+        await verification.vote(0, {from: investor2})
+        await verification.vote(1, {from: investor3})
+
+        let result = await verification.getHighestVotedOption()
+        assert.equal(result,0)
+    })
+
+    it('voters choice wins if the option gets more than 50% of the votes', async function() {
+        await verification.vote(0, {from: investor})
+        await verification.vote(0, {from: investor2})
+        await verification.vote(1, {from: investor3})
+
+        await verification.greenVerifierVote(1, {from: verifier})
+
+        await verification.verify2({from: verifier})
+        assert.equal(await verification.getFinalVote(), 0)
+    })
+
+    it('verifiers choice wins if voters option gets less than or equal to 50% of the votes', async function() {
+        await verification.vote(0, {from: investor})
+        await verification.vote(0, {from: investor2})
+        await verification.vote(1, {from: investor3})
+        await verification.vote(1, {from: investor4})
+
+        await verification.greenVerifierVote(2, {from: verifier})
+
+        await verification.verify2({from: verifier})
+        assert.equal(await verification.getFinalVote(), 2)
     })
 })

@@ -25,7 +25,7 @@ class BuyBonds extends Component {
 	async loadBlockchainData() {
 		const web3 = new Web3(window.web3.currentProvider)
 
-		// Load account
+		// Load account - first one
 		const accounts = await web3.eth.getAccounts()
 		this.setState({ account: accounts[0] })
 
@@ -36,6 +36,7 @@ class BuyBonds extends Component {
 			// Get the Green bond contract
 			const greenBond = new web3.eth.Contract(GreenBond.abi, networkData.address)
 			this.setState({ greenBond })
+			// For testing - print details on console
 			console.log("Bond", greenBond)
 
 
@@ -43,6 +44,7 @@ class BuyBonds extends Component {
 			const account = accounts[0];
 			const balance = await greenBond.methods.getInvestorBalance(account).call()
 			this.setState({ balance })
+			// For testing - print details on console
 			console.log("Balance", balance)
 
 			const value = await greenBond.methods.getFaceValue().call()

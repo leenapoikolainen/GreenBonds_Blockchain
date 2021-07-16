@@ -31,6 +31,7 @@ contract GreenVerification {
     address private _company;
     string private _project;
     Vote private _verifierVote;
+    Vote private _finalVote;
     uint256 private _votingClosingTime;
     uint256[3] private _investorVotes;
     bool private _verified;
@@ -56,6 +57,7 @@ contract GreenVerification {
         _votingClosingTime = votingClosingTime;
         _verified = false;
         _verifierVote = Vote.UNDEFINED;
+        _finalVote = Vote.UNDEFINED;
         
         // WHAT SHOULD BE THE DEFAULT
         _openForVoting = false;
@@ -163,6 +165,7 @@ contract GreenVerification {
         _voterCount++;
     }
 
+    
     function verify() external onlyGreenVerifier {
         uint256 totalVotes = 
             _investorVotes[0] +
@@ -174,5 +177,46 @@ contract GreenVerification {
         } else {
             _verified = false;
         }
+    }
+
+    // NEW 
+    function getHighestVotedOption() public view returns (uint256) {
+        uint256 highestNumberOfVotes = 0;
+        // Default result is UNDEFINED
+        uint256 result = 3; 
+        if (_investorVotes[0] > highestNumberOfVotes) {
+            highestNumberOfVotes = _investorVotes[0];
+            result = 0;
+        } 
+        if (_investorVotes[1] > highestNumberOfVotes) {
+            highestNumberOfVotes = _investorVotes[1];
+            result = 1;
+        }
+        if (_investorVotes[2] > highestNumberOfVotes) {
+            highestNumberOfVotes = _investorVotes[2];
+            result = 2;
+        }
+        return result;
+    }
+
+    function verify2() external onlyGreenVerifier {
+        // Need to add a limit check
+
+        uint256 totalVotes = 
+            _investorVotes[0] +
+            _investorVotes[1] +
+            _investorVotes[2];
+        
+        uint256 votersOption = getHighestVotedOption();
+        // If voters option has over 50% of the given votes
+        if ((_investorVotes[votersOption] * 100) / totalVotes > 50) {
+            _finalVote = Vote(votersOption);
+        } else {
+            _finalVote = _verifierVote;
+        }
+    }
+
+    function getFinalVote() external view returns (uint256) {
+        return uint256(_finalVote);
     }
 }

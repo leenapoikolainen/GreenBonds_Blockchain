@@ -25,6 +25,7 @@ contract('GreenBond', function (accounts) {
     let bondSymbol = "GREEN";
     let baseURI = "https://storage.cloud.google.com/metadata_platform/";
     let faceValue = 1000;
+    let numberOfBondsSeeked = 10;
     let minCoupon = 1;
     let maxCoupon = 5;
     let bidClosingTime = Math.floor(new Date().getTime() / 1000) + duration.days(2)
@@ -38,13 +39,14 @@ contract('GreenBond', function (accounts) {
     const owner = accounts[0];
     const investor = accounts[1];
     const investor2 = accounts[2];
-    const regulator = accounts[3];
-    const greenVerifier = accounts[4];
+    const investor3 = accounts[3];
+    const regulator = accounts[4];
+    const greenVerifier = accounts[5];
     const company = accounts[8];
 
     // Changed from beforeEach to before
     before(async function () {
-        bond = await GreenBond.new(company, bondName, bondSymbol, faceValue, minCoupon, maxCoupon,
+        bond = await GreenBond.new(company, bondName, bondSymbol, numberOfBondsSeeked, minCoupon, maxCoupon,
             bidClosingTime, term, couponsPerYear, baseURI,
             regulator, { from: owner });
     });
@@ -69,7 +71,7 @@ contract('GreenBond', function (accounts) {
             const _coupon = await bond.getCoupon()
             const _minCoupon = await bond.getMinCoupon()
             const _maxCoupon = await bond.getMaxCoupon()
-            assert.equal(_value.toNumber(), 1000)
+            assert.equal(_value.toNumber(), 100)
             assert.equal(_coupon.toNumber(), 0)
             assert.equal(_minCoupon.toNumber(), 1)
             assert.equal(_maxCoupon.toNumber(), 5)
@@ -108,19 +110,19 @@ contract('GreenBond', function (accounts) {
             investmentBefore = new web3.utils.BN(investmentBefore)
 
             // Bidding outside the range is rejected
-            await bond.registerBid(6, 1, {from: investor, value: web3.utils.toWei('1000', 'Wei')}).should.be.rejected
+            await bond.registerBid(6, 1, {from: investor, value: web3.utils.toWei('100', 'Wei')}).should.be.rejected
             // Bid without enough eth should be rejected
-            await bond.registerBid(5, 2, {from: investor, value: web3.utils.toWei('1000', 'Wei')}).should.be.rejected
+            await bond.registerBid(5, 2, {from: investor, value: web3.utils.toWei('100', 'Wei')}).should.be.rejected
             
             // Register investment during bidding time  
-            let result = await bond.registerBid(1, 2, {from: investor, value: web3.utils.toWei('2000', 'Wei')})
+            let result = await bond.registerBid(1, 2, {from: investor, value: web3.utils.toWei('200', 'Wei')})
             const bid = result.logs[0].args;
             assert.equal(bid.bidder, investor)
             assert.equal(bid.coupon, 1)
             assert.equal(bid.numberOfBonds, 2)
 
             // Check the investment balance
-            let investedAmount = web3.utils.toWei('2000', 'Wei')
+            let investedAmount = web3.utils.toWei('200', 'Wei')
             investedAmount = new web3.utils.BN(investedAmount)
 
             let investmentAfter = await bond.getInvestedAmountPerInvestor(investor)
@@ -138,78 +140,10 @@ contract('GreenBond', function (accounts) {
             let count = await bond.bondCount()
             assert.equal(count.toNumber(), 0)
         })
-        /*
-        it('Investor can register investment while investment window is open', async function() {
-            // Track the recorded investments
-            let investmentBefore = await bond.getInvestorBalance(investor)
-            investmentBefore = new web3.utils.BN(investmentBefore)
-    
-            // Register investment during bidding time   
-            let result = await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1000', 'Wei')})
-            const event = result.logs[0].args;
-    
-            // Check the event details (right investor and right amount logged)
-            assert.equal(event.value.toNumber(), 1000)
-            assert.equal(event.investor, investor)
-            assert.equal(event.numberOfBonds, 1)
-    
-            let paidAmount = web3.utils.toWei('1000', 'Wei')
-            paidAmount = new web3.utils.BN(paidAmount)
-            
-            let value = new web3.utils.BN(event.value)
-            assert.equal(value.toString(), paidAmount.toString())
-    
-            // Check new investment balance
-            let investmentAfter = await bond.getInvestorBalance(investor)
-            investmentAfter = new web3.utils.BN(investmentAfter)
-    
-            // Compare to the expected investment balance
-            const expectedInvestment = investmentBefore.add(paidAmount)
-            assert.equal(investmentAfter.toString(), expectedInvestment.toString()) 
+        
+        it('defining coupon is not possible, when bidding time is still open', async function() {
+            await bond.defineCoupon({from: owner}).should.be.rejected
         })
-
-
-        it('Issuing bonds is not possible when investment window is still open', async function() {
-            // Test issuing tokens
-            await bond.issueBonds({from: owner}).should.be.rejected
-        })
-
-        it('Investors can request multiple investments', async function() {
-            // Track the recorded investments
-            let investmentBefore = await bond.getInvestorBalance(investor)
-            investmentBefore = new web3.utils.BN(investmentBefore)
-    
-            // Investor invokes the method
-            let result = await bond.registerInvestment(2, {from: investor, value: web3.utils.toWei('2000', 'Wei')})
-            const event = result.logs[0].args;
-       
-            // Check the event details (right investor and right amount logged)
-            assert.equal(event.value.toNumber(), 2000)
-            assert.equal(event.investor, investor) 
-            assert.equal(event.numberOfBonds, 2)
-    
-            let paidAmount = web3.utils.toWei('2000', 'Wei')
-            paidAmount = new web3.utils.BN(paidAmount)
-            
-            let value = new web3.utils.BN(event.value)
-            assert.equal(value.toString(), paidAmount.toString())
-    
-            // Check new investment balance
-            let investmentAfter = await bond.getInvestorBalance(investor)
-            investmentAfter = new web3.utils.BN(investmentAfter)
-    
-            // Compare to the expected investment balance
-            const expectedInvestment = investmentBefore.add(paidAmount)
-            assert.equal(investmentAfter.toString(), expectedInvestment.toString())
-          
-        })
-    
-        it('The token count is 0 before issuing tokens', async function() {
-            let count = await bond.bondCount()
-            assert.equal(count.toNumber(), 0)
-        })
-
-        */
         /*
         it('regulator can return investor investments from the contract', async function() {
             let balance = await web3.eth.getBalance(investor)
@@ -239,23 +173,50 @@ contract('GreenBond', function (accounts) {
         */
     })
 
-    /*
+    
     describe('After bidding time is over', () => {
         let balanceAfterInvestment
 
         before(async () => {
-            await bond.registerInvestment(1, {from: investor2, value: web3.utils.toWei('1500', 'Wei')})
+            // Make another investments
+            await bond.registerBid(2, 9, {from: investor2, value: web3.utils.toWei('900', 'Wei')})
+            await bond.registerBid(3, 2, {from: investor3, value: web3.utils.toWei('200', 'Wei')})
+            
             // Record investor balance
-            balanceAfterInvestment = await web3.eth.getBalance(investor2)
-            balanceAfterInvestment = new web3.utils.BN(balanceAfterInvestment) 
-
+            //balanceAfterInvestment = await web3.eth.getBalance(investor2)
+            //balanceAfterInvestment = new web3.utils.BN(balanceAfterInvestment) 
+            
             // Advance time
-            await timeMachine.advanceTimeAndBlock(duration.weeks(1)); // + 1 week
+            await timeMachine.advanceTimeAndBlock(duration.days(2)); // + 2 week
         })
         it('bidding not possible after bidding time is closed', async function() {
-            await bond.registerInvestment(1, {from: investor, value: web3.utils.toWei('1000', 'Wei')}).should.be.rejected
+            await bond.registerBid(1, 1, {from: investor, value: web3.utils.toWei('100', 'Wei')}).should.be.rejected
         })
+        
+        it('coupon is set correctly', async function() {
+            let result = await bond.defineCoupon({from: owner})
+            let couponSet = result.logs[0].args
 
+            assert.equal(couponSet.coupon, 2)
+            let _coupon = await bond.getCoupon()
+            assert.equal(_coupon.toNumber(), 2)
+        })
+        
+        
+        /*
+        it('coupon is 0, when not enough demand', async function() {
+            let result = await bond.defineCoupon({from: owner})
+            let couponSet = result.logs[0].args
+
+            assert.equal(couponSet.actualDemand, 4)
+            assert.equal(couponSet.requestedDemand, 10)
+
+            const _coupon = await bond.getCoupon()
+            assert.equal(_coupon.toNumber(), 0)
+        })
+        */
+
+        /*
         
         it('issuing tokens is not possible if contract is paused by regulator', async function() {
             let result = await bond.pause({from: regulator})
@@ -777,7 +738,8 @@ contract('GreenBond', function (accounts) {
         const couponDecrese = result.logs[0].args
         assert.equal(couponDecrese.adjuster, greenVerifier)
         assert.equal(couponDecrese.couponRate, 0)
+        */
     })
-    */
+    
 
 })

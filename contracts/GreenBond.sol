@@ -5,6 +5,8 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+
+
 contract GreenBond is ERC721, Ownable {
     using Counters for Counters.Counter;
 
@@ -51,6 +53,7 @@ contract GreenBond is ERC721, Ownable {
     address payable private _company;
     address private _regulator;
     uint256 private _value;
+    uint256 private _numberOfBondsSeeked;
     uint256 private _coupon;
     uint256 private _minCoupon;
     uint256 private _maxCoupon;
@@ -112,7 +115,7 @@ contract GreenBond is ERC721, Ownable {
         address company,
         string memory name,
         string memory symbol,
-        uint256 value,
+        uint numberOfBondsSeeked,
         uint256 minCoupon,
         uint256 maxCoupon,
         uint256 bidClosingTime,
@@ -122,7 +125,6 @@ contract GreenBond is ERC721, Ownable {
         address regulator
     ) ERC721(name, symbol) {
         require(company != address(0), "Company address can not be 0x0");
-        require(value > 0, "Value can not be 0");
         require(minCoupon >= 0, "coupon can't be negative");
         require(maxCoupon > minCoupon,"max coupon needs to be greater than min coupon");
         require(bidClosingTime > block.timestamp, "Closing time can't be in the past");
@@ -130,7 +132,8 @@ contract GreenBond is ERC721, Ownable {
         _baseBondURI = baseBondURI;
         _company = payable(company);
         _regulator = regulator;
-        _value = value;
+        _value = 100; // Face value default at 100
+        _numberOfBondsSeeked = numberOfBondsSeeked;
         _coupon = 0;
         _minCoupon = minCoupon;
         _maxCoupon = maxCoupon;
@@ -266,6 +269,39 @@ contract GreenBond is ERC721, Ownable {
         emit Bid(msg.sender, coupon, numberOfBonds);
     }
 
+
+    event CouponSet(uint256 coupon);
+    event DemandNotMet(uint256 actualDemand, uint256 requestedDemand);
+
+    // Function for issuer to define coupon
+    // Finds the lowest coupon that fullfills the demand
+    // Returns the defined coupon
+    function defineCoupon() public onlyWhileBiddingWindowClosed onlyOwner returns (uint256)  {
+        // Variable for the total demand for tokens
+        uint256 tokenDemand = 0;
+
+        // Iterate each coupon level, and count the token demand to
+        // determine the coupon level which will fulfills the seeked number of bonds
+        for(uint i = _minCoupon; i <= _maxCoupon; i++) {
+            // Increase the tokendemand
+            tokenDemand += _bidsPerCoupon[i];
+            // If enough interest at this coupon level, set coupon and break the loop
+            if (tokenDemand >= _numberOfBondsSeeked) {
+                _coupon = i;
+                break;
+            }
+        }
+
+        if (_coupon > 0) {
+            emit CouponSet(_coupon);
+        } else {
+            emit DemandNotMet(tokenDemand, _numberOfBondsSeeked);
+        }   
+
+        return _coupon;
+    }
+
+
     // Just for testing 
     function getInvestorBalance(address investor)
         public
@@ -278,7 +314,7 @@ contract GreenBond is ERC721, Ownable {
 
     // Return true if the investment window is open, false otherwise.
     function biddingWindowisOpen() public view returns (bool) {
-        return block.timestamp <= _issueDate;
+        return block.timestamp <= _bidClosingTime;
     }
 
 

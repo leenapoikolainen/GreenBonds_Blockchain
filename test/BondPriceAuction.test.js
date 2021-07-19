@@ -25,6 +25,7 @@ contract('BondPriceAuction', function (accounts) {
     const investor2 = accounts[3];
     let deadline = Math.floor(new Date().getTime() / 1000) + duration.weeks(2)
 
+    /*
     it('closing time can not be in the past', async function() {
         await BondPriceAuction.new('Green project', company, 1, 5, 10, 1620293544).should.be.rejected
     })
@@ -95,9 +96,9 @@ contract('BondPriceAuction', function (accounts) {
         assert.equal(issue2.amount, 7)  
 
         assert.equal(refund.investor, investor2)
-        assert.equal(refund.amount, 200)
-        
+        assert.equal(refund.amount, 200)       
     })
+    */
 
     /*
     it('deploys successfully', async function () {

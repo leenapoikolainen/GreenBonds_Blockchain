@@ -24,7 +24,7 @@ contract('GreenBond', function (accounts) {
     let bondName = "Green Bond";
     let bondSymbol = "GREEN";
     let baseURI = "https://storage.cloud.google.com/metadata_platform/";
-    let faceValue = 1000;
+    //let faceValue = 1000;
     let numberOfBondsSeeked = 10;
     let minCoupon = 1;
     let maxCoupon = 5;
@@ -230,7 +230,7 @@ contract('GreenBond', function (accounts) {
             //balanceAfterInvestment = new web3.utils.BN(balanceAfterInvestment) 
             
             // Advance time
-            await timeMachine.advanceTimeAndBlock(duration.days(2)); // + 2 week
+            await timeMachine.advanceTimeAndBlock(duration.days(2)); // + 2 days
         })
         it('bidding not possible after bidding time is closed', async function() {
             await bond.registerBid(1, 1, {from: investor, value: web3.utils.toWei('100', 'Wei')}).should.be.rejected
@@ -278,9 +278,187 @@ contract('GreenBond', function (accounts) {
             const refund = result.logs[10].args
             assert.equal(refund.account, investor2)
             assert.equal(refund.value.toNumber(), 200)       
+
+            let newBalance = await web3.eth.getBalance(company)
+            newBalance = new web3.utils.BN(newBalance) 
+
+            let principal = web3.utils.toWei('1000', 'Wei')
+            principal = new web3.utils.BN(principal)
+            
+            let expectedBalance = oldBalance.add(principal)
+            assert.equal(newBalance.toString(), expectedBalance.toString())
         })
         
-         
+        it('coupon payments are made correctly', async function() {
+            
+            // Record investors' balances before the coupon payment
+            let oldBalance1 = await web3.eth.getBalance(investor)
+            oldBalance1 = new web3.utils.BN(oldBalance1)
+    
+            let oldBalance2 = await web3.eth.getBalance(investor2)
+            oldBalance2 = new web3.utils.BN(oldBalance2)
+
+            // Only borrowing company can make payments
+            await bond.payCoupons({from: owner, value: web3.utils.toWei('20', 'Wei')}).should.be.rejected
+            // Not enough coins will not be accepted
+            await bond.payCoupons({from: company, value: web3.utils.toWei('10', 'Wei')}).should.be.rejected
+
+            // Pay coupons (coupon is 2, for 10 bonds)
+            let result = await bond.payCoupons({from: company, value: web3.utils.toWei('20', 'Wei')})
+            // First two coupons for investor 1, next 8 for investor 2
+            const coupon1 = result.logs[0].args;
+            const coupon3 = result.logs[2].args;
+            
+    
+            // Check event details
+            assert.equal(coupon1.investor, investor)
+            assert.equal(coupon1.bondId, 0)   
+        
+            assert.equal(coupon3.investor, investor2)
+            assert.equal(coupon3.bondId, 2)
+
+
+            // Check new balance of the investor after the coupon payment
+            let newBalance1 = await web3.eth.getBalance(investor)
+            newBalance1 = new web3.utils.BN(newBalance1)
+    
+            let newBalance2 = await web3.eth.getBalance(investor2)
+            newBalance2 = new web3.utils.BN(newBalance2)
+    
+            // Mock the paid amount
+            let couponPayment = web3.utils.toWei('4', 'Wei')
+            couponPayment = new web3.utils.BN(couponPayment)
+    
+            const expectedBalance1 = oldBalance1.add(couponPayment)
+            assert.equal(newBalance1.toString(), expectedBalance1.toString())
+
+            couponPayment = web3.utils.toWei('16', 'Wei')
+            couponPayment = new web3.utils.BN(couponPayment)
+            
+            const expectedBalance2 = oldBalance2.add(couponPayment)
+            assert.equal(newBalance2.toString(), expectedBalance2.toString()) 
+            //await timeMachine.advanceTimeAndBlock(duration.days(2)); // + 2 days   
+        })
+        it('checkin coupon payment made on time', async function() {
+            // Coupon out of range
+            await bond.couponPaymentMadeOnTime(6).should.be.rejected
+            // Coupon not matured yet
+            await bond.couponPaymentMadeOnTime(1).should.be.rejected
+
+            // Advance time to after first coupon
+            await timeMachine.advanceTimeAndBlock(duration.days(200)) // + 200 days
+            let result = await bond.couponPaymentMadeOnTime(1)
+            assert.isTrue(result)
+            
+
+            // Advance time to after first coupon
+            await timeMachine.advanceTimeAndBlock(duration.days(200)); // + 200 days
+            // Second coupon
+            await bond.payCoupons({from: company, value: web3.utils.toWei('20', 'Wei')}) 
+            result = await bond.couponPaymentMadeOnTime(2);
+            assert.isFalse(result);  
+        })
+        it('Borrowing company can not make extra coupon payments', async function() {   
+            // Third coupon
+            await bond.payCoupons({from: company, value: web3.utils.toWei('20', 'Wei')})
+            // Fourth and final coupon
+            await bond.payCoupons({from: company, value: web3.utils.toWei('20', 'Wei')})
+            // This should be rejected
+            await bond.payCoupons({from: company, value: web3.utils.toWei('20', 'Wei')}).should.be.rejected
+        })
+
+        it('Tokens and principal transferred at maturity', async function() {
+            // Record investors' balances before the principal payback
+            let oldBalance1 = await web3.eth.getBalance(investor)
+            oldBalance1 = new web3.utils.BN(oldBalance1)
+    
+            let oldBalance2 = await web3.eth.getBalance(investor2)
+            oldBalance2 = new web3.utils.BN(oldBalance2)
+            
+     
+            // Paying back bond
+            // If not enough money, rejected
+            await bond.payBackBond({from: company, value: web3.utils.toWei('100', 'Wei')}).should.be.rejected
+            //  Not from the borrowing company
+            await bond.payBackBond({from: owner, value: web3.utils.toWei('1000', 'Wei')}).should.be.rejected
+            
+            //let debt = await bond.getTotalDebt()
+            //console.log(debt.toNumber())
+            let result = await bond.payBackBond({from: company, value: web3.utils.toWei('1500', 'Wei')})
+                 
+            // First two events are approval and transfer
+            const transfer1 = result.logs[1].args; 
+            
+            // First events for investor 2
+            const transfer3 = result.logs[5].args;
+            
+            // Last event is refund
+            const refund = result.logs[20].args;
+            
+            
+            // Check that tokens are returned to the owner of the contract
+
+            assert.equal(transfer1.tokenId, 0)
+            let ownerOfToken = await bond.ownerOf(0)
+            assert.equal(ownerOfToken, owner)
+
+            assert.equal(transfer3.tokenId, 2)
+            ownerOfToken = await bond.ownerOf(2)
+            assert.equal(ownerOfToken, owner)
+
+    
+            // Check refund event
+            assert.equal(refund.account, company)
+            assert.equal(refund.value.toString(), 500)
+      
+            
+            // Check investor's balance after
+            let newBalance1 = await web3.eth.getBalance(investor)
+            newBalance1 = new web3.utils.BN(newBalance1)
+    
+            let principalPayment = web3.utils.toWei('200', 'Wei')
+            principalPayment = new web3.utils.BN(principalPayment)
+    
+            let expectedBalance = oldBalance1.add(principalPayment)
+            assert.equal(newBalance1.toString(), expectedBalance.toString())
+
+            
+            let newBalance2 = await web3.eth.getBalance(investor2)
+            newBalance2 = new web3.utils.BN(newBalance2)
+
+            principalPayment = web3.utils.toWei('800', 'Wei')
+            principalPayment = new web3.utils.BN(principalPayment)
+    
+            expectedBalance = oldBalance2.add(principalPayment)
+            assert.equal(newBalance2.toString(), expectedBalance.toString())    
+        })
+        it('the bond count is 0 after all tokens returned to owner', async function() {
+            let count = await bond.bondCount()
+            assert.equal(count.toNumber(), 0)
+        })
+        /*
+        it('check bond payback time correctly', async function () {
+
+        })
+        */
+        
+        /*
+        it('the bond count is 0 after all tokens returned to owner', async function() {
+            let count = await bond.bondCount()
+            assert.equal(count.toNumber(), 0)
+        })
+        
+        it('can not call principal payment check before maturity date', async function() {
+            await bond.principalPaymentMadeOnTime().should.be.rejected
+        })
+        it('if principal is paid on time, check returns true', async function() {
+            await timeMachine.advanceTimeAndBlock(duration.years(1)); // +2 year & 1 week
+            let result = await bond.principalPaymentMadeOnTime()
+            assert.isTrue(result)
+        })
+        */
+    
+    
         
        
         

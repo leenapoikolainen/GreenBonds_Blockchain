@@ -436,31 +436,15 @@ contract('GreenBond', function (accounts) {
             let count = await bond.bondCount()
             assert.equal(count.toNumber(), 0)
         })
-        /*
+        
         it('check bond payback time correctly', async function () {
-
-        })
-        */
-        
-        /*
-        it('the bond count is 0 after all tokens returned to owner', async function() {
-            let count = await bond.bondCount()
-            assert.equal(count.toNumber(), 0)
-        })
-        
-        it('can not call principal payment check before maturity date', async function() {
+            // When not matured yet
             await bond.principalPaymentMadeOnTime().should.be.rejected
-        })
-        it('if principal is paid on time, check returns true', async function() {
-            await timeMachine.advanceTimeAndBlock(duration.years(1)); // +2 year & 1 week
+            await timeMachine.advanceTimeAndBlock(duration.years(1)); // + 1 year
             let result = await bond.principalPaymentMadeOnTime()
             assert.isTrue(result)
         })
-        */
-    
-    
         
-       
         
 
         /*

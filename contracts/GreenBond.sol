@@ -36,7 +36,6 @@ contract GreenBond is ERC721, Ownable {
     address[] private _initialInvestors;
     address private _owner;
     address payable private _company;
-    address private _regulator;
     uint256 private _value;
     uint256 private _numberOfBondsSeeked;
     uint256 private _coupon;
@@ -105,8 +104,7 @@ contract GreenBond is ERC721, Ownable {
         uint256 bidClosingTime,
         uint256 term,
         uint256 couponsPerYear,
-        string memory baseBondURI,
-        address regulator
+        string memory baseBondURI
     ) ERC721(name, symbol) {
         require(company != address(0), "Company address can not be 0x0");
         require(minCoupon >= 0, "coupon can't be negative");
@@ -121,10 +119,9 @@ contract GreenBond is ERC721, Ownable {
         _owner = msg.sender;
         _baseBondURI = baseBondURI;
         _company = payable(company);
-        _regulator = regulator;
         _value = 100; // Face value default at 100
         _numberOfBondsSeeked = numberOfBondsSeeked;
-        _coupon = 0;
+        _coupon = 0; // by default 0
         _minCoupon = minCoupon;
         _maxCoupon = maxCoupon;
         _bidClosingTime = bidClosingTime;
@@ -176,10 +173,6 @@ contract GreenBond is ERC721, Ownable {
 
     function getCompany() public view returns (address) {
         return _company;
-    }
-
-    function getRegulator() public view returns (address) {
-        return _regulator;
     }
 
     function getFaceValue() public view returns (uint256) {

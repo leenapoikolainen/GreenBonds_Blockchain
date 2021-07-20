@@ -41,14 +41,12 @@ contract('GreenBond', function (accounts) {
     const investor2 = accounts[2];
     const investor3 = accounts[3];
     const regulator = accounts[4];
-    const greenVerifier = accounts[5];
     const company = accounts[8];
 
     // Changed from beforeEach to before
     before(async function () {
         bond = await GreenBond.new(company, bondName, bondSymbol, numberOfBondsSeeked, minCoupon, maxCoupon,
-            bidClosingTime, term, couponsPerYear, baseURI,
-            regulator, { from: owner});
+            bidClosingTime, term, couponsPerYear, baseURI, { from: owner});
             
     });
 

@@ -84,7 +84,7 @@ contract GreenBond is ERC721, Ownable {
     /**
      * @dev Emmitted when coupon payment is adjusted
      */
-    event CouponAdjustment(address adjuster, uint256 couponRate);
+    event CouponAdjustment(uint256 from, uint256 to);
     event CouponSet(uint256 coupon);
     event CancelBondIssue(uint256 actualDemand, uint256 requestedDemand);
     event Bid(address bidder, uint256 coupon, uint256 numberOfBonds);
@@ -569,12 +569,13 @@ contract GreenBond is ERC721, Ownable {
      * Function to adjust the coupon
      */
     function adjustCoupon(bool increase, uint256 amount) external onlyOwner {
+        uint256 previousCoupon = _coupon;
         if (increase) {
             _coupon = _coupon + amount;
         } else {
             require(amount <= _coupon, "Coupon payment can't be negative");
             _coupon = _coupon - amount;
         }
-        emit CouponAdjustment(msg.sender, _coupon);
+        emit CouponAdjustment(previousCoupon, _coupon);
     }
 }

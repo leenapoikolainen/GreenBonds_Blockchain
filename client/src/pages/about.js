@@ -12,7 +12,7 @@ return (
 		height: '100vh'
 	}}
 	>
-	<h1>About this platform</h1>
+	<h1>About the bond</h1>
 	</div>
 );
 };

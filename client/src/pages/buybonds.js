@@ -71,6 +71,14 @@ class BuyBonds extends Component {
 		console.log(receipt.events.DataStored.raw)
 	}
 
+	// Register bid function
+	registerbid = (coupon, numberOfBonds) => {
+		var amount = (numberOfBonds * 100).toString();
+		this.state.greenBond.methods.registerBid(coupon, numberOfBonds).send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
+		this.setState({ coupon })
+		//console.log(receipt.events.DataStored.raw)
+	}
+
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -81,6 +89,7 @@ class BuyBonds extends Component {
 			balance: 0,
 			numberOfTokens: 0,
 			tokensOwned: 0,
+			coupon: 0,
 		}
 	}
 
@@ -90,17 +99,26 @@ class BuyBonds extends Component {
 				<main role="main" >
 					<div className="row">
 						<div className="container mr-auto ml-auto">
-							<h2>Invest</h2>
+							<h2>Register Bid</h2>
 							<form onSubmit={(event) => {
 								event.preventDefault()
-								const number = this.number.value
-								this.invest(number)
+								const coupon = this.coupon.value
+								const numberOfBonds = this.numberOfBonds.value
+								this.registerbid(coupon, numberOfBonds)
+								//const number = this.number.value
+								//this.invest(number)
 							}}>
 								<input
 									type='number'
 									className='form-control mb-1'
 									min='0'
-									ref={(input) => { this.number = input }}
+									ref={(input) => { this.coupon = input }}
+								/>
+								<input
+									type='number'
+									className='form-control mb-1'
+									min='0'
+									ref={(input) => { this.numberOfBonds = input }}
 								/>
 								<input
 									type='submit'
@@ -116,6 +134,9 @@ class BuyBonds extends Component {
 					</div>
 					<div className="row text-center">
 						<p>Tokens requested: {this.state.numberOfTokens}</p>
+					</div>
+					<div className="row text-center">
+						<p>Coupon bid: {this.state.coupon}</p>
 					</div>
 					<div className="row text-center">
 						<p>Investment balance: {this.state.balance}</p>

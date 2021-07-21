@@ -24,6 +24,9 @@ const Navbar = () => {
                 <NavLink to='/issuetokens' activeStyle>
                     Issue Tokens
                 </NavLink>
+                <NavLink to='/company' activeStyle>
+                    Company
+                </NavLink>
             </NavMenu>	
         </Nav>
         </>

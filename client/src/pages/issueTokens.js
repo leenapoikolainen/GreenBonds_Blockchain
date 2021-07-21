@@ -41,7 +41,7 @@ class IssueTokens extends Component {
 			}
 
             // Token count
-            const tokens = await greenBond.methods.tokenCount().call()
+            const tokens = await greenBond.methods.bondCount().call()
             this.setState({ tokens })
             console.log("Number of tokens issued", tokens)
 
@@ -57,7 +57,7 @@ class IssueTokens extends Component {
 
     // Issuing function
     issue = () => {
-        this.state.greenBond.methods.issueTokens().send({from: this.state.account})
+        this.state.greenBond.methods.issueBonds().send({from: this.state.account})
     }
 
     payCoupons = () => {

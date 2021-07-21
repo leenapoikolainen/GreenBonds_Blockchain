@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import About from './pages/about';
 import BuyBonds from './pages/buybonds';
 import IssueTokens from './pages/issueTokens';
+import Company from './pages/company';
 
 import Test from './pages/test';
 
@@ -173,6 +174,7 @@ class App extends Component {
               <Route path='/buybonds' component={BuyBonds} />
               <Route path='/issuetokens' component={IssueTokens}></Route>
               <Route path='/test' component={Test} />
+              <Route path='/company' component={Company}/>
             </Switch>
           </div>
         </Router>

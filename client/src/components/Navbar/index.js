@@ -27,6 +27,9 @@ const Navbar = () => {
                 <NavLink to='/company' activeStyle>
                     Company
                 </NavLink>
+                <NavLink to='/issuer' activeStyle>
+                    Issuer
+                </NavLink>
             </NavMenu>	
         </Nav>
         </>

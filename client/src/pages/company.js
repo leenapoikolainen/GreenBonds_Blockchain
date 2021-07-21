@@ -6,36 +6,36 @@ import GreenBond from '../contracts/GreenBond.json';
 
 class Company extends Component {
     async componentWillMount() {
-		await this.loadBlockchainData()
-	}
+        await this.loadBlockchainData()
+    }
 
     async loadWeb3() {
-		if (window.ethereum) {
-			window.web3 = new Web3(window.ethereum)
-		}
-		else if (window.web3) {
-			window.web3 = new Web3(window.web3.currentProvider)
-		}
-		else {
-			window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
-		}
-	}
+        if (window.ethereum) {
+            window.web3 = new Web3(window.ethereum)
+        }
+        else if (window.web3) {
+            window.web3 = new Web3(window.web3.currentProvider)
+        }
+        else {
+            window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+        }
+    }
 
     async loadBlockchainData() {
-		const web3 = new Web3(window.web3.currentProvider)
+        const web3 = new Web3(window.web3.currentProvider)
 
-		// Load account - first one
-		const accounts = await web3.eth.getAccounts()
-		this.setState({ account: accounts[0] })
+        // Load account - first one
+        const accounts = await web3.eth.getAccounts()
+        this.setState({ account: accounts[0] })
 
-		// Network connection
-		const networkId = await web3.eth.net.getId()
-		const networkData = GreenBond.networks[networkId]
+        // Network connection
+        const networkId = await web3.eth.net.getId()
+        const networkData = GreenBond.networks[networkId]
 
         if (networkData) {
-			// Get the Green bond contract
-			const greenBond = new web3.eth.Contract(GreenBond.abi, networkData.address)
-			this.setState({ greenBond })
+            // Get the Green bond contract
+            const greenBond = new web3.eth.Contract(GreenBond.abi, networkData.address)
+            this.setState({ greenBond })
 
             // Getting bond details
             const name = await greenBond.methods.getName().call()
@@ -72,6 +72,12 @@ class Company extends Component {
                 <li>{this.timeConverterDateYear(date)}</li>
             );
             this.setState({ couponList })
+
+            
+
+            // Set coupon
+            let coupon = await greenBond.methods.getCoupon().call()
+            this.setState({ coupon })
             /*
             for(var i = 0; i < couponDates.length; i++) {
                 const timeStamp = couponDates[i]
@@ -81,67 +87,90 @@ class Company extends Component {
                 })
             }
             */
-        
-        
+
+
         } else {
-        window.alert('Smart contract not deployed to detected network.')
+            window.alert('Smart contract not deployed to detected network.')
         }
     }
 
-    timeConverter(UNIX_timestamp){
+    timeConverter(UNIX_timestamp) {
         var a = new Date(UNIX_timestamp * 1000);
-        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         var year = a.getFullYear();
         var month = months[a.getMonth()];
         var date = a.getDate();
         var hour = a.getHours();
         var min = a.getMinutes();
-        if(min < 10) {
+        if (min < 10) {
             return (date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + '0')
         } else {
             return (date + ' ' + month + ' ' + year + ' ' + hour + ':' + min);
         }
-        
-        
-      }
-      timeConverterDateYear(UNIX_timestamp){
+
+
+    }
+    timeConverterDateYear(UNIX_timestamp) {
         var a = new Date(UNIX_timestamp * 1000);
-        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         var year = a.getFullYear();
         var month = months[a.getMonth()];
         var date = a.getDate();
         return (date + ' ' + month + ' ' + year);
-      }
+    }
+
+    payCoupon = () => {
+        // Here needs to be calculation for the amount
+        let amount = (10 * this.state.coupon).toString()
+        console.log(amount)
+        this.state.greenBond.methods.payCoupons().send({from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
+    }
 
     constructor(props) {
-		super(props)
-		this.state = {
-			account: '',
-			contract: null,
+        super(props)
+        this.state = {
+            account: '',
+            contract: null,
             couponPaymentDates: [],
-		}
-	}
+        }
+    }
 
     render() {
         return (
             <>
-            <div className="container-fluid mt-5">
-                 <h1>Bond Details</h1>
-                 <p>Company: {this.state.company}</p>
-                 <p>Project Name: {this.state.name}</p>
-                 <p>Symbol: {this.state.symbol}</p>
-                 <p>Face value: {this.state.faceValue}</p>
-                 <p>Min Coupon: {this.state.minCoupon}</p>
-                 <p>Max Coupon: {this.state.maxCoupon}</p>
-                 <p>Number of Bonds seeked: </p>
-                 <p>Bid closing time: {this.state.bidClosingTime}</p>
-                 <p>Term: {this.state.term} years</p>
-                 <p>Maturity Date: {this.state.maturityDate}</p>
-                 <p>Coupon Payment Dates:</p>
-                <ul>{this.state.couponList}</ul>
-            </div>
+                <div className="container-fluid mt-5">
+                    <h1>Bond Details</h1>
+                    <p>Company: {this.state.company}</p>
+                    <p>Project Name: {this.state.name}</p>
+                    <p>Symbol: {this.state.symbol}</p>
+                    <p>Face value: {this.state.faceValue}</p>
+                    <p>Min Coupon: {this.state.minCoupon}</p>
+                    <p>Max Coupon: {this.state.maxCoupon}</p>
+                    <p>Number of Bonds seeked: </p>
+                    <p>Bid closing time: {this.state.bidClosingTime}</p>
+                    <p>Term: {this.state.term} years</p>
+                    <p>Maturity Date: {this.state.maturityDate}</p>
+                    <p>Coupon Payment Dates:</p>
+                    <ul>{this.state.couponList}</ul>
+                </div>
+                <hr />
+                <div className="container-fluid mt-5">
+                    <h2>Pay coupon</h2>
+                    <form onSubmit={(event) => {
+                        event.preventDefault()
+                        this.payCoupon()
+                    }}>
+                        <input
+                            type='submit'
+                            className='btn btn-block btn-primary'
+                            value='PAYCOUPON'
+                        />
+
+                    </form>
+                </div>
             </>
-           
+
+
         );
     }
 }

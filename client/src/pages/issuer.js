@@ -38,7 +38,7 @@ class Issuer extends Component {
 
             // Bidding open
             let biddingOpen = true;
-            if (bidClosingTime * 1000 < time) {
+            if (bidClosingTimeTimeStamp * 1000  < time) {
                 biddingOpen = false;
             }
             this.setState({ biddingOpen })
@@ -55,7 +55,8 @@ class Issuer extends Component {
             const issueDateTimeStamp = await greenBond.methods.getIssueDate().call()
             const issueDate = this.timeConverterDateYear(issueDateTimeStamp)
             this.setState({ issueDate })
-
+ 
+            /*
 			for (var i = 1; i <= numberOfInvestors; i++) {
 				const investor = await greenBond.methods._investors(i - 1).call()
 				const balance = await greenBond.methods.getInvestorBalance(investor).call()
@@ -66,12 +67,13 @@ class Issuer extends Component {
 					balances: [...this.state.balances, balance]
 				})
 			}
+            */
 
             // Token count
             const tokens = await greenBond.methods.bondCount().call()
             this.setState({ tokens })
             console.log("Number of tokens issued", tokens)
-
+            
             
 
 
@@ -164,7 +166,11 @@ class Issuer extends Component {
 
                 </form>   
                 <hr/>
-                <p>Coupon: {this.state.coupon}</p>
+                {this.state.coupon == 0 
+                    ? <p>Coupon not defined</p> 
+                    : <p>Coupon defined: {this.state.coupon}</p>
+                }
+                
             </div>
             <hr/>
             <div className="container mr-auto ml-auto">

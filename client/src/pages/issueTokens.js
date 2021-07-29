@@ -29,6 +29,7 @@ class IssueTokens extends Component {
 			const numberOfInvestors = await greenBond.methods.numberOfInvestors().call()
 			this.setState({ numberOfInvestors })
 
+            /*
 			for (var i = 1; i <= numberOfInvestors; i++) {
 				const investor = await greenBond.methods._investors(i - 1).call()
 				const balance = await greenBond.methods.getInvestorBalance(investor).call()
@@ -39,6 +40,7 @@ class IssueTokens extends Component {
 					balances: [...this.state.balances, balance]
 				})
 			}
+            */
 
             // Token count
             const tokens = await greenBond.methods.bondCount().call()

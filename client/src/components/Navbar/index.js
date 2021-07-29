@@ -21,6 +21,9 @@ const Navbar = () => {
                 <NavLink to='/buybonds' activeStyle>
                     Buy Bonds
                 </NavLink>
+                <NavLink to='/investor' activeStyle>
+                    Investor
+                </NavLink>
                 <NavLink to='/issuetokens' activeStyle>
                     Issue Tokens
                 </NavLink>

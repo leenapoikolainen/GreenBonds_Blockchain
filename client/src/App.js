@@ -10,6 +10,7 @@ import BuyBonds from './pages/buybonds';
 import IssueTokens from './pages/issueTokens';
 import Company from './pages/company';
 import Issuer from './pages/issuer';
+import Investor from './pages/investor';
 
 import Test from './pages/test';
 
@@ -104,6 +105,8 @@ class App extends Component {
         <Router>
           <div>
             <Navbar />
+            <div className="container-fluid mt-5"></div>
+            {/* 
             <div className="container-fluid mt-5">
 
               <h1>This is the common text part</h1>
@@ -111,70 +114,16 @@ class App extends Component {
               <p>Contract Name: {this.state.name}</p>
               <p>Bond price: {this.state.value}</p>
               <p>Coupon: {this.state.coupon}</p>
-              
-              {/*
-              <main role="main" className="col-lg-12 d-flex text-center">
-                <div className="row">
-                  <div className="content mr-auto ml-auto">
-                    <h2>Invest</h2>
-                    <form onSubmit={(event) => {
-                      event.preventDefault()
-                      const number = this.number.value
-                      this.invest(number)
-                    }}>
-                      <input
-                        type='number'
-                        className='form-control mb-1'
-                        placeholder='0'
-                        // TESTING THIS
-                        ref={(input) => { this.number = input }}
-                      />
-                      <input
-                        type='submit'
-                        className='btn btn-block btn-primary'
-                        value='INVEST'
-                      />
-                    </form>
-                  </div>
-                </div>
-              </main>
-              <hr />
-              <div className="content mr-auto ml-auto">
-                <h2>Issue Tokens</h2>
-                <form onSubmit={(event) => {
-                  event.preventDefault()
-                  this.issue()
-                }}>
-                  <input
-                    type='submit'
-                    className='btn btn-block btn-primary'
-                    value='ISSUE'
-                  />
-                </form>
-              </div>
-
-              <hr />
-              <div className="content mr-auto ml-auto">
-                <h2>Registered investors</h2>
-                <div className="row text-center">
-                  {this.state.investors.map((investor, key) => {
-                    return (
-                      <ul>
-                        <li key={key}> {investor} </li>
-                      </ul>
-                    )
-                  })}
-                </div>
-              </div> 
-              */}      
+                  
             </div>
+            */}
                 
             <Switch>
               <Route path='/' exact component={About} />
               <Route path='/about' component={About} />
               <Route path='/buybonds' component={BuyBonds} />
+              <Route path='/investor' component={Investor} />
               <Route path='/issuetokens' component={IssueTokens}></Route>
-              <Route path='/test' component={Test} />
               <Route path='/issuer' component={Issuer}/>
               <Route path='/company' component={Company}/>
             </Switch>

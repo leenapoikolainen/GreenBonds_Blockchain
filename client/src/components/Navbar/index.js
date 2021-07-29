@@ -19,7 +19,7 @@ const Navbar = () => {
                     About
                 </NavLink>
                 <NavLink to='/buybonds' activeStyle>
-                    Buy Bonds
+                    Register Bid
                 </NavLink>
                 <NavLink to='/investor' activeStyle>
                     Investor

@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import Web3 from 'web3'
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond.json';
+import GreenBond from '../contracts/GreenBond2.json';
 
 class BuyBonds extends Component {
 
@@ -36,16 +36,40 @@ class BuyBonds extends Component {
 			// Get the Green bond contract
 			const greenBond = new web3.eth.Contract(GreenBond.abi, networkData.address)
 			this.setState({ greenBond })
-			// For testing - print details on console
-			console.log("Bond", greenBond)
+			
+			// Bond details
+			const company = await greenBond.methods.getCompany().call()
+			this.setState({ company })
 
+			const project = await greenBond.methods.getName().call()
+            this.setState({ project })
+
+			const minCoupon = await greenBond.methods.getMinCoupon().call()
+            this.setState({ minCoupon })
+
+            const maxCoupon = await greenBond.methods.getMaxCoupon().call()
+            this.setState({ maxCoupon }) 
+
+			const numberOfBondsSeeked = await greenBond.methods.getNumberOfBondsSeeked().call()
+			this.setState({ numberOfBondsSeeked })
+
+
+			const bidClosingTimeStamp = await greenBond.methods.getBidClosingTime().call()
+            const bidClosingTime = this.timeConverter(bidClosingTimeStamp)
+            this.setState({ bidClosingTime })
 
 			// Getting investor details 
 			const account = accounts[0];
+
+			const bondsRequested = await greenBond.methods.getRequestedBondsPerInvestor(account).call()
+			this.setState({ bondsRequested  })
+
+			const coupon = await greenBond.methods.getCouponPerInvestor(account).call()
+			this.setState({ coupon })
+			
 			const balance = await greenBond.methods.getInvestorBalance(account).call()
 			this.setState({ balance })
-			// For testing - print details on console
-			console.log("Balance", balance)
+			
 
 			const value = await greenBond.methods.getFaceValue().call()
 			console.log("Value", value)
@@ -63,6 +87,10 @@ class BuyBonds extends Component {
 		}
 	}
 
+	timeConverter(UNIX_timestamp) {
+        var dateObject = new Date(UNIX_timestamp * 1000); 
+        return dateObject.toLocaleString()  
+    }
 
 	// Testing investing function
 	invest = (numberOfTokens) => {
@@ -87,6 +115,7 @@ class BuyBonds extends Component {
 			numberOfInvestors: 0,
 			investors: [],
 			balance: 0,
+			bondsRequested: 0,
 			numberOfTokens: 0,
 			tokensOwned: 0,
 			coupon: 0,
@@ -97,6 +126,38 @@ class BuyBonds extends Component {
 		return (
 			<div className="container-fluid mt-5">
 				<main role="main" >
+					<div className="row"> 
+						<div className="container mr-auto ml-auto">
+							<h2 >Bond Details</h2>
+							<table className="table mt-5">
+								<tr>
+									<td>Company</td>
+									<td>{this.state.company}</td>
+								</tr>
+								<tr>
+									<td>Project</td>
+									<td>{this.state.project}</td>
+								</tr>
+								<tr>
+									<td>Min Coupon</td>
+									<td>{this.state.minCoupon}</td>
+								</tr>
+								<tr>
+									<td>Max Coupon</td>
+									<td>{this.state.maxCoupon}</td>
+								</tr>
+								<tr>
+									<td>Number of Bonds Seeked</td>
+									<td>{this.state.numberOfBondsSeeked}</td>
+								</tr>
+								<tr>
+									<td>Number of Bonds Seeked</td>
+									<td>{this.state.bidClosingTime}</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<hr/>
 					<div className="row">
 						<div className="container mr-auto ml-auto">
 							<h2>Register Bid</h2>
@@ -105,16 +166,18 @@ class BuyBonds extends Component {
 								const coupon = this.coupon.value
 								const numberOfBonds = this.numberOfBonds.value
 								this.registerbid(coupon, numberOfBonds)
-								//const number = this.number.value
-								//this.invest(number)
 							}}>
+								<label for="coupon">Coupon</label>
 								<input
+									id='coupon'
 									type='number'
 									className='form-control mb-1'
 									min='0'
 									ref={(input) => { this.coupon = input }}
 								/>
+								<label for="numberOfBonds">Number Of Bonds</label>
 								<input
+									id='numberOfBonds'
 									type='number'
 									className='form-control mb-1'
 									min='0'
@@ -122,7 +185,7 @@ class BuyBonds extends Component {
 								/>
 								<input
 									type='submit'
-									className='btn btn-block btn-primary'
+									className='btn btn-block btn-primary mt-4'
 									value='INVEST'
 								/>
 							</form>
@@ -130,24 +193,24 @@ class BuyBonds extends Component {
 					</div>
 					<hr />
 					<div className="row">
-						<h2>Your investment request:</h2>
+						<div className="container mr-auto ml-auto">
+							<h2 className="mb-4">Bid details:</h2>
+							<p>Bonds requested: {this.state.bondsRequested}</p>
+							<p>Coupon bid: {this.state.coupon}</p>
+							<p>Investment balance: {this.state.balance}</p>
+						</div>
+						
 					</div>
-					<div className="row text-center">
-						<p>Tokens requested: {this.state.numberOfTokens}</p>
-					</div>
-					<div className="row text-center">
-						<p>Coupon bid: {this.state.coupon}</p>
-					</div>
-					<div className="row text-center">
-						<p>Investment balance: {this.state.balance}</p>
-					</div>
+					
+					
 					<hr />
-					<div className="row">
-						<h2>Tokens:</h2>
+					<div className="row pb-5">
+						<div className="container mr-auto ml-auto">
+							<h2 className="mb-4">Investment Details:</h2>
+							<p>Bonds owned: {this.state.tokensOwned}</p>
+						</div>
 					</div>
-					<div className="row text-center">
-						<p>Tokens owned: {this.state.tokensOwned}</p>
-					</div>
+					
 					
 
 				</main>

@@ -22,7 +22,10 @@ const Navbar = () => {
                     Register Bid
                 </NavLink>
                 <NavLink to='/investor' activeStyle>
-                    Investor
+                    Investor (Ropsten)
+                </NavLink>
+                <NavLink to='/bondlist' activeStyle>
+                    Bond list
                 </NavLink>
                 <NavLink to='/issuetokens' activeStyle>
                     Issue Tokens

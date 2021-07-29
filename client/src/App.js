@@ -41,7 +41,7 @@ class App extends Component {
               <Route path='/about' component={About} />
               <Route path='/buybonds' component={BuyBonds} />
               <Route path='/investor' component={Investor} />
-              <Route path='/investor2' component={Investor2} />
+              <Route path='/bondlist' component={Investor2} />
               <Route path='/issuetokens' component={IssueTokens}></Route>
               <Route path='/issuer' component={Issuer}/>
               <Route path='/company' component={Company}/>

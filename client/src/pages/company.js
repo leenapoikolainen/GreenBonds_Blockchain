@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import Web3 from 'web3'
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond.json';
+import GreenBond from '../contracts/GreenBond2.json';
 
 class Company extends Component {
     async componentWillMount() {
@@ -56,6 +56,9 @@ class Company extends Component {
             const maxCoupon = await greenBond.methods.getMaxCoupon().call()
             this.setState({ maxCoupon })
 
+            const numberOfBonds = await greenBond.methods.getNumberOfBondsSeeked().call()
+            this.setState({ numberOfBonds })
+
             const bidClosingTimeTimeStamp = await greenBond.methods.getBidClosingTime().call()
             const bidClosingTime = this.timeConverter(bidClosingTimeTimeStamp)
             this.setState({ bidClosingTime })
@@ -64,29 +67,37 @@ class Company extends Component {
             this.setState({ term })
 
             const maturityDateTimeStamp = await greenBond.methods.getMaturityDate().call()
-            const maturityDate = this.timeConverterDateYear(maturityDateTimeStamp)
+            const maturityDate = this.timeConverter(maturityDateTimeStamp)
             this.setState({ maturityDate })
 
             let couponDates = await greenBond.methods.getCouponDates().call()
             const couponList = couponDates.map((date) =>
-                <li>{this.timeConverterDateYear(date)}</li>
+                <li>{this.timeConverter(date)}</li>
             );
             this.setState({ couponList })
-
-            
 
             // Set coupon
             let coupon = await greenBond.methods.getCoupon().call()
             this.setState({ coupon })
-            /*
-            for(var i = 0; i < couponDates.length; i++) {
-                const timeStamp = couponDates[i]
-                const date = this.timeConverter(timeStamp)
-                this.setState({
-                    couponPaymentDates: [...this.state.couponPaymentDates, date]
-                })
+
+            // Coupons payment count
+            const coupons = await greenBond.methods.getNumberOfCoupons().call()
+            this.setState({ coupons})
+
+            const couponsPaid = await greenBond.methods.getNumberOfCouponsPaid().call()
+            this.setState({ couponsPaid })
+
+            var dateArray = []
+            for(var i = 1; i <= couponsPaid; i++) {
+                let date = await greenBond.methods.getActualCouponDate(i).call()
+                dateArray.push(date)
             }
-            */
+
+            const actualDatesList = dateArray.map((date) => 
+                    <li>{this.timeConverter(date)}</li>  
+                     
+            );
+            this.setState({ actualDatesList})
 
 
         } else {
@@ -95,35 +106,23 @@ class Company extends Component {
     }
 
     timeConverter(UNIX_timestamp) {
-        var a = new Date(UNIX_timestamp * 1000);
-        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        var year = a.getFullYear();
-        var month = months[a.getMonth()];
-        var date = a.getDate();
-        var hour = a.getHours();
-        var min = a.getMinutes();
-        if (min < 10) {
-            return (date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + '0')
-        } else {
-            return (date + ' ' + month + ' ' + year + ' ' + hour + ':' + min);
-        }
-
-
-    }
-    timeConverterDateYear(UNIX_timestamp) {
-        var a = new Date(UNIX_timestamp * 1000);
-        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        var year = a.getFullYear();
-        var month = months[a.getMonth()];
-        var date = a.getDate();
-        return (date + ' ' + month + ' ' + year);
+        var dateObject = new Date(UNIX_timestamp * 1000);
+        return dateObject.toLocaleString()
     }
 
-    payCoupon = () => {
-        // Here needs to be calculation for the amount
-        let amount = (10 * this.state.coupon).toString()
+
+
+    payCoupon = (bonds) => {
+       
+        let amount = (bonds * this.state.coupon).toString()
         console.log(amount)
-        this.state.greenBond.methods.payCoupons().send({from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
+        this.state.greenBond.methods.payCoupons().send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
+    }
+
+    payPrincipal = (bonds) => {
+        let amount = (bonds * this.state.faceValue).toString()
+        console.log(amount)
+        this.state.greenBond.methods.payBackBond().send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
     }
 
     constructor(props) {
@@ -132,42 +131,68 @@ class Company extends Component {
             account: '',
             contract: null,
             couponPaymentDates: [],
+            
         }
     }
 
     render() {
         return (
             <>
-                <div className="container-fluid mt-5">
-                    <h1>Bond Details</h1>
-                    <p>Company: {this.state.company}</p>
-                    <p>Project Name: {this.state.name}</p>
-                    <p>Symbol: {this.state.symbol}</p>
-                    <p>Face value: {this.state.faceValue}</p>
-                    <p>Min Coupon: {this.state.minCoupon}</p>
-                    <p>Max Coupon: {this.state.maxCoupon}</p>
-                    <p>Number of Bonds seeked: </p>
-                    <p>Bid closing time: {this.state.bidClosingTime}</p>
-                    <p>Term: {this.state.term} years</p>
-                    <p>Maturity Date: {this.state.maturityDate}</p>
-                    <p>Coupon Payment Dates:</p>
-                    <ul>{this.state.couponList}</ul>
-                </div>
+                
+                    <div className="container mr-auto ml-auto">
+                        <h1>Bond Details</h1>
+                        <p>Company: {this.state.company}</p>
+                        <p>Project Name: {this.state.name}</p>
+                        <p>Symbol: {this.state.symbol}</p>
+                        <p>Face value: {this.state.faceValue}</p>
+                        <p>Coupon: {this.state.coupon}</p>
+                        <p>Number of Bonds: {this.state.numberOfBonds}</p>
+                        <p>Bid closing time: {this.state.bidClosingTime}</p>
+                        <p>Term: {this.state.term} years</p>
+                        <p>Maturity Date: {this.state.maturityDate}</p>
+                        <p>Coupon Payment Dates:</p>
+                        <ul>{this.state.couponList}</ul>
+                    </div>
+            
                 <hr />
-                <div className="container-fluid mt-5">
+                <div className="container mr-auto ml-auto mb-5">
                     <h2>Pay coupon</h2>
                     <form onSubmit={(event) => {
                         event.preventDefault()
-                        this.payCoupon()
+                        const bonds = this.state.numberOfBonds
+                        this.payCoupon(bonds)
                     }}>
                         <input
                             type='submit'
                             className='btn btn-block btn-primary'
                             value='PAYCOUPON'
                         />
+                    </form>
+                    <div className="mt-2">
+                        <p>Coupons paid: {this.state.couponsPaid}/{this.state.coupons}</p>
+                        <ul>{this.state.actualDatesList}</ul>
+                    </div>
+                </div>
+
+                <hr />
+                
+                <div className="container mr-auto ml-auto mb-5">
+                    <h2>Pay Back Principal</h2>
+                    <form onSubmit={(event) => {
+                        event.preventDefault()
+                        const bonds = this.state.numberOfBonds
+                        this.payPrincipal(bonds)
+                    }}>
+                        <input
+                            type='submit'
+                            className='btn btn-block btn-primary'
+                            value='PAYPRINCIPAL'   
+                        />
 
                     </form>
+                    
                 </div>
+
             </>
 
 

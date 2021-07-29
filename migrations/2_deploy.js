@@ -6,13 +6,14 @@ const BondPriceAuction = artifacts.require("BondPriceAuction");
 
 
 // Variables for green bond constructor
-let company = "0xe5dc3eFEcDc0f2Ee5672Fa287CE80733F81FCB78"; // Ropsten 2 on MetaMask
+//let company = "0xe5dc3eFEcDc0f2Ee5672Fa287CE80733F81FCB78"; // Ropsten 2 on MetaMask
+let company = "0x94ef9712F0C40CF8a1786944DcE2399df547853b" // Ganache account 10
 let name = "Project1";
 let symbol = "GREEN";
 let numberOfBondsSeeked = 10;
 let minCoupon = 1;
 let maxCoupon = 5;
-let closingDate = 1627642800; // Fri Jul 30 2021 12:00:00 GMT+0100 (British Summer Time)
+let closingDate = 1627572600; // Thu Jul 29 2021 16:30:00 GMT+0100 (British Summer Time)
 let term = 1; // 1 year
 let couponsPerYear = 2 // semiannual
 let baseURI = "https://storage.cloud.google.com/metadata_platform/";

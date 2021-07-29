@@ -385,6 +385,14 @@ contract GreenBond2 is ERC721, Ownable {
         return _investorListAtCouponLevel[coupon];
     }
 
+    function getNumberOfCouponsPaid() public view returns (uint256) {
+        return _couponsPaid;
+    }
+
+    function getNumberOfCoupons() public view returns (uint256) {
+        return _totalCouponPayments;
+    }
+
     // Function to refund unsuccessful bidders when coupon is defined
     function refundBiddersFromCouponLevel(uint256 coupon) internal {
         for (uint256 i = coupon; i <= _maxCoupon; i++) {

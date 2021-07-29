@@ -151,7 +151,7 @@ class BuyBonds extends Component {
 									<td>{this.state.numberOfBondsSeeked}</td>
 								</tr>
 								<tr>
-									<td>Number of Bonds Seeked</td>
+									<td>Bid Closing time</td>
 									<td>{this.state.bidClosingTime}</td>
 								</tr>
 							</table>

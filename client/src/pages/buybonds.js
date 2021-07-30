@@ -58,6 +58,16 @@ class BuyBonds extends Component {
             const bidClosingTime = this.timeConverter(bidClosingTimeStamp)
             this.setState({ bidClosingTime })
 
+			// Bidding open
+			const timeNow = Date.now()
+            let biddingOpen
+            if(timeNow/1000 - bidClosingTimeStamp > 0) {
+                biddingOpen = false
+            } else {
+                biddingOpen = true
+            }
+            this.setState({ biddingOpen })
+
 			// Getting investor details 
 			const account = accounts[0];
 
@@ -125,6 +135,16 @@ class BuyBonds extends Component {
 		return (
 			<div className="container-fluid mt-5">
 				<main role="main" >
+				<div className="container mr-auto ml-auto">
+                    {this.state.biddingOpen
+                    ? <div className="alert alert-success" role="alert">
+                    Bidding for this bond is open.
+                    </div> 
+                    : <div className="alert alert-danger" role="alert">
+                    Bidding for this bond is closed.
+                    </div> 
+                } 
+                </div>
 					<div className="row"> 
 						<div className="container mr-auto ml-auto">
 							<h2 >Bond Details</h2>

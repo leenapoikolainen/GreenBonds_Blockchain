@@ -5,6 +5,7 @@ import Web3 from 'web3'
 
 import GreenCertifier from '../contracts/GreenCertifier.json'
 
+
 class Certifier extends Component {
 
     async componentWillMount() {
@@ -23,15 +24,10 @@ class Certifier extends Component {
         const networkData = GreenCertifier.networks[networkId]
 
         if (networkData) {
-            // Get the Green bond contract
-
-
             const greenCertifier = new web3.eth.Contract(GreenCertifier.abi, networkData.address)
 
             this.setState({ greenCertifier })
-            // Bond details
-
-
+  
             const certifier = await greenCertifier.methods.getOwner().call()
             this.setState({ certifier })
 
@@ -96,7 +92,6 @@ class Certifier extends Component {
             <>
                 <div className="container mr-auto ml-auto">
                     <p>You're logged in from address: {this.state.account}</p>
-
                     <h2>Green Certifier</h2>
                     <p>Address: {this.state.certifier}</p>
                     <table className="table mt-5">
@@ -106,7 +101,6 @@ class Certifier extends Component {
 
                 <div className="container mr-auto ml-auto">
                     <h2>Create certificate</h2>
-
 
                     <form onSubmit={(event) => {
                         event.preventDefault()
@@ -154,6 +148,8 @@ class Certifier extends Component {
                                 id='company'
                                 type='text'
                                 className='form-control mb-1'
+                                maxlength="42"
+                                minLength="42"
                                 required
                                 ref={(input) => { this.company = input }}
                             />
@@ -173,16 +169,18 @@ class Certifier extends Component {
                         <h3>Get certificate address</h3>
                         <form onSubmit={(event) => {
                             event.preventDefault()
-                            const address = this.address.value
-                            this.getCertificate(address)
+                            const companyAddress = this.companyAddress.value
+                            this.getCertificate(companyAddress)
                         }}>
                             <label for="company">Company Address</label>
                             <input
                                 id='company'
                                 type='text'
                                 className='form-control mb-1'
+                                maxlength="42"
+                                minLength="42"
                                 required
-                                ref={(input) => { this.address = input }}
+                                ref={(input) => { this.companyAddress = input }}
                             />
                             <input
                                 type='submit'
@@ -207,6 +205,8 @@ class Certifier extends Component {
                                 id='company'
                                 type='text'
                                 className='form-control mb-1'
+                                maxlength="42"
+                                minLength="42"
                                 required
                                 ref={(input) => { this.address = input }}
                             />

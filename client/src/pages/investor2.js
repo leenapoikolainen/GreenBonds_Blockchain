@@ -110,6 +110,7 @@ class Investor2 extends Component {
     render() {
         return (
             <>
+                
                 <div className="container-fluid mt-5">
                     <h1>Bond List</h1>
                     <table className="table">

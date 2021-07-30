@@ -7,7 +7,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // Pages
 import About from './pages/about';
 import BuyBonds from './pages/buybonds';
-import IssueTokens from './pages/issueTokens';
 import Company from './pages/company';
 import Issuer from './pages/issuer';
 import Investor from './pages/investor';
@@ -44,7 +43,6 @@ class App extends Component {
               <Route path='/buybonds' component={BuyBonds} />
               <Route path='/investor' component={Investor} />
               <Route path='/bondlist' component={Investor2} />
-              <Route path='/issuetokens' component={IssueTokens}></Route>
               <Route path='/issuer' component={Issuer}/>
               <Route path='/company' component={Company}/>
               <Route path='/regulation' component={Regulation}/>

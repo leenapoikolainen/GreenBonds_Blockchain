@@ -39,6 +39,9 @@ const Navbar = () => {
                 <NavLink to='/regulation' activeStyle>
                     Regulation
                 </NavLink>
+                <NavLink to='/certifier' activeStyle>
+                    Certifier
+                </NavLink>
             </NavMenu>	
         </Nav>
         </>

@@ -13,6 +13,7 @@ import Issuer from './pages/issuer';
 import Investor from './pages/investor';
 import Investor2 from './pages/investor2';
 import Regulation from './pages/regulation';
+import Certifier from './pages/certificate';
 
 
 // import Navbar from './components/Navbar';
@@ -47,6 +48,7 @@ class App extends Component {
               <Route path='/issuer' component={Issuer}/>
               <Route path='/company' component={Company}/>
               <Route path='/regulation' component={Regulation}/>
+              <Route path='/certifier' component={Certifier}/>
             </Switch>
           </div>
         </Router>

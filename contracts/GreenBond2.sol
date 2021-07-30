@@ -224,6 +224,10 @@ contract GreenBond2 is ERC721, Ownable {
         return _couponPaymentDates;
     }
 
+    function getActualPricipalPaymentDate() public view returns (uint256) {
+        return _actualPrincipalPaymentDate;
+    }
+
     function numberOfInvestors() public view returns (uint256) {
         return _initialInvestors.length;
     }

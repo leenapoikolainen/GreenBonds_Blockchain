@@ -184,8 +184,12 @@ class Issuer extends Component {
                 <div className="container mr-auto ml-auto">
 
                     <h2>Define Coupon</h2>
-                    <p>Bidding is {this.state.biddingOpen ? 'open - can not define coupon yet' : 'closed - coupon can be defined'}</p>
-
+                   <p>{this.state.biddingOpen
+                            ? <p>Bidding is open. Can't define coupon yet</p>
+                            : <p>Bidding is closed and 
+                                {this.state.couponConfirmed ? " coupon defined." : " coupon not defined."}</p>
+                            
+                        }</p>
                     <form onSubmit={(event) => {
                         event.preventDefault()
                         this.defineCoupon()
@@ -200,8 +204,8 @@ class Issuer extends Component {
                     <div className="mt-2">
                         <i>
                         {this.state.couponConfirmed
-                            ? <p>Coupon defined: {this.state.coupon}</p>
-                            : <p>Coupon not defined</p>
+                            ? <p>Coupon: {this.state.coupon}</p>
+                            : <p>Coupon: undefined</p>
                         }
                         </i>
                         <i>

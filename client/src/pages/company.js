@@ -99,6 +99,9 @@ class Company extends Component {
             );
             this.setState({ actualDatesList})
 
+            
+
+
 
         } else {
             window.alert('Smart contract not deployed to detected network.')
@@ -165,7 +168,7 @@ class Company extends Component {
                         <input
                             type='submit'
                             className='btn btn-block btn-primary'
-                            value='PAYCOUPON'
+                            value='Make coupon payment'
                         />
                     </form>
                     <div className="mt-2">
@@ -178,6 +181,7 @@ class Company extends Component {
                 
                 <div className="container mr-auto ml-auto mb-5">
                     <h2>Pay Back Principal</h2>
+                    <p>Maturity Date: {this.state.maturityDate}</p>
                     <form onSubmit={(event) => {
                         event.preventDefault()
                         const bonds = this.state.numberOfBonds
@@ -186,7 +190,7 @@ class Company extends Component {
                         <input
                             type='submit'
                             className='btn btn-block btn-primary'
-                            value='PAYPRINCIPAL'   
+                            value='Make principal payment'   
                         />
 
                     </form>

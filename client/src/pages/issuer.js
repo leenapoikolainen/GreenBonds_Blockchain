@@ -90,8 +90,11 @@ class Issuer extends Component {
             this.setState({ tokens })
             console.log("Number of tokens issued", tokens)
 
-
-
+            // Issuer tokens
+            const issuer = await greenBond.methods.owner().call()
+            console.log(issuer)
+			const issuerTokens = await greenBond.methods.balanceOf(issuer).call()
+            this.setState({ issuerTokens })
 
         } else {
             window.alert('Smart contract not deployed to detected network.')
@@ -184,7 +187,7 @@ class Issuer extends Component {
                 <div className="container mr-auto ml-auto">
 
                     <h2>Define Coupon</h2>
-                   <p>{this.state.biddingOpen
+                    <p>{this.state.biddingOpen
                             ? <p>Bidding is open. Can't define coupon yet</p>
                             : <p>Bidding is closed and 
                                 {this.state.couponConfirmed ? " coupon defined." : " coupon not defined."}</p>
@@ -234,7 +237,8 @@ class Issuer extends Component {
                         />
                     </form>
                     <div className="mt-2 pb-5">
-                        <p >Number of tokens issued: {this.state.tokens}</p>
+                        <p>Number of bonds in circulation: {this.state.tokens}</p>
+                        <p>Number of bonds returned to issuer: {this.state.issuerTokens}</p>
                     </div>
                     
                 </div>

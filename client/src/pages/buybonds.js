@@ -79,7 +79,6 @@ class BuyBonds extends Component {
 
 			// Balance of test
 			const tokensOwned = await greenBond.methods.balanceOf(account).call()
-			console.log("Tokens owned", tokensOwned)
 			this.setState({ tokensOwned })
 
 		} else {

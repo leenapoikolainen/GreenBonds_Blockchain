@@ -646,6 +646,7 @@ contract GreenBond2 is ERC721, Ownable {
             }
         }
     }
+    /*
     // Checks if the principal amount was paid back on time
     function principalPaymentMadeOnTime() public view returns (bool) {
         require(block.timestamp > _maturityDate, "Bond has not matured yet");
@@ -657,6 +658,7 @@ contract GreenBond2 is ERC721, Ownable {
             return true;
         }
     }
+    */
 
     // Internal function to transer the bonds
     function bondTransfer(

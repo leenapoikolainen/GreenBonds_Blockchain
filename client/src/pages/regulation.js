@@ -60,6 +60,10 @@ class Regulation extends Component {
             );
             this.setState({ couponList })
 
+            const couponPayments = await greenBond.methods.getNumberOfCoupons().call()
+            const couponLimit = couponPayments.toString()
+            this.setState({couponLimit})
+
             // Status
             const cancelled = await greenBond.methods.cancelled().call()
             this.setState({ cancelled })
@@ -108,8 +112,6 @@ class Regulation extends Component {
             const principalPaymentDate = this.timeConverter(principalPaymentDateTimeStamp)
             this.setState({ principalPaymentDate })
 
-
-
         } else {
             window.alert('Smart contract not deployed to detected network.')
         }
@@ -119,15 +121,17 @@ class Regulation extends Component {
         var dateObject = new Date(UNIX_timestamp * 1000);
         return dateObject.toLocaleString()
     }
+   
+    
+    couponMadeOnTime = async(coupon) => {  
+        let couponResult = await this.state.greenBond.methods.couponPaymentOnTime(coupon).call({ from: this.state.account })    
+        this.setState({ couponResult })
+    }
 
-    couponMadeOnTime = (coupon) => {  
-        try{
-            const result = this.state.greenBond.methods.couponPaymentMadeOnTime(coupon).send({ from: this.state.account })    
-            console.log({result})
-        } catch (error) {
-            console.log(error)
-        }
-     }
+    principalMadeOnTime = async() => {
+        let principalResult = await this.state.greenBond.methods.principalPaidOnTime().call({ from: this.state.account })
+        this.setState({ principalResult })
+    }
 
     payCoupon = (bonds) => {
 
@@ -148,7 +152,8 @@ class Regulation extends Component {
             account: '',
             contract: null,
             couponPaymentDates: [],
-
+            couponResult: '',
+            principalResult: '',
         }
     }
 
@@ -212,7 +217,8 @@ class Regulation extends Component {
                             id='coupon'
                             type='number'
                             className='form-control mb-1'
-                            min='0'
+                            min='1'
+                            required
                             ref={(input) => { this.coupon = input }}
                         />
                         
@@ -222,56 +228,33 @@ class Regulation extends Component {
                             value='Check'
                         />
                     </form>
+                    <div className="mt-4">
+                        <p>{this.state.couponResult}</p>
+                    </div>
+                    
                 </div>
                 <hr/>
 
-
-                <div className="container mr-auto ml-auto mb-5">
-                    <h2>Pay coupon</h2>
+                <div className="container mr-auto ml-auto">
+                    <h2>Check Principal Payment</h2>
                     <form onSubmit={(event) => {
                         event.preventDefault()
-                        const bonds = this.state.numberOfBonds
-                        this.payCoupon(bonds)
+                        this.principalMadeOnTime()
                     }}>
+                        
                         <input
                             type='submit'
-                            className='btn btn-block btn-primary'
-                            value='Make coupon payment'
+                            className='btn btn-block btn-primary mt-4'
+                            value='Check'
                         />
                     </form>
-                    <div className="mt-2">
-                        <p>Coupons paid: {this.state.couponsPaid}/{this.state.coupons}</p>
-                        <ul>{this.state.actualDatesList}</ul>
+                    <div className="mt-4">
+                        <p>{this.state.principalResult}</p>
                     </div>
+                    
                 </div>
+                <hr/>
 
-                <hr />
-
-                <div className="container mr-auto ml-auto mb-5">
-                    <h2>Pay Back Principal</h2>
-                    <p>Maturity Date: {this.state.maturityDate}</p>
-                    <form onSubmit={(event) => {
-                        event.preventDefault()
-                        const bonds = this.state.numberOfBonds
-                        this.payPrincipal(bonds)
-                    }}>
-                        <input
-                            type='submit'
-                            className='btn btn-block btn-primary'
-                            value='Make principal payment'
-                        />
-
-                    </form>
-
-                    <div className="mt-2">
-                        {this.state.principalPaymentMade
-                            ? <p>Principal paid back on: <i> {this.state.principalPaymentDate} </i></p>
-                            : <p>Principal has not been paid back yet</p>}
-                    </div>
-
-
-
-                </div>
 
             </>
 

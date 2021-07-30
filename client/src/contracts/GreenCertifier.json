@@ -6907,18 +6907,18 @@
         1384
       ],
       "GreenCertificate": [
-        3408
+        3416
       ],
       "GreenCertifier": [
-        3616
+        3624
       ]
     },
-    "id": 3617,
+    "id": 3625,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3410,
+        "id": 3418,
         "literals": [
           "solidity",
           ">=",
@@ -6931,10 +6931,10 @@
       {
         "absolutePath": "project:/contracts/GreenCertificate.sol",
         "file": "./GreenCertificate.sol",
-        "id": 3411,
+        "id": 3419,
         "nodeType": "ImportDirective",
-        "scope": 3617,
-        "sourceUnit": 3409,
+        "scope": 3625,
+        "sourceUnit": 3417,
         "src": "58:32:13",
         "symbolAliases": [],
         "unitAlias": ""
@@ -6942,9 +6942,9 @@
       {
         "absolutePath": "@openzeppelin/contracts/utils/Address.sol",
         "file": "@openzeppelin/contracts/utils/Address.sol",
-        "id": 3412,
+        "id": 3420,
         "nodeType": "ImportDirective",
-        "scope": 3617,
+        "scope": 3625,
         "sourceUnit": 1385,
         "src": "91:51:13",
         "symbolAliases": [],
@@ -6954,21 +6954,21 @@
         "abstract": false,
         "baseContracts": [],
         "contractDependencies": [
-          3408
+          3416
         ],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 3616,
+        "id": 3624,
         "linearizedBaseContracts": [
-          3616
+          3624
         ],
         "name": "GreenCertifier",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 3415,
+            "id": 3423,
             "libraryName": {
-              "id": 3413,
+              "id": 3421,
               "name": "Address",
               "nodeType": "IdentifierPath",
               "referencedDeclaration": 1384,
@@ -6977,7 +6977,7 @@
             "nodeType": "UsingForDirective",
             "src": "174:26:13",
             "typeName": {
-              "id": 3414,
+              "id": 3422,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "192:7:13",
@@ -6990,7 +6990,7 @@
           },
           {
             "body": {
-              "id": 3426,
+              "id": 3434,
               "nodeType": "Block",
               "src": "322:57:13",
               "statements": [
@@ -7002,14 +7002,14 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 3422,
+                        "id": 3430,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "expression": {
-                            "id": 3419,
+                            "id": 3427,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
@@ -7020,7 +7020,7 @@
                               "typeString": "msg"
                             }
                           },
-                          "id": 3420,
+                          "id": 3428,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -7036,11 +7036,11 @@
                         "nodeType": "BinaryOperation",
                         "operator": "==",
                         "rightExpression": {
-                          "id": 3421,
+                          "id": 3429,
                           "name": "_owner",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3441,
+                          "referencedDeclaration": 3449,
                           "src": "354:6:13",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -7061,7 +7061,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 3418,
+                      "id": 3426,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -7075,7 +7075,7 @@
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 3423,
+                    "id": 3431,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -7090,28 +7090,28 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3424,
+                  "id": 3432,
                   "nodeType": "ExpressionStatement",
                   "src": "332:29:13"
                 },
                 {
-                  "id": 3425,
+                  "id": 3433,
                   "nodeType": "PlaceholderStatement",
                   "src": "371:1:13"
                 }
               ]
             },
             "documentation": {
-              "id": 3416,
+              "id": 3424,
               "nodeType": "StructuredDocumentation",
               "src": "206:90:13",
               "text": " @dev Modifier to allow function to be called only by the contract owner"
             },
-            "id": 3427,
+            "id": 3435,
             "name": "onlyOwner",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 3417,
+              "id": 3425,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "319:2:13"
@@ -7123,26 +7123,26 @@
           {
             "anonymous": false,
             "documentation": {
-              "id": 3428,
+              "id": 3436,
               "nodeType": "StructuredDocumentation",
               "src": "385:82:13",
               "text": " @dev Event to be emmitted when a company certificate is created"
             },
-            "id": 3432,
+            "id": 3440,
             "name": "CompanyCertification",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 3431,
+              "id": 3439,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3430,
+                  "id": 3438,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "certificate",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3432,
+                  "scope": 3440,
                   "src": "499:19:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7151,7 +7151,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3429,
+                    "id": 3437,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "499:7:13",
@@ -7171,26 +7171,26 @@
           {
             "anonymous": false,
             "documentation": {
-              "id": 3433,
+              "id": 3441,
               "nodeType": "StructuredDocumentation",
               "src": "526:68:13",
               "text": " @dev Event to be emmitted when a project is added"
             },
-            "id": 3439,
+            "id": 3447,
             "name": "ProjectCertification",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 3438,
+              "id": 3446,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3435,
+                  "id": 3443,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "company",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3439,
+                  "scope": 3447,
                   "src": "626:15:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7199,7 +7199,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3434,
+                    "id": 3442,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "626:7:13",
@@ -7213,12 +7213,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 3437,
+                  "id": 3445,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "project",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3439,
+                  "scope": 3447,
                   "src": "643:14:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7227,7 +7227,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 3436,
+                    "id": 3444,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "643:6:13",
@@ -7245,11 +7245,11 @@
           },
           {
             "constant": false,
-            "id": 3441,
+            "id": 3449,
             "mutability": "mutable",
             "name": "_owner",
             "nodeType": "VariableDeclaration",
-            "scope": 3616,
+            "scope": 3624,
             "src": "696:22:13",
             "stateVariable": true,
             "storageLocation": "default",
@@ -7258,7 +7258,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 3440,
+              "id": 3448,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "696:7:13",
@@ -7272,22 +7272,22 @@
           },
           {
             "constant": false,
-            "id": 3446,
+            "id": 3454,
             "mutability": "mutable",
             "name": "_greenCertificates",
             "nodeType": "VariableDeclaration",
-            "scope": 3616,
+            "scope": 3624,
             "src": "774:63:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
               "typeString": "mapping(address => contract GreenCertificate)"
             },
             "typeName": {
-              "id": 3445,
+              "id": 3453,
               "keyType": {
-                "id": 3442,
+                "id": 3450,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "782:7:13",
@@ -7299,23 +7299,23 @@
               "nodeType": "Mapping",
               "src": "774:36:13",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
                 "typeString": "mapping(address => contract GreenCertificate)"
               },
               "valueType": {
-                "id": 3444,
+                "id": 3452,
                 "nodeType": "UserDefinedTypeName",
                 "pathNode": {
-                  "id": 3443,
+                  "id": 3451,
                   "name": "GreenCertificate",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 3408,
+                  "referencedDeclaration": 3416,
                   "src": "793:16:13"
                 },
-                "referencedDeclaration": 3408,
+                "referencedDeclaration": 3416,
                 "src": "793:16:13",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                  "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                   "typeString": "contract GreenCertificate"
                 }
               }
@@ -7324,11 +7324,11 @@
           },
           {
             "constant": false,
-            "id": 3450,
+            "id": 3458,
             "mutability": "mutable",
             "name": "_certifiedCompanies",
             "nodeType": "VariableDeclaration",
-            "scope": 3616,
+            "scope": 3624,
             "src": "881:52:13",
             "stateVariable": true,
             "storageLocation": "default",
@@ -7337,9 +7337,9 @@
               "typeString": "mapping(address => bool)"
             },
             "typeName": {
-              "id": 3449,
+              "id": 3457,
               "keyType": {
-                "id": 3447,
+                "id": 3455,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "889:7:13",
@@ -7355,7 +7355,7 @@
                 "typeString": "mapping(address => bool)"
               },
               "valueType": {
-                "id": 3448,
+                "id": 3456,
                 "name": "bool",
                 "nodeType": "ElementaryTypeName",
                 "src": "900:4:13",
@@ -7369,23 +7369,23 @@
           },
           {
             "body": {
-              "id": 3458,
+              "id": 3466,
               "nodeType": "Block",
               "src": "955:36:13",
               "statements": [
                 {
                   "expression": {
-                    "id": 3456,
+                    "id": 3464,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 3453,
+                      "id": 3461,
                       "name": "_owner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3441,
+                      "referencedDeclaration": 3449,
                       "src": "965:6:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -7396,7 +7396,7 @@
                     "operator": "=",
                     "rightHandSide": {
                       "expression": {
-                        "id": 3454,
+                        "id": 3462,
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
@@ -7407,7 +7407,7 @@
                           "typeString": "msg"
                         }
                       },
-                      "id": 3455,
+                      "id": 3463,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -7426,31 +7426,31 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 3457,
+                  "id": 3465,
                   "nodeType": "ExpressionStatement",
                   "src": "965:19:13"
                 }
               ]
             },
-            "id": 3459,
+            "id": 3467,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3451,
+              "id": 3459,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "952:2:13"
             },
             "returnParameters": {
-              "id": 3452,
+              "id": 3460,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "955:0:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "941:50:13",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -7458,54 +7458,54 @@
           },
           {
             "body": {
-              "id": 3466,
+              "id": 3474,
               "nodeType": "Block",
               "src": "1073:30:13",
               "statements": [
                 {
                   "expression": {
-                    "id": 3464,
+                    "id": 3472,
                     "name": "_owner",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 3441,
+                    "referencedDeclaration": 3449,
                     "src": "1090:6:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 3463,
-                  "id": 3465,
+                  "functionReturnParameters": 3471,
+                  "id": 3473,
                   "nodeType": "Return",
                   "src": "1083:13:13"
                 }
               ]
             },
             "functionSelector": "893d20e8",
-            "id": 3467,
+            "id": 3475,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getOwner",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3460,
+              "id": 3468,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1038:2:13"
             },
             "returnParameters": {
-              "id": 3463,
+              "id": 3471,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3462,
+                  "id": 3470,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3467,
+                  "scope": 3475,
                   "src": "1064:7:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7514,7 +7514,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3461,
+                    "id": 3469,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1064:7:13",
@@ -7529,7 +7529,7 @@
               ],
               "src": "1063:9:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "1021:82:13",
             "stateMutability": "view",
             "virtual": false,
@@ -7537,31 +7537,31 @@
           },
           {
             "body": {
-              "id": 3478,
+              "id": 3486,
               "nodeType": "Block",
               "src": "1232:52:13",
               "statements": [
                 {
                   "expression": {
                     "baseExpression": {
-                      "id": 3474,
+                      "id": 3482,
                       "name": "_certifiedCompanies",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3450,
+                      "referencedDeclaration": 3458,
                       "src": "1249:19:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                         "typeString": "mapping(address => bool)"
                       }
                     },
-                    "id": 3476,
+                    "id": 3484,
                     "indexExpression": {
-                      "id": 3475,
+                      "id": 3483,
                       "name": "company",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3469,
+                      "referencedDeclaration": 3477,
                       "src": "1269:7:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -7579,31 +7579,31 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 3473,
-                  "id": 3477,
+                  "functionReturnParameters": 3481,
+                  "id": 3485,
                   "nodeType": "Return",
                   "src": "1242:35:13"
                 }
               ]
             },
             "functionSelector": "cb35e1e6",
-            "id": 3479,
+            "id": 3487,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "isCertifiedCompany",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3470,
+              "id": 3478,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3469,
+                  "id": 3477,
                   "mutability": "mutable",
                   "name": "company",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3479,
+                  "scope": 3487,
                   "src": "1188:15:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7612,7 +7612,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3468,
+                    "id": 3476,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1188:7:13",
@@ -7628,16 +7628,16 @@
               "src": "1187:17:13"
             },
             "returnParameters": {
-              "id": 3473,
+              "id": 3481,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3472,
+                  "id": 3480,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3479,
+                  "scope": 3487,
                   "src": "1226:4:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7646,7 +7646,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 3471,
+                    "id": 3479,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1226:4:13",
@@ -7660,7 +7660,7 @@
               ],
               "src": "1225:6:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "1160:124:13",
             "stateMutability": "view",
             "virtual": false,
@@ -7668,7 +7668,7 @@
           },
           {
             "body": {
-              "id": 3500,
+              "id": 3508,
               "nodeType": "Block",
               "src": "1439:145:13",
               "statements": [
@@ -7678,11 +7678,11 @@
                       {
                         "arguments": [
                           {
-                            "id": 3488,
+                            "id": 3496,
                             "name": "company",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3481,
+                            "referencedDeclaration": 3489,
                             "src": "1476:7:13",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -7697,18 +7697,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 3487,
+                          "id": 3495,
                           "name": "isCertifiedCompany",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3479,
+                          "referencedDeclaration": 3487,
                           "src": "1457:18:13",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
                             "typeString": "function (address) view returns (bool)"
                           }
                         },
-                        "id": 3489,
+                        "id": 3497,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -7725,7 +7725,7 @@
                       },
                       {
                         "hexValue": "476976656e20636f6d70616e79206973206e6f7420636572746966696564",
-                        "id": 3490,
+                        "id": 3498,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -7751,7 +7751,7 @@
                           "typeString": "literal_string \"Given company is not certified\""
                         }
                       ],
-                      "id": 3486,
+                      "id": 3494,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -7765,7 +7765,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 3491,
+                    "id": 3499,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -7780,7 +7780,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3492,
+                  "id": 3500,
                   "nodeType": "ExpressionStatement",
                   "src": "1449:70:13"
                 },
@@ -7789,24 +7789,24 @@
                     "arguments": [
                       {
                         "baseExpression": {
-                          "id": 3495,
+                          "id": 3503,
                           "name": "_greenCertificates",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3446,
+                          "referencedDeclaration": 3454,
                           "src": "1544:18:13",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+                            "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
                             "typeString": "mapping(address => contract GreenCertificate)"
                           }
                         },
-                        "id": 3497,
+                        "id": 3505,
                         "indexExpression": {
-                          "id": 3496,
+                          "id": 3504,
                           "name": "company",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3481,
+                          "referencedDeclaration": 3489,
                           "src": "1563:7:13",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -7820,7 +7820,7 @@
                         "nodeType": "IndexAccess",
                         "src": "1544:27:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       }
@@ -7828,11 +7828,11 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       ],
-                      "id": 3494,
+                      "id": 3502,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -7844,14 +7844,14 @@
                         "typeString": "type(address)"
                       },
                       "typeName": {
-                        "id": 3493,
+                        "id": 3501,
                         "name": "address",
                         "nodeType": "ElementaryTypeName",
                         "src": "1536:7:13",
                         "typeDescriptions": {}
                       }
                     },
-                    "id": 3498,
+                    "id": 3506,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -7866,31 +7866,31 @@
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 3485,
-                  "id": 3499,
+                  "functionReturnParameters": 3493,
+                  "id": 3507,
                   "nodeType": "Return",
                   "src": "1529:43:13"
                 }
               ]
             },
             "functionSelector": "9c0d15fb",
-            "id": 3501,
+            "id": 3509,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getCompanyCertificateAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3482,
+              "id": 3490,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3481,
+                  "id": 3489,
                   "mutability": "mutable",
                   "name": "company",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3501,
+                  "scope": 3509,
                   "src": "1392:15:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7899,7 +7899,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3480,
+                    "id": 3488,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1392:7:13",
@@ -7915,16 +7915,16 @@
               "src": "1391:17:13"
             },
             "returnParameters": {
-              "id": 3485,
+              "id": 3493,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3484,
+                  "id": 3492,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3501,
+                  "scope": 3509,
                   "src": "1430:7:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7933,7 +7933,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3483,
+                    "id": 3491,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1430:7:13",
@@ -7948,7 +7948,7 @@
               ],
               "src": "1429:9:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "1354:230:13",
             "stateMutability": "view",
             "virtual": false,
@@ -7956,7 +7956,7 @@
           },
           {
             "body": {
-              "id": 3522,
+              "id": 3530,
               "nodeType": "Block",
               "src": "1729:145:13",
               "statements": [
@@ -7966,11 +7966,11 @@
                       {
                         "arguments": [
                           {
-                            "id": 3511,
+                            "id": 3519,
                             "name": "company",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3503,
+                            "referencedDeclaration": 3511,
                             "src": "1766:7:13",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -7985,18 +7985,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 3510,
+                          "id": 3518,
                           "name": "isCertifiedCompany",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3479,
+                          "referencedDeclaration": 3487,
                           "src": "1747:18:13",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
                             "typeString": "function (address) view returns (bool)"
                           }
                         },
-                        "id": 3512,
+                        "id": 3520,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -8013,7 +8013,7 @@
                       },
                       {
                         "hexValue": "476976656e20636f6d70616e79206973206e6f7420636572746966696564",
-                        "id": 3513,
+                        "id": 3521,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -8039,7 +8039,7 @@
                           "typeString": "literal_string \"Given company is not certified\""
                         }
                       ],
-                      "id": 3509,
+                      "id": 3517,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -8053,7 +8053,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 3514,
+                    "id": 3522,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -8068,7 +8068,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3515,
+                  "id": 3523,
                   "nodeType": "ExpressionStatement",
                   "src": "1739:70:13"
                 },
@@ -8079,24 +8079,24 @@
                       "argumentTypes": [],
                       "expression": {
                         "baseExpression": {
-                          "id": 3516,
+                          "id": 3524,
                           "name": "_greenCertificates",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3446,
+                          "referencedDeclaration": 3454,
                           "src": "1826:18:13",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+                            "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
                             "typeString": "mapping(address => contract GreenCertificate)"
                           }
                         },
-                        "id": 3518,
+                        "id": 3526,
                         "indexExpression": {
-                          "id": 3517,
+                          "id": 3525,
                           "name": "company",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3503,
+                          "referencedDeclaration": 3511,
                           "src": "1845:7:13",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -8110,25 +8110,25 @@
                         "nodeType": "IndexAccess",
                         "src": "1826:27:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       },
-                      "id": 3519,
+                      "id": 3527,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "getProjects",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 3370,
+                      "referencedDeclaration": 3378,
                       "src": "1826:39:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_view$__$returns$_t_array$_t_string_memory_ptr_$dyn_memory_ptr_$",
                         "typeString": "function () view external returns (string memory[] memory)"
                       }
                     },
-                    "id": 3520,
+                    "id": 3528,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -8143,31 +8143,31 @@
                       "typeString": "string memory[] memory"
                     }
                   },
-                  "functionReturnParameters": 3508,
-                  "id": 3521,
+                  "functionReturnParameters": 3516,
+                  "id": 3529,
                   "nodeType": "Return",
                   "src": "1819:48:13"
                 }
               ]
             },
             "functionSelector": "42b828b3",
-            "id": 3523,
+            "id": 3531,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getCertifiedProjects",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3504,
+              "id": 3512,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3503,
+                  "id": 3511,
                   "mutability": "mutable",
                   "name": "company",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3523,
+                  "scope": 3531,
                   "src": "1672:15:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -8176,7 +8176,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3502,
+                    "id": 3510,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1672:7:13",
@@ -8192,16 +8192,16 @@
               "src": "1671:17:13"
             },
             "returnParameters": {
-              "id": 3508,
+              "id": 3516,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3507,
+                  "id": 3515,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3523,
+                  "scope": 3531,
                   "src": "1712:15:13",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -8211,7 +8211,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 3505,
+                      "id": 3513,
                       "name": "string",
                       "nodeType": "ElementaryTypeName",
                       "src": "1712:6:13",
@@ -8220,7 +8220,7 @@
                         "typeString": "string"
                       }
                     },
-                    "id": 3506,
+                    "id": 3514,
                     "nodeType": "ArrayTypeName",
                     "src": "1712:8:13",
                     "typeDescriptions": {
@@ -8233,7 +8233,7 @@
               ],
               "src": "1711:17:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "1642:232:13",
             "stateMutability": "view",
             "virtual": false,
@@ -8241,7 +8241,7 @@
           },
           {
             "body": {
-              "id": 3551,
+              "id": 3559,
               "nodeType": "Block",
               "src": "1978:211:13",
               "statements": [
@@ -8251,11 +8251,11 @@
                       {
                         "arguments": [
                           {
-                            "id": 3534,
+                            "id": 3542,
                             "name": "company",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3525,
+                            "referencedDeclaration": 3533,
                             "src": "2015:7:13",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -8270,18 +8270,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 3533,
+                          "id": 3541,
                           "name": "isCertifiedCompany",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3479,
+                          "referencedDeclaration": 3487,
                           "src": "1996:18:13",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
                             "typeString": "function (address) view returns (bool)"
                           }
                         },
-                        "id": 3535,
+                        "id": 3543,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -8298,7 +8298,7 @@
                       },
                       {
                         "hexValue": "476976656e20636f6d70616e79206973206e6f7420636572746966696564",
-                        "id": 3536,
+                        "id": 3544,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -8324,7 +8324,7 @@
                           "typeString": "literal_string \"Given company is not certified\""
                         }
                       ],
-                      "id": 3532,
+                      "id": 3540,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -8338,7 +8338,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 3537,
+                    "id": 3545,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -8353,70 +8353,70 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3538,
+                  "id": 3546,
                   "nodeType": "ExpressionStatement",
                   "src": "1988:70:13"
                 },
                 {
                   "assignments": [
-                    3541
+                    3549
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 3541,
+                      "id": 3549,
                       "mutability": "mutable",
                       "name": "certificate",
                       "nodeType": "VariableDeclaration",
-                      "scope": 3551,
+                      "scope": 3559,
                       "src": "2068:28:13",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                        "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                         "typeString": "contract GreenCertificate"
                       },
                       "typeName": {
-                        "id": 3540,
+                        "id": 3548,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 3539,
+                          "id": 3547,
                           "name": "GreenCertificate",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 3408,
+                          "referencedDeclaration": 3416,
                           "src": "2068:16:13"
                         },
-                        "referencedDeclaration": 3408,
+                        "referencedDeclaration": 3416,
                         "src": "2068:16:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 3545,
+                  "id": 3553,
                   "initialValue": {
                     "baseExpression": {
-                      "id": 3542,
+                      "id": 3550,
                       "name": "_greenCertificates",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3446,
+                      "referencedDeclaration": 3454,
                       "src": "2099:18:13",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
                         "typeString": "mapping(address => contract GreenCertificate)"
                       }
                     },
-                    "id": 3544,
+                    "id": 3552,
                     "indexExpression": {
-                      "id": 3543,
+                      "id": 3551,
                       "name": "company",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3525,
+                      "referencedDeclaration": 3533,
                       "src": "2118:7:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -8430,7 +8430,7 @@
                     "nodeType": "IndexAccess",
                     "src": "2099:27:13",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                      "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                       "typeString": "contract GreenCertificate"
                     }
                   },
@@ -8441,11 +8441,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 3548,
+                        "id": 3556,
                         "name": "project",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3527,
+                        "referencedDeclaration": 3535,
                         "src": "2174:7:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -8461,32 +8461,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 3546,
+                        "id": 3554,
                         "name": "certificate",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3541,
+                        "referencedDeclaration": 3549,
                         "src": "2143:11:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       },
-                      "id": 3547,
+                      "id": 3555,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "isCertifiedProject",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 3383,
+                      "referencedDeclaration": 3391,
                       "src": "2143:30:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_view$_t_string_memory_ptr_$returns$_t_bool_$",
                         "typeString": "function (string memory) view external returns (bool)"
                       }
                     },
-                    "id": 3549,
+                    "id": 3557,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -8501,31 +8501,31 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 3531,
-                  "id": 3550,
+                  "functionReturnParameters": 3539,
+                  "id": 3558,
                   "nodeType": "Return",
                   "src": "2136:46:13"
                 }
               ]
             },
             "functionSelector": "620feee3",
-            "id": 3552,
+            "id": 3560,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "isCeritifiedProject",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3528,
+              "id": 3536,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3525,
+                  "id": 3533,
                   "mutability": "mutable",
                   "name": "company",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3552,
+                  "scope": 3560,
                   "src": "1909:15:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -8534,7 +8534,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3524,
+                    "id": 3532,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1909:7:13",
@@ -8548,11 +8548,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3527,
+                  "id": 3535,
                   "mutability": "mutable",
                   "name": "project",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3552,
+                  "scope": 3560,
                   "src": "1926:21:13",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -8561,7 +8561,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 3526,
+                    "id": 3534,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "1926:6:13",
@@ -8576,16 +8576,16 @@
               "src": "1908:40:13"
             },
             "returnParameters": {
-              "id": 3531,
+              "id": 3539,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3530,
+                  "id": 3538,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3552,
+                  "scope": 3560,
                   "src": "1972:4:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -8594,7 +8594,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 3529,
+                    "id": 3537,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1972:4:13",
@@ -8608,7 +8608,7 @@
               ],
               "src": "1971:6:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "1880:309:13",
             "stateMutability": "view",
             "virtual": false,
@@ -8616,7 +8616,7 @@
           },
           {
             "body": {
-              "id": 3614,
+              "id": 3622,
               "nodeType": "Block",
               "src": "2282:666:13",
               "statements": [
@@ -8626,31 +8626,31 @@
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     },
-                    "id": 3565,
+                    "id": 3573,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
                       "baseExpression": {
-                        "id": 3561,
+                        "id": 3569,
                         "name": "_certifiedCompanies",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3450,
+                        "referencedDeclaration": 3458,
                         "src": "2370:19:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 3563,
+                      "id": 3571,
                       "indexExpression": {
-                        "id": 3562,
+                        "id": 3570,
                         "name": "company",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3554,
+                        "referencedDeclaration": 3562,
                         "src": "2390:7:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -8672,7 +8672,7 @@
                     "operator": "==",
                     "rightExpression": {
                       "hexValue": "66616c7365",
-                      "id": 3564,
+                      "id": 3572,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -8692,62 +8692,62 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 3595,
+                  "id": 3603,
                   "nodeType": "IfStatement",
                   "src": "2367:367:13",
                   "trueBody": {
-                    "id": 3594,
+                    "id": 3602,
                     "nodeType": "Block",
                     "src": "2409:325:13",
                     "statements": [
                       {
                         "assignments": [
-                          3568
+                          3576
                         ],
                         "declarations": [
                           {
                             "constant": false,
-                            "id": 3568,
+                            "id": 3576,
                             "mutability": "mutable",
                             "name": "newCertificate",
                             "nodeType": "VariableDeclaration",
-                            "scope": 3594,
+                            "scope": 3602,
                             "src": "2457:31:13",
                             "stateVariable": false,
                             "storageLocation": "default",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                              "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                               "typeString": "contract GreenCertificate"
                             },
                             "typeName": {
-                              "id": 3567,
+                              "id": 3575,
                               "nodeType": "UserDefinedTypeName",
                               "pathNode": {
-                                "id": 3566,
+                                "id": 3574,
                                 "name": "GreenCertificate",
                                 "nodeType": "IdentifierPath",
-                                "referencedDeclaration": 3408,
+                                "referencedDeclaration": 3416,
                                 "src": "2457:16:13"
                               },
-                              "referencedDeclaration": 3408,
+                              "referencedDeclaration": 3416,
                               "src": "2457:16:13",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                                "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                                 "typeString": "contract GreenCertificate"
                               }
                             },
                             "visibility": "internal"
                           }
                         ],
-                        "id": 3574,
+                        "id": 3582,
                         "initialValue": {
                           "arguments": [
                             {
-                              "id": 3572,
+                              "id": 3580,
                               "name": "company",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3554,
+                              "referencedDeclaration": 3562,
                               "src": "2512:7:13",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_address",
@@ -8762,7 +8762,7 @@
                                 "typeString": "address"
                               }
                             ],
-                            "id": 3571,
+                            "id": 3579,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -8770,28 +8770,28 @@
                             "nodeType": "NewExpression",
                             "src": "2491:20:13",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_function_creation_nonpayable$_t_address_$returns$_t_contract$_GreenCertificate_$3408_$",
+                              "typeIdentifier": "t_function_creation_nonpayable$_t_address_$returns$_t_contract$_GreenCertificate_$3416_$",
                               "typeString": "function (address) returns (contract GreenCertificate)"
                             },
                             "typeName": {
-                              "id": 3570,
+                              "id": 3578,
                               "nodeType": "UserDefinedTypeName",
                               "pathNode": {
-                                "id": 3569,
+                                "id": 3577,
                                 "name": "GreenCertificate",
                                 "nodeType": "IdentifierPath",
-                                "referencedDeclaration": 3408,
+                                "referencedDeclaration": 3416,
                                 "src": "2495:16:13"
                               },
-                              "referencedDeclaration": 3408,
+                              "referencedDeclaration": 3416,
                               "src": "2495:16:13",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                                "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                                 "typeString": "contract GreenCertificate"
                               }
                             }
                           },
-                          "id": 3573,
+                          "id": 3581,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -8802,7 +8802,7 @@
                           "src": "2491:29:13",
                           "tryCall": false,
                           "typeDescriptions": {
-                            "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                            "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                             "typeString": "contract GreenCertificate"
                           }
                         },
@@ -8811,31 +8811,31 @@
                       },
                       {
                         "expression": {
-                          "id": 3579,
+                          "id": 3587,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftHandSide": {
                             "baseExpression": {
-                              "id": 3575,
+                              "id": 3583,
                               "name": "_certifiedCompanies",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3450,
+                              "referencedDeclaration": 3458,
                               "src": "2534:19:13",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                                 "typeString": "mapping(address => bool)"
                               }
                             },
-                            "id": 3577,
+                            "id": 3585,
                             "indexExpression": {
-                              "id": 3576,
+                              "id": 3584,
                               "name": "company",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3554,
+                              "referencedDeclaration": 3562,
                               "src": "2554:7:13",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_address",
@@ -8857,7 +8857,7 @@
                           "operator": "=",
                           "rightHandSide": {
                             "hexValue": "74727565",
-                            "id": 3578,
+                            "id": 3586,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -8877,37 +8877,37 @@
                             "typeString": "bool"
                           }
                         },
-                        "id": 3580,
+                        "id": 3588,
                         "nodeType": "ExpressionStatement",
                         "src": "2534:35:13"
                       },
                       {
                         "expression": {
-                          "id": 3585,
+                          "id": 3593,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftHandSide": {
                             "baseExpression": {
-                              "id": 3581,
+                              "id": 3589,
                               "name": "_greenCertificates",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3446,
+                              "referencedDeclaration": 3454,
                               "src": "2583:18:13",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+                                "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
                                 "typeString": "mapping(address => contract GreenCertificate)"
                               }
                             },
-                            "id": 3583,
+                            "id": 3591,
                             "indexExpression": {
-                              "id": 3582,
+                              "id": 3590,
                               "name": "company",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3554,
+                              "referencedDeclaration": 3562,
                               "src": "2602:7:13",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_address",
@@ -8921,31 +8921,31 @@
                             "nodeType": "IndexAccess",
                             "src": "2583:27:13",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                              "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                               "typeString": "contract GreenCertificate"
                             }
                           },
                           "nodeType": "Assignment",
                           "operator": "=",
                           "rightHandSide": {
-                            "id": 3584,
+                            "id": 3592,
                             "name": "newCertificate",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3568,
+                            "referencedDeclaration": 3576,
                             "src": "2613:14:13",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                              "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                               "typeString": "contract GreenCertificate"
                             }
                           },
                           "src": "2583:44:13",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                            "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                             "typeString": "contract GreenCertificate"
                           }
                         },
-                        "id": 3586,
+                        "id": 3594,
                         "nodeType": "ExpressionStatement",
                         "src": "2583:44:13"
                       },
@@ -8955,14 +8955,14 @@
                             {
                               "arguments": [
                                 {
-                                  "id": 3590,
+                                  "id": 3598,
                                   "name": "newCertificate",
                                   "nodeType": "Identifier",
                                   "overloadedDeclarations": [],
-                                  "referencedDeclaration": 3568,
+                                  "referencedDeclaration": 3576,
                                   "src": "2707:14:13",
                                   "typeDescriptions": {
-                                    "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                                    "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                                     "typeString": "contract GreenCertificate"
                                   }
                                 }
@@ -8970,11 +8970,11 @@
                               "expression": {
                                 "argumentTypes": [
                                   {
-                                    "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                                    "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                                     "typeString": "contract GreenCertificate"
                                   }
                                 ],
-                                "id": 3589,
+                                "id": 3597,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": true,
@@ -8986,14 +8986,14 @@
                                   "typeString": "type(address)"
                                 },
                                 "typeName": {
-                                  "id": 3588,
+                                  "id": 3596,
                                   "name": "address",
                                   "nodeType": "ElementaryTypeName",
                                   "src": "2699:7:13",
                                   "typeDescriptions": {}
                                 }
                               },
-                              "id": 3591,
+                              "id": 3599,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": false,
@@ -9016,18 +9016,18 @@
                                 "typeString": "address"
                               }
                             ],
-                            "id": 3587,
+                            "id": 3595,
                             "name": "CompanyCertification",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3432,
+                            "referencedDeclaration": 3440,
                             "src": "2678:20:13",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                               "typeString": "function (address)"
                             }
                           },
-                          "id": 3592,
+                          "id": 3600,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -9042,7 +9042,7 @@
                             "typeString": "tuple()"
                           }
                         },
-                        "id": 3593,
+                        "id": 3601,
                         "nodeType": "EmitStatement",
                         "src": "2673:50:13"
                       }
@@ -9051,64 +9051,64 @@
                 },
                 {
                   "assignments": [
-                    3598
+                    3606
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 3598,
+                      "id": 3606,
                       "mutability": "mutable",
                       "name": "certificate",
                       "nodeType": "VariableDeclaration",
-                      "scope": 3614,
+                      "scope": 3622,
                       "src": "2780:28:13",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                        "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                         "typeString": "contract GreenCertificate"
                       },
                       "typeName": {
-                        "id": 3597,
+                        "id": 3605,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 3596,
+                          "id": 3604,
                           "name": "GreenCertificate",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 3408,
+                          "referencedDeclaration": 3416,
                           "src": "2780:16:13"
                         },
-                        "referencedDeclaration": 3408,
+                        "referencedDeclaration": 3416,
                         "src": "2780:16:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 3602,
+                  "id": 3610,
                   "initialValue": {
                     "baseExpression": {
-                      "id": 3599,
+                      "id": 3607,
                       "name": "_greenCertificates",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3446,
+                      "referencedDeclaration": 3454,
                       "src": "2811:18:13",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
                         "typeString": "mapping(address => contract GreenCertificate)"
                       }
                     },
-                    "id": 3601,
+                    "id": 3609,
                     "indexExpression": {
-                      "id": 3600,
+                      "id": 3608,
                       "name": "company",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3554,
+                      "referencedDeclaration": 3562,
                       "src": "2830:7:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -9122,7 +9122,7 @@
                     "nodeType": "IndexAccess",
                     "src": "2811:27:13",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                      "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                       "typeString": "contract GreenCertificate"
                     }
                   },
@@ -9133,11 +9133,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 3606,
+                        "id": 3614,
                         "name": "project",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3556,
+                        "referencedDeclaration": 3564,
                         "src": "2871:7:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -9153,32 +9153,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 3603,
+                        "id": 3611,
                         "name": "certificate",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3598,
+                        "referencedDeclaration": 3606,
                         "src": "2848:11:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       },
-                      "id": 3605,
+                      "id": 3613,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "addProject",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 3407,
+                      "referencedDeclaration": 3415,
                       "src": "2848:22:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (string memory) external"
                       }
                     },
-                    "id": 3607,
+                    "id": 3615,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -9193,7 +9193,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3608,
+                  "id": 3616,
                   "nodeType": "ExpressionStatement",
                   "src": "2848:31:13"
                 },
@@ -9201,11 +9201,11 @@
                   "eventCall": {
                     "arguments": [
                       {
-                        "id": 3610,
+                        "id": 3618,
                         "name": "company",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3554,
+                        "referencedDeclaration": 3562,
                         "src": "2918:7:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -9213,11 +9213,11 @@
                         }
                       },
                       {
-                        "id": 3611,
+                        "id": 3619,
                         "name": "project",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3556,
+                        "referencedDeclaration": 3564,
                         "src": "2927:7:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -9236,18 +9236,18 @@
                           "typeString": "string memory"
                         }
                       ],
-                      "id": 3609,
+                      "id": 3617,
                       "name": "ProjectCertification",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3439,
+                      "referencedDeclaration": 3447,
                       "src": "2897:20:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (address,string memory)"
                       }
                     },
-                    "id": 3612,
+                    "id": 3620,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -9262,24 +9262,24 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3613,
+                  "id": 3621,
                   "nodeType": "EmitStatement",
                   "src": "2892:43:13"
                 }
               ]
             },
             "functionSelector": "00896eee",
-            "id": 3615,
+            "id": 3623,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 3559,
+                "id": 3567,
                 "modifierName": {
-                  "id": 3558,
+                  "id": 3566,
                   "name": "onlyOwner",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 3427,
+                  "referencedDeclaration": 3435,
                   "src": "2272:9:13"
                 },
                 "nodeType": "ModifierInvocation",
@@ -9289,16 +9289,16 @@
             "name": "createCertificate",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3557,
+              "id": 3565,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3554,
+                  "id": 3562,
                   "mutability": "mutable",
                   "name": "company",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3615,
+                  "scope": 3623,
                   "src": "2223:15:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -9307,7 +9307,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3553,
+                    "id": 3561,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "2223:7:13",
@@ -9321,11 +9321,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3556,
+                  "id": 3564,
                   "mutability": "mutable",
                   "name": "project",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3615,
+                  "scope": 3623,
                   "src": "2240:21:13",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -9334,7 +9334,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 3555,
+                    "id": 3563,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "2240:6:13",
@@ -9349,19 +9349,19 @@
               "src": "2222:40:13"
             },
             "returnParameters": {
-              "id": 3560,
+              "id": 3568,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "2282:0:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "2196:752:13",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 3617,
+        "scope": 3625,
         "src": "144:2808:13"
       }
     ],
@@ -9374,18 +9374,18 @@
         1384
       ],
       "GreenCertificate": [
-        3408
+        3416
       ],
       "GreenCertifier": [
-        3616
+        3624
       ]
     },
-    "id": 3617,
+    "id": 3625,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3410,
+        "id": 3418,
         "literals": [
           "solidity",
           ">=",
@@ -9398,10 +9398,10 @@
       {
         "absolutePath": "project:/contracts/GreenCertificate.sol",
         "file": "./GreenCertificate.sol",
-        "id": 3411,
+        "id": 3419,
         "nodeType": "ImportDirective",
-        "scope": 3617,
-        "sourceUnit": 3409,
+        "scope": 3625,
+        "sourceUnit": 3417,
         "src": "58:32:13",
         "symbolAliases": [],
         "unitAlias": ""
@@ -9409,9 +9409,9 @@
       {
         "absolutePath": "@openzeppelin/contracts/utils/Address.sol",
         "file": "@openzeppelin/contracts/utils/Address.sol",
-        "id": 3412,
+        "id": 3420,
         "nodeType": "ImportDirective",
-        "scope": 3617,
+        "scope": 3625,
         "sourceUnit": 1385,
         "src": "91:51:13",
         "symbolAliases": [],
@@ -9421,21 +9421,21 @@
         "abstract": false,
         "baseContracts": [],
         "contractDependencies": [
-          3408
+          3416
         ],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 3616,
+        "id": 3624,
         "linearizedBaseContracts": [
-          3616
+          3624
         ],
         "name": "GreenCertifier",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 3415,
+            "id": 3423,
             "libraryName": {
-              "id": 3413,
+              "id": 3421,
               "name": "Address",
               "nodeType": "IdentifierPath",
               "referencedDeclaration": 1384,
@@ -9444,7 +9444,7 @@
             "nodeType": "UsingForDirective",
             "src": "174:26:13",
             "typeName": {
-              "id": 3414,
+              "id": 3422,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "192:7:13",
@@ -9457,7 +9457,7 @@
           },
           {
             "body": {
-              "id": 3426,
+              "id": 3434,
               "nodeType": "Block",
               "src": "322:57:13",
               "statements": [
@@ -9469,14 +9469,14 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 3422,
+                        "id": 3430,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "expression": {
-                            "id": 3419,
+                            "id": 3427,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
@@ -9487,7 +9487,7 @@
                               "typeString": "msg"
                             }
                           },
-                          "id": 3420,
+                          "id": 3428,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -9503,11 +9503,11 @@
                         "nodeType": "BinaryOperation",
                         "operator": "==",
                         "rightExpression": {
-                          "id": 3421,
+                          "id": 3429,
                           "name": "_owner",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3441,
+                          "referencedDeclaration": 3449,
                           "src": "354:6:13",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -9528,7 +9528,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 3418,
+                      "id": 3426,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -9542,7 +9542,7 @@
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 3423,
+                    "id": 3431,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -9557,28 +9557,28 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3424,
+                  "id": 3432,
                   "nodeType": "ExpressionStatement",
                   "src": "332:29:13"
                 },
                 {
-                  "id": 3425,
+                  "id": 3433,
                   "nodeType": "PlaceholderStatement",
                   "src": "371:1:13"
                 }
               ]
             },
             "documentation": {
-              "id": 3416,
+              "id": 3424,
               "nodeType": "StructuredDocumentation",
               "src": "206:90:13",
               "text": " @dev Modifier to allow function to be called only by the contract owner"
             },
-            "id": 3427,
+            "id": 3435,
             "name": "onlyOwner",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 3417,
+              "id": 3425,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "319:2:13"
@@ -9590,26 +9590,26 @@
           {
             "anonymous": false,
             "documentation": {
-              "id": 3428,
+              "id": 3436,
               "nodeType": "StructuredDocumentation",
               "src": "385:82:13",
               "text": " @dev Event to be emmitted when a company certificate is created"
             },
-            "id": 3432,
+            "id": 3440,
             "name": "CompanyCertification",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 3431,
+              "id": 3439,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3430,
+                  "id": 3438,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "certificate",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3432,
+                  "scope": 3440,
                   "src": "499:19:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -9618,7 +9618,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3429,
+                    "id": 3437,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "499:7:13",
@@ -9638,26 +9638,26 @@
           {
             "anonymous": false,
             "documentation": {
-              "id": 3433,
+              "id": 3441,
               "nodeType": "StructuredDocumentation",
               "src": "526:68:13",
               "text": " @dev Event to be emmitted when a project is added"
             },
-            "id": 3439,
+            "id": 3447,
             "name": "ProjectCertification",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 3438,
+              "id": 3446,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3435,
+                  "id": 3443,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "company",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3439,
+                  "scope": 3447,
                   "src": "626:15:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -9666,7 +9666,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3434,
+                    "id": 3442,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "626:7:13",
@@ -9680,12 +9680,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 3437,
+                  "id": 3445,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "project",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3439,
+                  "scope": 3447,
                   "src": "643:14:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -9694,7 +9694,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 3436,
+                    "id": 3444,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "643:6:13",
@@ -9712,11 +9712,11 @@
           },
           {
             "constant": false,
-            "id": 3441,
+            "id": 3449,
             "mutability": "mutable",
             "name": "_owner",
             "nodeType": "VariableDeclaration",
-            "scope": 3616,
+            "scope": 3624,
             "src": "696:22:13",
             "stateVariable": true,
             "storageLocation": "default",
@@ -9725,7 +9725,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 3440,
+              "id": 3448,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "696:7:13",
@@ -9739,22 +9739,22 @@
           },
           {
             "constant": false,
-            "id": 3446,
+            "id": 3454,
             "mutability": "mutable",
             "name": "_greenCertificates",
             "nodeType": "VariableDeclaration",
-            "scope": 3616,
+            "scope": 3624,
             "src": "774:63:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
               "typeString": "mapping(address => contract GreenCertificate)"
             },
             "typeName": {
-              "id": 3445,
+              "id": 3453,
               "keyType": {
-                "id": 3442,
+                "id": 3450,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "782:7:13",
@@ -9766,23 +9766,23 @@
               "nodeType": "Mapping",
               "src": "774:36:13",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
                 "typeString": "mapping(address => contract GreenCertificate)"
               },
               "valueType": {
-                "id": 3444,
+                "id": 3452,
                 "nodeType": "UserDefinedTypeName",
                 "pathNode": {
-                  "id": 3443,
+                  "id": 3451,
                   "name": "GreenCertificate",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 3408,
+                  "referencedDeclaration": 3416,
                   "src": "793:16:13"
                 },
-                "referencedDeclaration": 3408,
+                "referencedDeclaration": 3416,
                 "src": "793:16:13",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                  "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                   "typeString": "contract GreenCertificate"
                 }
               }
@@ -9791,11 +9791,11 @@
           },
           {
             "constant": false,
-            "id": 3450,
+            "id": 3458,
             "mutability": "mutable",
             "name": "_certifiedCompanies",
             "nodeType": "VariableDeclaration",
-            "scope": 3616,
+            "scope": 3624,
             "src": "881:52:13",
             "stateVariable": true,
             "storageLocation": "default",
@@ -9804,9 +9804,9 @@
               "typeString": "mapping(address => bool)"
             },
             "typeName": {
-              "id": 3449,
+              "id": 3457,
               "keyType": {
-                "id": 3447,
+                "id": 3455,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "889:7:13",
@@ -9822,7 +9822,7 @@
                 "typeString": "mapping(address => bool)"
               },
               "valueType": {
-                "id": 3448,
+                "id": 3456,
                 "name": "bool",
                 "nodeType": "ElementaryTypeName",
                 "src": "900:4:13",
@@ -9836,23 +9836,23 @@
           },
           {
             "body": {
-              "id": 3458,
+              "id": 3466,
               "nodeType": "Block",
               "src": "955:36:13",
               "statements": [
                 {
                   "expression": {
-                    "id": 3456,
+                    "id": 3464,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 3453,
+                      "id": 3461,
                       "name": "_owner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3441,
+                      "referencedDeclaration": 3449,
                       "src": "965:6:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -9863,7 +9863,7 @@
                     "operator": "=",
                     "rightHandSide": {
                       "expression": {
-                        "id": 3454,
+                        "id": 3462,
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
@@ -9874,7 +9874,7 @@
                           "typeString": "msg"
                         }
                       },
-                      "id": 3455,
+                      "id": 3463,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -9893,31 +9893,31 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 3457,
+                  "id": 3465,
                   "nodeType": "ExpressionStatement",
                   "src": "965:19:13"
                 }
               ]
             },
-            "id": 3459,
+            "id": 3467,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3451,
+              "id": 3459,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "952:2:13"
             },
             "returnParameters": {
-              "id": 3452,
+              "id": 3460,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "955:0:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "941:50:13",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -9925,54 +9925,54 @@
           },
           {
             "body": {
-              "id": 3466,
+              "id": 3474,
               "nodeType": "Block",
               "src": "1073:30:13",
               "statements": [
                 {
                   "expression": {
-                    "id": 3464,
+                    "id": 3472,
                     "name": "_owner",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 3441,
+                    "referencedDeclaration": 3449,
                     "src": "1090:6:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 3463,
-                  "id": 3465,
+                  "functionReturnParameters": 3471,
+                  "id": 3473,
                   "nodeType": "Return",
                   "src": "1083:13:13"
                 }
               ]
             },
             "functionSelector": "893d20e8",
-            "id": 3467,
+            "id": 3475,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getOwner",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3460,
+              "id": 3468,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1038:2:13"
             },
             "returnParameters": {
-              "id": 3463,
+              "id": 3471,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3462,
+                  "id": 3470,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3467,
+                  "scope": 3475,
                   "src": "1064:7:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -9981,7 +9981,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3461,
+                    "id": 3469,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1064:7:13",
@@ -9996,7 +9996,7 @@
               ],
               "src": "1063:9:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "1021:82:13",
             "stateMutability": "view",
             "virtual": false,
@@ -10004,31 +10004,31 @@
           },
           {
             "body": {
-              "id": 3478,
+              "id": 3486,
               "nodeType": "Block",
               "src": "1232:52:13",
               "statements": [
                 {
                   "expression": {
                     "baseExpression": {
-                      "id": 3474,
+                      "id": 3482,
                       "name": "_certifiedCompanies",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3450,
+                      "referencedDeclaration": 3458,
                       "src": "1249:19:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                         "typeString": "mapping(address => bool)"
                       }
                     },
-                    "id": 3476,
+                    "id": 3484,
                     "indexExpression": {
-                      "id": 3475,
+                      "id": 3483,
                       "name": "company",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3469,
+                      "referencedDeclaration": 3477,
                       "src": "1269:7:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -10046,31 +10046,31 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 3473,
-                  "id": 3477,
+                  "functionReturnParameters": 3481,
+                  "id": 3485,
                   "nodeType": "Return",
                   "src": "1242:35:13"
                 }
               ]
             },
             "functionSelector": "cb35e1e6",
-            "id": 3479,
+            "id": 3487,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "isCertifiedCompany",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3470,
+              "id": 3478,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3469,
+                  "id": 3477,
                   "mutability": "mutable",
                   "name": "company",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3479,
+                  "scope": 3487,
                   "src": "1188:15:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -10079,7 +10079,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3468,
+                    "id": 3476,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1188:7:13",
@@ -10095,16 +10095,16 @@
               "src": "1187:17:13"
             },
             "returnParameters": {
-              "id": 3473,
+              "id": 3481,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3472,
+                  "id": 3480,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3479,
+                  "scope": 3487,
                   "src": "1226:4:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -10113,7 +10113,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 3471,
+                    "id": 3479,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1226:4:13",
@@ -10127,7 +10127,7 @@
               ],
               "src": "1225:6:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "1160:124:13",
             "stateMutability": "view",
             "virtual": false,
@@ -10135,7 +10135,7 @@
           },
           {
             "body": {
-              "id": 3500,
+              "id": 3508,
               "nodeType": "Block",
               "src": "1439:145:13",
               "statements": [
@@ -10145,11 +10145,11 @@
                       {
                         "arguments": [
                           {
-                            "id": 3488,
+                            "id": 3496,
                             "name": "company",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3481,
+                            "referencedDeclaration": 3489,
                             "src": "1476:7:13",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -10164,18 +10164,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 3487,
+                          "id": 3495,
                           "name": "isCertifiedCompany",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3479,
+                          "referencedDeclaration": 3487,
                           "src": "1457:18:13",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
                             "typeString": "function (address) view returns (bool)"
                           }
                         },
-                        "id": 3489,
+                        "id": 3497,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -10192,7 +10192,7 @@
                       },
                       {
                         "hexValue": "476976656e20636f6d70616e79206973206e6f7420636572746966696564",
-                        "id": 3490,
+                        "id": 3498,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -10218,7 +10218,7 @@
                           "typeString": "literal_string \"Given company is not certified\""
                         }
                       ],
-                      "id": 3486,
+                      "id": 3494,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -10232,7 +10232,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 3491,
+                    "id": 3499,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10247,7 +10247,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3492,
+                  "id": 3500,
                   "nodeType": "ExpressionStatement",
                   "src": "1449:70:13"
                 },
@@ -10256,24 +10256,24 @@
                     "arguments": [
                       {
                         "baseExpression": {
-                          "id": 3495,
+                          "id": 3503,
                           "name": "_greenCertificates",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3446,
+                          "referencedDeclaration": 3454,
                           "src": "1544:18:13",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+                            "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
                             "typeString": "mapping(address => contract GreenCertificate)"
                           }
                         },
-                        "id": 3497,
+                        "id": 3505,
                         "indexExpression": {
-                          "id": 3496,
+                          "id": 3504,
                           "name": "company",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3481,
+                          "referencedDeclaration": 3489,
                           "src": "1563:7:13",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -10287,7 +10287,7 @@
                         "nodeType": "IndexAccess",
                         "src": "1544:27:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       }
@@ -10295,11 +10295,11 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       ],
-                      "id": 3494,
+                      "id": 3502,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -10311,14 +10311,14 @@
                         "typeString": "type(address)"
                       },
                       "typeName": {
-                        "id": 3493,
+                        "id": 3501,
                         "name": "address",
                         "nodeType": "ElementaryTypeName",
                         "src": "1536:7:13",
                         "typeDescriptions": {}
                       }
                     },
-                    "id": 3498,
+                    "id": 3506,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10333,31 +10333,31 @@
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 3485,
-                  "id": 3499,
+                  "functionReturnParameters": 3493,
+                  "id": 3507,
                   "nodeType": "Return",
                   "src": "1529:43:13"
                 }
               ]
             },
             "functionSelector": "9c0d15fb",
-            "id": 3501,
+            "id": 3509,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getCompanyCertificateAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3482,
+              "id": 3490,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3481,
+                  "id": 3489,
                   "mutability": "mutable",
                   "name": "company",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3501,
+                  "scope": 3509,
                   "src": "1392:15:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -10366,7 +10366,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3480,
+                    "id": 3488,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1392:7:13",
@@ -10382,16 +10382,16 @@
               "src": "1391:17:13"
             },
             "returnParameters": {
-              "id": 3485,
+              "id": 3493,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3484,
+                  "id": 3492,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3501,
+                  "scope": 3509,
                   "src": "1430:7:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -10400,7 +10400,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3483,
+                    "id": 3491,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1430:7:13",
@@ -10415,7 +10415,7 @@
               ],
               "src": "1429:9:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "1354:230:13",
             "stateMutability": "view",
             "virtual": false,
@@ -10423,7 +10423,7 @@
           },
           {
             "body": {
-              "id": 3522,
+              "id": 3530,
               "nodeType": "Block",
               "src": "1729:145:13",
               "statements": [
@@ -10433,11 +10433,11 @@
                       {
                         "arguments": [
                           {
-                            "id": 3511,
+                            "id": 3519,
                             "name": "company",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3503,
+                            "referencedDeclaration": 3511,
                             "src": "1766:7:13",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -10452,18 +10452,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 3510,
+                          "id": 3518,
                           "name": "isCertifiedCompany",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3479,
+                          "referencedDeclaration": 3487,
                           "src": "1747:18:13",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
                             "typeString": "function (address) view returns (bool)"
                           }
                         },
-                        "id": 3512,
+                        "id": 3520,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -10480,7 +10480,7 @@
                       },
                       {
                         "hexValue": "476976656e20636f6d70616e79206973206e6f7420636572746966696564",
-                        "id": 3513,
+                        "id": 3521,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -10506,7 +10506,7 @@
                           "typeString": "literal_string \"Given company is not certified\""
                         }
                       ],
-                      "id": 3509,
+                      "id": 3517,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -10520,7 +10520,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 3514,
+                    "id": 3522,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10535,7 +10535,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3515,
+                  "id": 3523,
                   "nodeType": "ExpressionStatement",
                   "src": "1739:70:13"
                 },
@@ -10546,24 +10546,24 @@
                       "argumentTypes": [],
                       "expression": {
                         "baseExpression": {
-                          "id": 3516,
+                          "id": 3524,
                           "name": "_greenCertificates",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3446,
+                          "referencedDeclaration": 3454,
                           "src": "1826:18:13",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+                            "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
                             "typeString": "mapping(address => contract GreenCertificate)"
                           }
                         },
-                        "id": 3518,
+                        "id": 3526,
                         "indexExpression": {
-                          "id": 3517,
+                          "id": 3525,
                           "name": "company",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3503,
+                          "referencedDeclaration": 3511,
                           "src": "1845:7:13",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -10577,25 +10577,25 @@
                         "nodeType": "IndexAccess",
                         "src": "1826:27:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       },
-                      "id": 3519,
+                      "id": 3527,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "getProjects",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 3370,
+                      "referencedDeclaration": 3378,
                       "src": "1826:39:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_view$__$returns$_t_array$_t_string_memory_ptr_$dyn_memory_ptr_$",
                         "typeString": "function () view external returns (string memory[] memory)"
                       }
                     },
-                    "id": 3520,
+                    "id": 3528,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10610,31 +10610,31 @@
                       "typeString": "string memory[] memory"
                     }
                   },
-                  "functionReturnParameters": 3508,
-                  "id": 3521,
+                  "functionReturnParameters": 3516,
+                  "id": 3529,
                   "nodeType": "Return",
                   "src": "1819:48:13"
                 }
               ]
             },
             "functionSelector": "42b828b3",
-            "id": 3523,
+            "id": 3531,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getCertifiedProjects",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3504,
+              "id": 3512,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3503,
+                  "id": 3511,
                   "mutability": "mutable",
                   "name": "company",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3523,
+                  "scope": 3531,
                   "src": "1672:15:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -10643,7 +10643,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3502,
+                    "id": 3510,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1672:7:13",
@@ -10659,16 +10659,16 @@
               "src": "1671:17:13"
             },
             "returnParameters": {
-              "id": 3508,
+              "id": 3516,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3507,
+                  "id": 3515,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3523,
+                  "scope": 3531,
                   "src": "1712:15:13",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -10678,7 +10678,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 3505,
+                      "id": 3513,
                       "name": "string",
                       "nodeType": "ElementaryTypeName",
                       "src": "1712:6:13",
@@ -10687,7 +10687,7 @@
                         "typeString": "string"
                       }
                     },
-                    "id": 3506,
+                    "id": 3514,
                     "nodeType": "ArrayTypeName",
                     "src": "1712:8:13",
                     "typeDescriptions": {
@@ -10700,7 +10700,7 @@
               ],
               "src": "1711:17:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "1642:232:13",
             "stateMutability": "view",
             "virtual": false,
@@ -10708,7 +10708,7 @@
           },
           {
             "body": {
-              "id": 3551,
+              "id": 3559,
               "nodeType": "Block",
               "src": "1978:211:13",
               "statements": [
@@ -10718,11 +10718,11 @@
                       {
                         "arguments": [
                           {
-                            "id": 3534,
+                            "id": 3542,
                             "name": "company",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3525,
+                            "referencedDeclaration": 3533,
                             "src": "2015:7:13",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -10737,18 +10737,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 3533,
+                          "id": 3541,
                           "name": "isCertifiedCompany",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3479,
+                          "referencedDeclaration": 3487,
                           "src": "1996:18:13",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
                             "typeString": "function (address) view returns (bool)"
                           }
                         },
-                        "id": 3535,
+                        "id": 3543,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -10765,7 +10765,7 @@
                       },
                       {
                         "hexValue": "476976656e20636f6d70616e79206973206e6f7420636572746966696564",
-                        "id": 3536,
+                        "id": 3544,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -10791,7 +10791,7 @@
                           "typeString": "literal_string \"Given company is not certified\""
                         }
                       ],
-                      "id": 3532,
+                      "id": 3540,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -10805,7 +10805,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 3537,
+                    "id": 3545,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10820,70 +10820,70 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3538,
+                  "id": 3546,
                   "nodeType": "ExpressionStatement",
                   "src": "1988:70:13"
                 },
                 {
                   "assignments": [
-                    3541
+                    3549
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 3541,
+                      "id": 3549,
                       "mutability": "mutable",
                       "name": "certificate",
                       "nodeType": "VariableDeclaration",
-                      "scope": 3551,
+                      "scope": 3559,
                       "src": "2068:28:13",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                        "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                         "typeString": "contract GreenCertificate"
                       },
                       "typeName": {
-                        "id": 3540,
+                        "id": 3548,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 3539,
+                          "id": 3547,
                           "name": "GreenCertificate",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 3408,
+                          "referencedDeclaration": 3416,
                           "src": "2068:16:13"
                         },
-                        "referencedDeclaration": 3408,
+                        "referencedDeclaration": 3416,
                         "src": "2068:16:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 3545,
+                  "id": 3553,
                   "initialValue": {
                     "baseExpression": {
-                      "id": 3542,
+                      "id": 3550,
                       "name": "_greenCertificates",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3446,
+                      "referencedDeclaration": 3454,
                       "src": "2099:18:13",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
                         "typeString": "mapping(address => contract GreenCertificate)"
                       }
                     },
-                    "id": 3544,
+                    "id": 3552,
                     "indexExpression": {
-                      "id": 3543,
+                      "id": 3551,
                       "name": "company",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3525,
+                      "referencedDeclaration": 3533,
                       "src": "2118:7:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -10897,7 +10897,7 @@
                     "nodeType": "IndexAccess",
                     "src": "2099:27:13",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                      "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                       "typeString": "contract GreenCertificate"
                     }
                   },
@@ -10908,11 +10908,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 3548,
+                        "id": 3556,
                         "name": "project",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3527,
+                        "referencedDeclaration": 3535,
                         "src": "2174:7:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -10928,32 +10928,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 3546,
+                        "id": 3554,
                         "name": "certificate",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3541,
+                        "referencedDeclaration": 3549,
                         "src": "2143:11:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       },
-                      "id": 3547,
+                      "id": 3555,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "isCertifiedProject",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 3383,
+                      "referencedDeclaration": 3391,
                       "src": "2143:30:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_view$_t_string_memory_ptr_$returns$_t_bool_$",
                         "typeString": "function (string memory) view external returns (bool)"
                       }
                     },
-                    "id": 3549,
+                    "id": 3557,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10968,31 +10968,31 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 3531,
-                  "id": 3550,
+                  "functionReturnParameters": 3539,
+                  "id": 3558,
                   "nodeType": "Return",
                   "src": "2136:46:13"
                 }
               ]
             },
             "functionSelector": "620feee3",
-            "id": 3552,
+            "id": 3560,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "isCeritifiedProject",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3528,
+              "id": 3536,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3525,
+                  "id": 3533,
                   "mutability": "mutable",
                   "name": "company",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3552,
+                  "scope": 3560,
                   "src": "1909:15:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -11001,7 +11001,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3524,
+                    "id": 3532,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1909:7:13",
@@ -11015,11 +11015,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3527,
+                  "id": 3535,
                   "mutability": "mutable",
                   "name": "project",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3552,
+                  "scope": 3560,
                   "src": "1926:21:13",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -11028,7 +11028,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 3526,
+                    "id": 3534,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "1926:6:13",
@@ -11043,16 +11043,16 @@
               "src": "1908:40:13"
             },
             "returnParameters": {
-              "id": 3531,
+              "id": 3539,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3530,
+                  "id": 3538,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3552,
+                  "scope": 3560,
                   "src": "1972:4:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -11061,7 +11061,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 3529,
+                    "id": 3537,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1972:4:13",
@@ -11075,7 +11075,7 @@
               ],
               "src": "1971:6:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "1880:309:13",
             "stateMutability": "view",
             "virtual": false,
@@ -11083,7 +11083,7 @@
           },
           {
             "body": {
-              "id": 3614,
+              "id": 3622,
               "nodeType": "Block",
               "src": "2282:666:13",
               "statements": [
@@ -11093,31 +11093,31 @@
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     },
-                    "id": 3565,
+                    "id": 3573,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
                       "baseExpression": {
-                        "id": 3561,
+                        "id": 3569,
                         "name": "_certifiedCompanies",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3450,
+                        "referencedDeclaration": 3458,
                         "src": "2370:19:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 3563,
+                      "id": 3571,
                       "indexExpression": {
-                        "id": 3562,
+                        "id": 3570,
                         "name": "company",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3554,
+                        "referencedDeclaration": 3562,
                         "src": "2390:7:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -11139,7 +11139,7 @@
                     "operator": "==",
                     "rightExpression": {
                       "hexValue": "66616c7365",
-                      "id": 3564,
+                      "id": 3572,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -11159,62 +11159,62 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 3595,
+                  "id": 3603,
                   "nodeType": "IfStatement",
                   "src": "2367:367:13",
                   "trueBody": {
-                    "id": 3594,
+                    "id": 3602,
                     "nodeType": "Block",
                     "src": "2409:325:13",
                     "statements": [
                       {
                         "assignments": [
-                          3568
+                          3576
                         ],
                         "declarations": [
                           {
                             "constant": false,
-                            "id": 3568,
+                            "id": 3576,
                             "mutability": "mutable",
                             "name": "newCertificate",
                             "nodeType": "VariableDeclaration",
-                            "scope": 3594,
+                            "scope": 3602,
                             "src": "2457:31:13",
                             "stateVariable": false,
                             "storageLocation": "default",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                              "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                               "typeString": "contract GreenCertificate"
                             },
                             "typeName": {
-                              "id": 3567,
+                              "id": 3575,
                               "nodeType": "UserDefinedTypeName",
                               "pathNode": {
-                                "id": 3566,
+                                "id": 3574,
                                 "name": "GreenCertificate",
                                 "nodeType": "IdentifierPath",
-                                "referencedDeclaration": 3408,
+                                "referencedDeclaration": 3416,
                                 "src": "2457:16:13"
                               },
-                              "referencedDeclaration": 3408,
+                              "referencedDeclaration": 3416,
                               "src": "2457:16:13",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                                "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                                 "typeString": "contract GreenCertificate"
                               }
                             },
                             "visibility": "internal"
                           }
                         ],
-                        "id": 3574,
+                        "id": 3582,
                         "initialValue": {
                           "arguments": [
                             {
-                              "id": 3572,
+                              "id": 3580,
                               "name": "company",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3554,
+                              "referencedDeclaration": 3562,
                               "src": "2512:7:13",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_address",
@@ -11229,7 +11229,7 @@
                                 "typeString": "address"
                               }
                             ],
-                            "id": 3571,
+                            "id": 3579,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -11237,28 +11237,28 @@
                             "nodeType": "NewExpression",
                             "src": "2491:20:13",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_function_creation_nonpayable$_t_address_$returns$_t_contract$_GreenCertificate_$3408_$",
+                              "typeIdentifier": "t_function_creation_nonpayable$_t_address_$returns$_t_contract$_GreenCertificate_$3416_$",
                               "typeString": "function (address) returns (contract GreenCertificate)"
                             },
                             "typeName": {
-                              "id": 3570,
+                              "id": 3578,
                               "nodeType": "UserDefinedTypeName",
                               "pathNode": {
-                                "id": 3569,
+                                "id": 3577,
                                 "name": "GreenCertificate",
                                 "nodeType": "IdentifierPath",
-                                "referencedDeclaration": 3408,
+                                "referencedDeclaration": 3416,
                                 "src": "2495:16:13"
                               },
-                              "referencedDeclaration": 3408,
+                              "referencedDeclaration": 3416,
                               "src": "2495:16:13",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                                "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                                 "typeString": "contract GreenCertificate"
                               }
                             }
                           },
-                          "id": 3573,
+                          "id": 3581,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -11269,7 +11269,7 @@
                           "src": "2491:29:13",
                           "tryCall": false,
                           "typeDescriptions": {
-                            "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                            "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                             "typeString": "contract GreenCertificate"
                           }
                         },
@@ -11278,31 +11278,31 @@
                       },
                       {
                         "expression": {
-                          "id": 3579,
+                          "id": 3587,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftHandSide": {
                             "baseExpression": {
-                              "id": 3575,
+                              "id": 3583,
                               "name": "_certifiedCompanies",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3450,
+                              "referencedDeclaration": 3458,
                               "src": "2534:19:13",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                                 "typeString": "mapping(address => bool)"
                               }
                             },
-                            "id": 3577,
+                            "id": 3585,
                             "indexExpression": {
-                              "id": 3576,
+                              "id": 3584,
                               "name": "company",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3554,
+                              "referencedDeclaration": 3562,
                               "src": "2554:7:13",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_address",
@@ -11324,7 +11324,7 @@
                           "operator": "=",
                           "rightHandSide": {
                             "hexValue": "74727565",
-                            "id": 3578,
+                            "id": 3586,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -11344,37 +11344,37 @@
                             "typeString": "bool"
                           }
                         },
-                        "id": 3580,
+                        "id": 3588,
                         "nodeType": "ExpressionStatement",
                         "src": "2534:35:13"
                       },
                       {
                         "expression": {
-                          "id": 3585,
+                          "id": 3593,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftHandSide": {
                             "baseExpression": {
-                              "id": 3581,
+                              "id": 3589,
                               "name": "_greenCertificates",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3446,
+                              "referencedDeclaration": 3454,
                               "src": "2583:18:13",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+                                "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
                                 "typeString": "mapping(address => contract GreenCertificate)"
                               }
                             },
-                            "id": 3583,
+                            "id": 3591,
                             "indexExpression": {
-                              "id": 3582,
+                              "id": 3590,
                               "name": "company",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3554,
+                              "referencedDeclaration": 3562,
                               "src": "2602:7:13",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_address",
@@ -11388,31 +11388,31 @@
                             "nodeType": "IndexAccess",
                             "src": "2583:27:13",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                              "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                               "typeString": "contract GreenCertificate"
                             }
                           },
                           "nodeType": "Assignment",
                           "operator": "=",
                           "rightHandSide": {
-                            "id": 3584,
+                            "id": 3592,
                             "name": "newCertificate",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3568,
+                            "referencedDeclaration": 3576,
                             "src": "2613:14:13",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                              "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                               "typeString": "contract GreenCertificate"
                             }
                           },
                           "src": "2583:44:13",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                            "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                             "typeString": "contract GreenCertificate"
                           }
                         },
-                        "id": 3586,
+                        "id": 3594,
                         "nodeType": "ExpressionStatement",
                         "src": "2583:44:13"
                       },
@@ -11422,14 +11422,14 @@
                             {
                               "arguments": [
                                 {
-                                  "id": 3590,
+                                  "id": 3598,
                                   "name": "newCertificate",
                                   "nodeType": "Identifier",
                                   "overloadedDeclarations": [],
-                                  "referencedDeclaration": 3568,
+                                  "referencedDeclaration": 3576,
                                   "src": "2707:14:13",
                                   "typeDescriptions": {
-                                    "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                                    "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                                     "typeString": "contract GreenCertificate"
                                   }
                                 }
@@ -11437,11 +11437,11 @@
                               "expression": {
                                 "argumentTypes": [
                                   {
-                                    "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                                    "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                                     "typeString": "contract GreenCertificate"
                                   }
                                 ],
-                                "id": 3589,
+                                "id": 3597,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": true,
@@ -11453,14 +11453,14 @@
                                   "typeString": "type(address)"
                                 },
                                 "typeName": {
-                                  "id": 3588,
+                                  "id": 3596,
                                   "name": "address",
                                   "nodeType": "ElementaryTypeName",
                                   "src": "2699:7:13",
                                   "typeDescriptions": {}
                                 }
                               },
-                              "id": 3591,
+                              "id": 3599,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": false,
@@ -11483,18 +11483,18 @@
                                 "typeString": "address"
                               }
                             ],
-                            "id": 3587,
+                            "id": 3595,
                             "name": "CompanyCertification",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3432,
+                            "referencedDeclaration": 3440,
                             "src": "2678:20:13",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                               "typeString": "function (address)"
                             }
                           },
-                          "id": 3592,
+                          "id": 3600,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -11509,7 +11509,7 @@
                             "typeString": "tuple()"
                           }
                         },
-                        "id": 3593,
+                        "id": 3601,
                         "nodeType": "EmitStatement",
                         "src": "2673:50:13"
                       }
@@ -11518,64 +11518,64 @@
                 },
                 {
                   "assignments": [
-                    3598
+                    3606
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 3598,
+                      "id": 3606,
                       "mutability": "mutable",
                       "name": "certificate",
                       "nodeType": "VariableDeclaration",
-                      "scope": 3614,
+                      "scope": 3622,
                       "src": "2780:28:13",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                        "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                         "typeString": "contract GreenCertificate"
                       },
                       "typeName": {
-                        "id": 3597,
+                        "id": 3605,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 3596,
+                          "id": 3604,
                           "name": "GreenCertificate",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 3408,
+                          "referencedDeclaration": 3416,
                           "src": "2780:16:13"
                         },
-                        "referencedDeclaration": 3408,
+                        "referencedDeclaration": 3416,
                         "src": "2780:16:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 3602,
+                  "id": 3610,
                   "initialValue": {
                     "baseExpression": {
-                      "id": 3599,
+                      "id": 3607,
                       "name": "_greenCertificates",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3446,
+                      "referencedDeclaration": 3454,
                       "src": "2811:18:13",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3408_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_contract$_GreenCertificate_$3416_$",
                         "typeString": "mapping(address => contract GreenCertificate)"
                       }
                     },
-                    "id": 3601,
+                    "id": 3609,
                     "indexExpression": {
-                      "id": 3600,
+                      "id": 3608,
                       "name": "company",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3554,
+                      "referencedDeclaration": 3562,
                       "src": "2830:7:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -11589,7 +11589,7 @@
                     "nodeType": "IndexAccess",
                     "src": "2811:27:13",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                      "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                       "typeString": "contract GreenCertificate"
                     }
                   },
@@ -11600,11 +11600,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 3606,
+                        "id": 3614,
                         "name": "project",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3556,
+                        "referencedDeclaration": 3564,
                         "src": "2871:7:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -11620,32 +11620,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 3603,
+                        "id": 3611,
                         "name": "certificate",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3598,
+                        "referencedDeclaration": 3606,
                         "src": "2848:11:13",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_GreenCertificate_$3408",
+                          "typeIdentifier": "t_contract$_GreenCertificate_$3416",
                           "typeString": "contract GreenCertificate"
                         }
                       },
-                      "id": 3605,
+                      "id": 3613,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "addProject",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 3407,
+                      "referencedDeclaration": 3415,
                       "src": "2848:22:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (string memory) external"
                       }
                     },
-                    "id": 3607,
+                    "id": 3615,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -11660,7 +11660,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3608,
+                  "id": 3616,
                   "nodeType": "ExpressionStatement",
                   "src": "2848:31:13"
                 },
@@ -11668,11 +11668,11 @@
                   "eventCall": {
                     "arguments": [
                       {
-                        "id": 3610,
+                        "id": 3618,
                         "name": "company",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3554,
+                        "referencedDeclaration": 3562,
                         "src": "2918:7:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -11680,11 +11680,11 @@
                         }
                       },
                       {
-                        "id": 3611,
+                        "id": 3619,
                         "name": "project",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3556,
+                        "referencedDeclaration": 3564,
                         "src": "2927:7:13",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -11703,18 +11703,18 @@
                           "typeString": "string memory"
                         }
                       ],
-                      "id": 3609,
+                      "id": 3617,
                       "name": "ProjectCertification",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3439,
+                      "referencedDeclaration": 3447,
                       "src": "2897:20:13",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (address,string memory)"
                       }
                     },
-                    "id": 3612,
+                    "id": 3620,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -11729,24 +11729,24 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3613,
+                  "id": 3621,
                   "nodeType": "EmitStatement",
                   "src": "2892:43:13"
                 }
               ]
             },
             "functionSelector": "00896eee",
-            "id": 3615,
+            "id": 3623,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 3559,
+                "id": 3567,
                 "modifierName": {
-                  "id": 3558,
+                  "id": 3566,
                   "name": "onlyOwner",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 3427,
+                  "referencedDeclaration": 3435,
                   "src": "2272:9:13"
                 },
                 "nodeType": "ModifierInvocation",
@@ -11756,16 +11756,16 @@
             "name": "createCertificate",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3557,
+              "id": 3565,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3554,
+                  "id": 3562,
                   "mutability": "mutable",
                   "name": "company",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3615,
+                  "scope": 3623,
                   "src": "2223:15:13",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -11774,7 +11774,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3553,
+                    "id": 3561,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "2223:7:13",
@@ -11788,11 +11788,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3556,
+                  "id": 3564,
                   "mutability": "mutable",
                   "name": "project",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3615,
+                  "scope": 3623,
                   "src": "2240:21:13",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -11801,7 +11801,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 3555,
+                    "id": 3563,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "2240:6:13",
@@ -11816,19 +11816,19 @@
               "src": "2222:40:13"
             },
             "returnParameters": {
-              "id": 3560,
+              "id": 3568,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "2282:0:13"
             },
-            "scope": 3616,
+            "scope": 3624,
             "src": "2196:752:13",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 3617,
+        "scope": 3625,
         "src": "144:2808:13"
       }
     ],
@@ -11871,7 +11871,7 @@
     }
   },
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-07-29T14:58:52.271Z",
+  "updatedAt": "2021-07-30T08:35:11.576Z",
   "networkType": "ethereum",
   "devdoc": {
     "events": {

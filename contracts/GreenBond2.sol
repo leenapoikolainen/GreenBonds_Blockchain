@@ -480,11 +480,11 @@ contract GreenBond2 is ERC721, Ownable {
                     _mint(investor, _bondIdTracker.current());
                     _bondIdTracker.increment();
                 }
-                // Update Investor balance to 0
-                _investedAmountPerInvestor[investor] = 0;
-
+                
                 bondsAvailable -= numberOfBonds;
             }
+            // Update Investor balance to 0
+            _investedAmountPerInvestor[investor] = 0;
         }
     }
 
@@ -526,6 +526,34 @@ contract GreenBond2 is ERC721, Ownable {
         }
     }
 
+    function couponPaymentOnTime(uint256 coupon) public view returns (string memory) {
+        if(coupon < 1 || coupon > _totalCouponPayments) {
+            return "Than coupon does not exists.";
+        }
+        // Before the due date
+        if (block.timestamp < _couponPaymentDates[coupon - 1]) {
+            if(_actualCouponPaymentDates[coupon - 1] != 0) {
+                return "Coupon paid early.";
+            }
+            else {
+                return "Coupon not due yet.";
+            }
+        }
+        // After the due date
+        else {
+            if(_actualCouponPaymentDates[coupon - 1] == 0) {
+                return "Coupon payment is late.";
+            }
+            else if(_actualCouponPaymentDates[coupon - 1] <= _couponPaymentDates[coupon - 1]) {
+                return "Coupon paid on time.";
+            }
+            
+            else {
+                return "Coupon paid late.";
+            }
+        }
+    }
+    /*
     function couponPaymentMadeOnTime(uint256 coupon)
         public
         view
@@ -553,6 +581,7 @@ contract GreenBond2 is ERC721, Ownable {
             return false;
         }
     }
+    */
 
     // This function should be called by the borrowing company
     function payBackBond() public payable {
@@ -595,6 +624,28 @@ contract GreenBond2 is ERC721, Ownable {
         }
     }
 
+    function principalPaidOnTime() public view returns (string memory) {
+        // Before due date
+        if(block.timestamp < _maturityDate) {
+            if (_actualPrincipalPaymentDate == 0) {
+                return "Principal Payment is not due yet.";
+            } else {
+                return "Principal was paid back early.";
+            }
+        }
+        // After
+        else {
+            if(_actualPrincipalPaymentDate == 0) {
+                return "Principal payment is late.";
+            }
+            else if(_actualPrincipalPaymentDate <= _maturityDate) {
+                return "Principal was paid back on time.";
+            }
+            else {
+                return "Principal was paid back late.";
+            }
+        }
+    }
     // Checks if the principal amount was paid back on time
     function principalPaymentMadeOnTime() public view returns (bool) {
         require(block.timestamp > _maturityDate, "Bond has not matured yet");

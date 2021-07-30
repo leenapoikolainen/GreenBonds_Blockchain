@@ -4,7 +4,7 @@ import Web3 from 'web3'
 // Import smart Contracts
 import GreenBond from '../contracts/GreenBond2.json';
 
-class Company extends Component {
+class Regulation extends Component {
     async componentWillMount() {
         await this.loadBlockchainData()
     }
@@ -38,30 +38,14 @@ class Company extends Component {
             this.setState({ greenBond })
 
             // Getting bond details
-            const name = await greenBond.methods.getName().call()
-            this.setState({ name })
-
-            const symbol = await greenBond.methods.symbol().call()
-            this.setState({ symbol })
-
             const company = await greenBond.methods.getCompany().call()
             this.setState({ company })
 
-            const faceValue = await greenBond.methods.getFaceValue().call()
-            this.setState({ faceValue })
+            const project = await greenBond.methods.getName().call()
+            this.setState({ project })
 
-            const minCoupon = await greenBond.methods.getMinCoupon().call()
-            this.setState({ minCoupon })
-
-            const maxCoupon = await greenBond.methods.getMaxCoupon().call()
-            this.setState({ maxCoupon })
-
-            const numberOfBonds = await greenBond.methods.getNumberOfBondsSeeked().call()
-            this.setState({ numberOfBonds })
-
-            const bidClosingTimeTimeStamp = await greenBond.methods.getBidClosingTime().call()
-            const bidClosingTime = this.timeConverter(bidClosingTimeTimeStamp)
-            this.setState({ bidClosingTime })
+            const symbol = await greenBond.methods.symbol().call()
+            this.setState({ symbol })
 
             const term = await greenBond.methods.getTerm().call()
             this.setState({ term })
@@ -89,37 +73,37 @@ class Company extends Component {
 
             // Coupons payment count
             const coupons = await greenBond.methods.getNumberOfCoupons().call()
-            this.setState({ coupons})
+            this.setState({ coupons })
 
             const couponsPaid = await greenBond.methods.getNumberOfCouponsPaid().call()
             this.setState({ couponsPaid })
 
             var dateArray = []
-            for(var i = 1; i <= couponsPaid; i++) {
+            for (var i = 1; i <= couponsPaid; i++) {
                 let date = await greenBond.methods.getActualCouponDate(i).call()
                 dateArray.push(date)
             }
 
-            const actualDatesList = dateArray.map((date) => 
-                    <li>{this.timeConverter(date)}</li>  
-                     
+            const actualDatesList = dateArray.map((date) =>
+                <li>{this.timeConverter(date)}</li>
+
             );
-            this.setState({ actualDatesList})
+            this.setState({ actualDatesList })
 
             // Get actual principal payment date
             const principalPaymentDateTimeStamp = await greenBond.methods.getActualPricipalPaymentDate().call()
-            
+
             let principalPaymentMade;
-            
+
             // If it's larger than zero, date has been updated
-            if(principalPaymentDateTimeStamp > 0) {
-                principalPaymentMade = true; 
+            if (principalPaymentDateTimeStamp > 0) {
+                principalPaymentMade = true;
             } else {
                 principalPaymentMade = false;
             }
-           
+
             this.setState({ principalPaymentMade })
-           
+
 
             const principalPaymentDate = this.timeConverter(principalPaymentDateTimeStamp)
             this.setState({ principalPaymentDate })
@@ -136,10 +120,17 @@ class Company extends Component {
         return dateObject.toLocaleString()
     }
 
-
+    couponMadeOnTime = (coupon) => {  
+        try{
+            const result = this.state.greenBond.methods.couponPaymentMadeOnTime(coupon).send({ from: this.state.account })    
+            console.log({result})
+        } catch (error) {
+            console.log(error)
+        }
+     }
 
     payCoupon = (bonds) => {
-       
+
         let amount = (bonds * this.state.coupon).toString()
         console.log(amount)
         this.state.greenBond.methods.payCoupons().send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
@@ -157,44 +148,84 @@ class Company extends Component {
             account: '',
             contract: null,
             couponPaymentDates: [],
-            
+
         }
     }
 
     render() {
         return (
             <>
-                
-                    <div className="container mr-auto ml-auto">
-                        {this.state.cancelled 
-                            ? <div className="alert alert-danger" role="alert">
-                                Bond Issue has been cancelled due to inadequate demand.
-                            </div> 
-                            : <div> </div> 
-                        }
-                        {this.state.couponConfirmed 
-                            ? <div className="alert alert-success" role="alert">
-                                Bond issue has been confirmed.
-                            </div> 
-                            : <div className="alert alert-secondary" role="alert">
-                                Bond issue has not been confirmed.     
-                            </div> 
-                        }
-                        <h1>Bond Details</h1>
-                        <p>Company: {this.state.company}</p>
-                        <p>Project Name: {this.state.name}</p>
-                        <p>Symbol: {this.state.symbol}</p>
-                        <p>Face value: {this.state.faceValue}</p>
-                        <p>Coupon: {this.state.coupon}</p>
-                        <p>Number of Bonds: {this.state.numberOfBonds}</p>
-                        <p>Bid closing time: {this.state.bidClosingTime}</p>
-                        <p>Term: {this.state.term} year(s)</p>
-                        <p>Maturity Date: {this.state.maturityDate}</p>
-                        <p>Coupon Payment Dates:</p>
-                        <ul>{this.state.couponList}</ul>
-                    </div>
-            
+
+                <div className="container mr-auto ml-auto">
+                    <h2 >Bond Details</h2>
+                    {this.state.cancelled
+                        ? <div className="alert alert-danger" role="alert">
+                            Bond Issue has been cancelled due to inadequate demand.
+                        </div>
+                        : <div> </div>
+                    }
+                    {this.state.couponConfirmed
+                        ? <div className="alert alert-success" role="alert">
+                            Bond issue has been confirmed.
+                        </div>
+                        : <div className="alert alert-secondary" role="alert">
+                            Bond issue has not been confirmed.
+                        </div>
+                    }
+
+                    <table className="table mt-5">
+                        <tr>
+                            <td>Company</td>
+                            <td>{this.state.company}</td>
+                        </tr>
+                        <tr>
+                            <td>Project</td>
+                            <td>{this.state.project}</td>
+                        </tr>
+                        <tr>
+                            <td>Symbol</td>
+                            <td>{this.state.symbol}</td>
+                        </tr>
+                        <tr>
+                            <td>Term</td>
+                            <td>{this.state.term} year(s)</td>
+                        </tr>
+                        <tr>
+                            <td>Maturity Date</td>
+                            <td>{this.state.maturityDate}</td>
+                        </tr>
+                    </table>
+                    <p>Coupon Payment Dates:</p>
+                    <ul>{this.state.couponList}</ul>
+                </div>
                 <hr />
+
+                <div className="container mr-auto ml-auto">
+                    <h2>Check coupon payments</h2>
+                    <form onSubmit={(event) => {
+                        event.preventDefault()
+                        const coupon = this.coupon.value
+                        this.couponMadeOnTime(coupon)
+                    }}>
+                        <label for="coupon">Coupon</label>
+                        <input
+                            id='coupon'
+                            type='number'
+                            className='form-control mb-1'
+                            min='0'
+                            ref={(input) => { this.coupon = input }}
+                        />
+                        
+                        <input
+                            type='submit'
+                            className='btn btn-block btn-primary mt-4'
+                            value='Check'
+                        />
+                    </form>
+                </div>
+                <hr/>
+
+
                 <div className="container mr-auto ml-auto mb-5">
                     <h2>Pay coupon</h2>
                     <form onSubmit={(event) => {
@@ -215,7 +246,7 @@ class Company extends Component {
                 </div>
 
                 <hr />
-                
+
                 <div className="container mr-auto ml-auto mb-5">
                     <h2>Pay Back Principal</h2>
                     <p>Maturity Date: {this.state.maturityDate}</p>
@@ -227,19 +258,19 @@ class Company extends Component {
                         <input
                             type='submit'
                             className='btn btn-block btn-primary'
-                            value='Make principal payment'   
+                            value='Make principal payment'
                         />
 
                     </form>
-                    
+
                     <div className="mt-2">
-                        {this.state.principalPaymentMade 
-                        ? <p>Principal paid back on: <i> {this.state.principalPaymentDate} </i></p>
-                        : <p>Principal has not been paid back yet</p>}
+                        {this.state.principalPaymentMade
+                            ? <p>Principal paid back on: <i> {this.state.principalPaymentDate} </i></p>
+                            : <p>Principal has not been paid back yet</p>}
                     </div>
-                    
-                    
-                    
+
+
+
                 </div>
 
             </>
@@ -249,4 +280,4 @@ class Company extends Component {
     }
 }
 
-export default Company;
+export default Regulation;

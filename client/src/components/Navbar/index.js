@@ -36,6 +36,9 @@ const Navbar = () => {
                 <NavLink to='/issuer' activeStyle>
                     Issuer
                 </NavLink>
+                <NavLink to='/regulation' activeStyle>
+                    Regulation
+                </NavLink>
             </NavMenu>	
         </Nav>
         </>

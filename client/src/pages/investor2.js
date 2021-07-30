@@ -45,18 +45,20 @@ class Investor2 extends Component {
             const project = await greenBond.methods.getName().call()
             this.setState({ project })
 
-            const open = await greenBond.methods.biddingWindowisOpen().call()
-            if(open) {
-                const biddingOpen = "Open";
-                this.setState({ biddingOpen })
-            } else {
-                const biddingOpen = "Closed";
-                this.setState({ biddingOpen })
-            }
 
             const bidClosingTimeStamp = await greenBond.methods.getBidClosingTime().call()
             const bidClosingTime = this.timeConverter(bidClosingTimeStamp)
             this.setState({ bidClosingTime })
+
+            const timeNow = Date.now()
+            let biddingOpen
+            if(timeNow/1000 - bidClosingTimeStamp > 0) {
+                biddingOpen = false
+            } else {
+                biddingOpen = true
+            }
+            this.setState({ biddingOpen })
+            
             
 
             const coupon = await greenBond.methods.getCoupon().call()
@@ -124,7 +126,7 @@ class Investor2 extends Component {
                     <tr>
                         <td>{this.state.company}</td>
                         <td>{this.state.project}</td>
-                        <td><b>{this.state.biddingOpen}</b></td>
+                        <td><b>{this.state.biddingOpen ? "Open": "Closed"}</b></td>
                         <td>{this.state.bidClosingTime}</td>
                         <td>{this.state.coupon}</td>
                         <td>{this.state.status}</td>

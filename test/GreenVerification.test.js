@@ -35,6 +35,8 @@ contract('GreenVerification', function (accounts) {
         verification = await GreenVerification.new(company, project, votingClosingTime, {from: verifier});  
     });
 
+    /*
+
     it('deploys successfully', async function() {
         const address = await verification.address
         assert.notEqual(address, 0x0)
@@ -168,4 +170,5 @@ contract('GreenVerification', function (accounts) {
         await verification.verify2({from: verifier})
         assert.equal(await verification.getFinalVote(), 2)
     })
+    */
 })

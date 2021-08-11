@@ -38,7 +38,7 @@ class Company extends Component {
             this.setState({ greenBond })
 
             // Getting bond details
-            const name = await greenBond.methods.getName().call()
+            const name = await greenBond.methods.name().call()
             this.setState({ name })
 
             const symbol = await greenBond.methods.symbol().call()
@@ -56,7 +56,7 @@ class Company extends Component {
             const maxCoupon = await greenBond.methods.getMaxCoupon().call()
             this.setState({ maxCoupon })
 
-            const numberOfBonds = await greenBond.methods.getNumberOfBondsSeeked().call()
+            const numberOfBonds = await greenBond.methods.getNumberOfBondsSought().call()
             this.setState({ numberOfBonds })
 
             const bidClosingTimeTimeStamp = await greenBond.methods.getBidClosingTime().call()
@@ -138,11 +138,10 @@ class Company extends Component {
 
 
 
-    payCoupon = (bonds) => {
-       
+    payCoupon = (bonds) => {      
         let amount = (bonds * this.state.coupon).toString()
         console.log(amount)
-        this.state.greenBond.methods.payCoupons().send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
+        this.state.greenBond.methods.makeCouponPayment().send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
     }
 
     payPrincipal = (bonds) => {

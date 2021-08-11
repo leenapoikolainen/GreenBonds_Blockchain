@@ -41,7 +41,7 @@ class BuyBonds extends Component {
 			const company = await greenBond.methods.getCompany().call()
 			this.setState({ company })
 
-			const project = await greenBond.methods.getName().call()
+			const project = await greenBond.methods.name().call()
             this.setState({ project })
 
 			const minCoupon = await greenBond.methods.getMinCoupon().call()
@@ -50,7 +50,7 @@ class BuyBonds extends Component {
             const maxCoupon = await greenBond.methods.getMaxCoupon().call()
             this.setState({ maxCoupon }) 
 
-			const numberOfBondsSeeked = await greenBond.methods.getNumberOfBondsSeeked().call()
+			const numberOfBondsSeeked = await greenBond.methods.getNumberOfBondsSought().call()
 			this.setState({ numberOfBondsSeeked })
 
 
@@ -77,7 +77,7 @@ class BuyBonds extends Component {
 			const coupon = await greenBond.methods.getCouponPerInvestor(account).call()
 			this.setState({ coupon })
 			
-			const balance = await greenBond.methods.getInvestorBalance(account).call()
+			const balance = await greenBond.methods.getStakedAmountPerInvestor(account).call()
 			this.setState({ balance })
 			
 
@@ -216,7 +216,7 @@ class BuyBonds extends Component {
 							<h2 className="mb-4">Bid details:</h2>
 							<p>Bonds requested: {this.state.bondsRequested}</p>
 							<p>Coupon bid: {this.state.coupon}</p>
-							<p>Investment balance: {this.state.balance}</p>
+							<p>Staking balance: {this.state.balance}</p>
 						</div>
 						
 					</div>

@@ -437,25 +437,7 @@ contract('GreenBond2', function (accounts) {
     
 })
 
-        /*
         
 
-    it('Green Verifier can adjust the coupon', async function() {
-        // FAILURE
-        // Only green verifier can adjust the coupons
-        await bond.adjustCoupon(true, 1).should.be.rejected
-        // Can't make coupon payment negative
-        await bond.adjustCoupon(false, 2, {from: greenVerifier}).should.be.rejected
-
-        // SUCCESS
-        let result = await bond.adjustCoupon(true, 1, {from: greenVerifier})
-        const couponIncrease = result.logs[0].args
-        assert.equal(couponIncrease.adjuster, greenVerifier)
-        assert.equal(couponIncrease.couponRate, 2)
-
-        result = await bond.adjustCoupon(false, 2, {from: greenVerifier})
-        const couponDecrese = result.logs[0].args
-        assert.equal(couponDecrese.adjuster, greenVerifier)
-        assert.equal(couponDecrese.couponRate, 0)
-        */
+  
  

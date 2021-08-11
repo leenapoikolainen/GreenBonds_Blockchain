@@ -42,7 +42,7 @@ class Investor2 extends Component {
             const company = await greenBond.methods.getCompany().call()
             this.setState({ company })
 
-            const project = await greenBond.methods.getName().call()
+            const project = await greenBond.methods.name().call()
             this.setState({ project })
 
 

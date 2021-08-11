@@ -291,6 +291,13 @@ contract GreenBond2 is ERC721, Ownable {
     }
 
     /**
+     * @dev Get the number of coupons paid
+     */
+    function getNumberOfCouponsPaid() public view returns (uint256) {
+        return _couponsPaid;
+    }
+
+    /**
      * @dev Get the agreed date for a specific coupon
      */
     function getCouponDate(uint256 number) public view returns (uint256) {
@@ -710,14 +717,7 @@ contract GreenBond2 is ERC721, Ownable {
             }
         }
     }
-    // Internal function to transer the bonds -- MIGHT BE REDUNDANT
-    function bondTransfer(
-        address from,
-        address to,
-        uint256 bondId
-    ) internal {
-        _transfer(from, to, bondId);
-    }
+  
     /**
      * @dev Function to check if the principal payment was made on time
      */

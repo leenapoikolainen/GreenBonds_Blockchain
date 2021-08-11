@@ -2,13 +2,7 @@
 pragma solidity >=0.6.0;
 
 contract GreenVerification2 {
-    // Voting options
-    enum Result {
-        BELOW,
-        PAR,
-        ABOVE
-    }
-
+  
     /**
      * @dev Modified for functions that can only be called by the  owner/green verifier
      */
@@ -66,11 +60,7 @@ contract GreenVerification2 {
         external
         onlyOwner
     {
-        require(
-            result >= 0 && result <= 2,
-            "Vote must be between 0-2: 0 below expectation, 1 at par, 2 above expectations"
-        );
-
+        
         _resultArray.push(result);
         emit ResultAdded(result);
     }

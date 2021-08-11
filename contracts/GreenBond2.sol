@@ -25,54 +25,89 @@ contract GreenBond2 is ERC721, Ownable {
         _;
     }
 
-
     // MEMBER VARIABLES
-
+    
+    // Bond ID numbers
     Counters.Counter private _bondIdTracker;
+
+    // URI for bond metadata stored on decentralised database or cloud
     string private _baseBondURI;
-    // Boolean variable that is only set true if there is enough demand for bond
+
+    // Bond state controllers
     bool private _coupondefined = false;
     bool private _cancelled = false;
 
-    // List of initial investors who have bidded at 'right coupon level'
-    address[] private _initialInvestors;
+    // List of initial investors
+    address[] private _initialInvestors; 
+
+    // Owner of the contract - Issuing Financial Institution
     address private _owner;
+    // Borrowing company
     address payable private _company;
+
+    // Face value of 1 bond
     uint256 private _value;
-    uint256 private _numberOfBondsSeeked;
-    uint256 private _coupon;
+
+    // Number of bonds sought by the borrowing company
+    uint256 private _numberOfBondsSought;
+
+    // Total amount borrowed. Calculated as number of bonds * face value
+    uint256 private _totalDebt;
+
+    // Coupon range
     uint256 private _minCoupon;
     uint256 private _maxCoupon;
-    uint256 private _term;
-    uint256 private _totalCouponPayments;
-    uint256 private _couponsPaid = 0; // Zero in the beginning
-    uint256 private _totalDebt;
-    uint256 private _bidClosingTime;
-    uint256 private _issueDate;
-    uint256 private _maturityDate;
-    uint256 private _actualPrincipalPaymentDate = 0; // Initialise to 0
-    uint256 private _couponsPerYear;
-    // Dates for the agreed coupon payments
-    uint256[] private _couponPaymentDates;
-    // Dates when the actual couons were paid
-    uint256[] private _actualCouponPaymentDates;
-    
-    
 
-    mapping(address => uint256) _investedAmountPerInvestor;
+    // Final coupon 
+    uint256 private _coupon;
+    
+    // Term of the bond (in years)
+    uint256 private _term;
+
+    // Coupon payment schedule (per year)
+    uint256 private _couponsPerYear;
+
+    // Total number of coupons. Calculated as term * number of coupons per year
+    uint256 private _totalCouponPayments;
+
+    // Number of coupons paid
+    uint256 private _couponsPaid; // Zero in the beginning
+
+    // Closing time for bidding
+    uint256 private _bidClosingTime;    
+
+    // Issue Date: bid closing time + 2 days
+    uint256 private _issueDate;
+
+    // Maturity Date: issue date + term
+    uint256 private _maturityDate;
+
+    // Actual principal payment date
+    uint256 private _actualPrincipalPaymentDate; 
+
+    // Coupon payment dates: calculated from issue date onwards
+    uint256[] private _couponPaymentDates;
+
+    // Actual coupon payment dates
+    uint256[] private _actualCouponPaymentDates;
+
+    // Records for investor bid details
+    mapping(address => uint256) _stakedAmountPerInvestor;
     mapping(address => uint256) _requestedBondsPerInvestor;
     mapping(address => uint256) _couponPerInvestor;
+    mapping(address => bool) _investorHasBid;
 
+    // Records for coupon definition
     mapping(uint256 => uint256) _bidsPerCoupon;
     mapping(uint256 => address[]) _investorListAtCouponLevel;
-    mapping(address => mapping(uint256 => uint256)) _bidsPerInvestorAtCouponLevel;
-    mapping(address => bool) _biddedInvestors;
+
+    // EVENTS
 
     /**
-     * @dev Emitted when an investor registers initial investment request
+     * @dev Emitted when an investor registers a bid
      */
-    event Investment(address investor, uint256 value, uint256 numberOfBonds);
-
+    event Bid(address bidder, uint256 coupon, uint256 numberOfBonds);
+    
     /**
      * @dev Emitted when coins are refunded to the investor in case there are
             too many coins for the investment or to the company if they pay too much 
@@ -85,25 +120,36 @@ contract GreenBond2 is ERC721, Ownable {
      */
     event CouponPayment(address investor, uint256 bondId);
 
+    /**
+     * @dev Emmitted when the coupon is defined after bidding. 
+            Only when there is enough demand and issue will go ahead.
+     */
+    event CouponSet(uint256 coupon);
 
+    /**
+     * @dev Emmitted when there is not enough demand for the bond
+            and the issue is cancelled.
+     */
+    event CancelBondIssue(uint256 actualDemand, uint256 requestedDemand);
+    
+    
     /**
      * @dev Emmitted when coupon payment is adjusted
      */
     event CouponAdjustment(uint256 from, uint256 to);
-    event CouponSet(uint256 coupon);
-    event CancelBondIssue(uint256 actualDemand, uint256 requestedDemand);
-    event Bid(address bidder, uint256 coupon, uint256 numberOfBonds);
+    
 
     /**
-     * @dev constructor, requires name and symbol for the bond,
-     * base URI for metadata, company address, facevalue for one bond / min investment
-     * coupon amount, investment window closing time
+     * @dev constructor: requires specifying the borrowing company address,
+            bond name and symbol, number of bonds sought, coupon range,
+            bidding window closing time, term, coupons per year and
+            base URI for metadata,
      */
     constructor(
         address company,
         string memory name,
         string memory symbol,
-        uint256 numberOfBondsSeeked,
+        uint256 numberOfBondsSought,
         uint256 minCoupon,
         uint256 maxCoupon,
         uint256 bidClosingTime,
@@ -112,7 +158,6 @@ contract GreenBond2 is ERC721, Ownable {
         string memory baseBondURI
     ) ERC721(name, symbol) {
         require(company != address(0), "Company address can not be 0x0");
-        require(minCoupon >= 0, "coupon can't be negative");
         require(
             maxCoupon > minCoupon,
             "max coupon needs to be greater than min coupon"
@@ -122,21 +167,22 @@ contract GreenBond2 is ERC721, Ownable {
             "Closing time can't be in the past"
         );
         _owner = msg.sender;
-        _baseBondURI = baseBondURI;
         _company = payable(company);
-        _value = 100; // Face value default at 100
-        _numberOfBondsSeeked = numberOfBondsSeeked;
-        _coupon = 0; // by default 0
+        _numberOfBondsSought = numberOfBondsSought;
         _minCoupon = minCoupon;
         _maxCoupon = maxCoupon;
+        _coupon = 0; // by default 0
+        _value = 100; // Face value default at 100
+        _couponsPaid = 0; // set to 0 
         _bidClosingTime = bidClosingTime;
+        _baseBondURI = baseBondURI;
+        
         _issueDate = _bidClosingTime + 1 weeks;
         _term = term;
         _couponsPerYear = couponsPerYear;
         _totalCouponPayments = couponsPerYear * term;
-
         _maturityDate = _issueDate + term * 365 days;
-
+        _actualPrincipalPaymentDate = 0; // default to 0
         uint256 timeBetweenpayments = 365 days / couponsPerYear;
 
         // Setting up the coupon payment dates
@@ -146,36 +192,23 @@ contract GreenBond2 is ERC721, Ownable {
         }
     }
 
-    // Getter functions
-
-    function couponDefined() public view returns (bool) {
-        return _coupondefined;
-    }
-
-    function cancelled() public view returns (bool) {
-        return _cancelled;
-    }
-
+    /**
+     * @dev Get borrowing company.
+     */
     function getCompany() public view returns (address) {
         return _company;
     }
 
+    /**
+     * @dev Get bond face value
+     */
     function getFaceValue() public view returns (uint256) {
         return _value;
     }
 
-    function getName() public view returns (string memory) {
-        return name();
-    }
-
-    function getNumberOfBondsSeeked() public view returns (uint256) {
-        return _numberOfBondsSeeked;
-    }
-
-    function getCoupon() public view returns (uint256) {
-        return _coupon;
-    }
-
+    /**
+     * @dev Get coupon bidding range
+     */
     function getMinCoupon() public view returns (uint256) {
         return _minCoupon;
     }
@@ -184,26 +217,82 @@ contract GreenBond2 is ERC721, Ownable {
         return _maxCoupon;
     }
 
+    /**
+     * @dev Get coupon
+     */
+    function getCoupon() public view returns (uint256) {
+        return _coupon;
+    }
+ 
+    /* REDUNDANT
+    function getName() public view returns (string memory) {
+        return name();
+    }
+    */
+
+    /**
+     * @dev Get number of bonds sought
+     */
+    function getNumberOfBondsSought() public view returns (uint256) {
+        return _numberOfBondsSought;
+    }
+
+    /**
+     * @dev Get bond term in years
+     */
     function getTerm() public view returns (uint256) {
         return _term;
     }
 
+    /**
+     * @dev Get the total debt
+     */
     function getTotalDebt() public view returns (uint256) {
         return _totalDebt;
     }
 
+    /**
+     * @dev Get bid closing time
+     */
     function getBidClosingTime() external view returns (uint256) {
         return _bidClosingTime;
     }
 
+    /**
+     * @dev Get issue date
+     */
     function getIssueDate() public view returns (uint256) {
         return _issueDate;
     }
 
+    /**
+     * @dev Get maturity date
+     */
     function getMaturityDate() public view returns (uint256) {
         return _maturityDate;
     }
 
+    /**
+     * @dev Query bond status (cancelled/coupon defined)
+     */
+    function couponDefined() public view returns (bool) {
+        return _coupondefined;
+    }
+
+    function cancelled() public view returns (bool) {
+        return _cancelled;
+    }
+
+    /**
+     * @dev Get the number of coupon payments for the bond
+     */
+    function getNumberOfCoupons() public view returns (uint256) {
+        return _totalCouponPayments;
+    }
+
+    /**
+     * @dev Get the agreed date for a specific coupon
+     */
     function getCouponDate(uint256 number) public view returns (uint256) {
         require(
             number > 0 && number <= _totalCouponPayments,
@@ -212,6 +301,9 @@ contract GreenBond2 is ERC721, Ownable {
         return _couponPaymentDates[number - 1];
     }
 
+    /**
+     * @dev Get the actual coupon payment date for a specific coupon
+     */
     function getActualCouponDate(uint256 number) public view returns (uint256) {
         require(
             number > 0 && number <= _totalCouponPayments,
@@ -220,10 +312,16 @@ contract GreenBond2 is ERC721, Ownable {
         return _actualCouponPaymentDates[number - 1];
     }
 
+    /**
+     * @dev Get an array containin all agreed coupon dates
+     */
     function getCouponDates() public view returns (uint256[] memory) {
         return _couponPaymentDates;
     }
 
+    /**
+     * @dev Get actual principal payment date
+     */
     function getActualPricipalPaymentDate() public view returns (uint256) {
         return _actualPrincipalPaymentDate;
     }
@@ -232,23 +330,34 @@ contract GreenBond2 is ERC721, Ownable {
         return _initialInvestors.length;
     }
 
+    /**
+     * @dev Get the number of bonds issued
+     */
     function bondCount() public view returns (uint256) {
         return _bondIdTracker.current();
     }
 
-
+    /**
+     * @dev Get the base URI for bond metadata
+     */
     function _baseURI() internal view override returns (string memory) {
         return _baseBondURI;
     }
 
-    function getInvestedAmountPerInvestor(address investor)
+    /**
+     * @dev Get staked amount per investor
+     */
+    function getStakedAmountPerInvestor(address investor)
         external
         view
         returns (uint256)
     {
-        return _investedAmountPerInvestor[investor];
+        return _stakedAmountPerInvestor[investor];
     }
 
+    /**
+     * @dev Get requested bonds per investor
+     */
     function getRequestedBondsPerInvestor(address investor)
         external
         view
@@ -257,12 +366,37 @@ contract GreenBond2 is ERC721, Ownable {
         return _requestedBondsPerInvestor[investor];
     }
 
+    /**
+     * @dev Get the coupon bid per investor
+     */
     function getCouponPerInvestor(address investor)
         external
         view
         returns(uint256)
     {
         return _couponPerInvestor[investor];
+    }
+
+    /**
+     * @dev Get a list of bidders at a specific coupon level
+     */
+    function getBiddersAtCoupon(uint256 coupon)
+        public
+        view
+        returns (address[] memory)
+    {
+        require(
+            coupon >= _minCoupon && coupon <= _maxCoupon,
+            "Coupon not in range"
+        );
+        return _investorListAtCouponLevel[coupon];
+    }  
+
+    /**
+     * @dev Returns true if bidding window is open
+     */
+    function biddingWindowisOpen() public view returns (bool) {
+        return block.timestamp <= _bidClosingTime;
     }
 
     // Needed to override this function as two parent classes defined the same function
@@ -276,7 +410,12 @@ contract GreenBond2 is ERC721, Ownable {
         return super.supportsInterface(interfaceId);
     }
 
-    // Function for investors to register their bids
+    /**
+     * @dev Function for an investor to register a bid.
+            Needs to specify the coupon within the given range (min and max coupon)
+            and send enough ether to cover the bid (number of bonds bid * face value of bond).
+            Only one bid allowed per investor.    
+     */
     function registerBid(uint256 coupon, uint256 numberOfBonds)
         external
         payable
@@ -288,35 +427,28 @@ contract GreenBond2 is ERC721, Ownable {
         );
         require(
             msg.value >= _value * numberOfBonds,
-            "Not enough coins deposited for the bid"
+            "Not enough ether to cover the bid"
         );
         require(
-            _biddedInvestors[msg.sender] == false,
+            _investorHasBid[msg.sender] == false,
             "Only one bid per investor"
         );
 
-        _biddedInvestors[msg.sender] = true;
+        // Mark that investor has made a bit
+        _investorHasBid[msg.sender] = true;
+        // Update bid details
         _requestedBondsPerInvestor[msg.sender] = numberOfBonds;
+        _couponPerInvestor[msg.sender] = coupon;
 
         // Update the demand for the coupon level
         uint256 currentDemand = _bidsPerCoupon[coupon];
         _bidsPerCoupon[coupon] = currentDemand + numberOfBonds;
-        _couponPerInvestor[msg.sender] = coupon;
-
-        // Add the investor to the list if not already on the list
-        uint256 currentAmountInvested = _bidsPerInvestorAtCouponLevel[
-            msg.sender
-        ][coupon];
-        if (currentAmountInvested == 0) {
-            _investorListAtCouponLevel[coupon].push(msg.sender);
-        }
-
-        // Update the mapping
-        _bidsPerInvestorAtCouponLevel[msg.sender][coupon] =
-            numberOfBonds +
-            currentAmountInvested;
-
-        _investedAmountPerInvestor[msg.sender] = _value * numberOfBonds;
+        
+        // Add the investor to the list of investors bidding at this coupon level
+        _investorListAtCouponLevel[coupon].push(msg.sender);
+        
+        // Update the staked amount for the investor
+        _stakedAmountPerInvestor[msg.sender] = _value * numberOfBonds;
 
         // Emit event
         emit Bid(msg.sender, coupon, numberOfBonds);
@@ -329,46 +461,54 @@ contract GreenBond2 is ERC721, Ownable {
         }
     }
 
-    // Function for issuer to define coupon
-    // Finds the lowest coupon that fullfills the demand
-    // Returns the defined coupon
+    /**
+     * @dev Function for the issuing institution to define the coupon.
+            Finds the lowest coupon that covers the number of sought bonds
+            and sets the coupon to that level. Refunds unsuccessful bidders.
+            If not enough demand, coupon will not be defined and _cancelled
+            will be set to false.    
+     */
     function defineCoupon()
         public
         onlyWhileBiddingWindowClosed
         onlyOwner
-        returns (uint256)
     {
-        // Variable for the total demand for tokens
-        uint256 tokenDemand = 0;
+        // Variable for the total demand for bonds
+        uint256 bondDemand = 0;
 
-        // Iterate each coupon level, and count the token demand to
+        // Iterate each coupon level, and count the bonf demand to
         // determine the coupon level which will fulfills the seeked number of bonds
         for (uint256 i = _minCoupon; i <= _maxCoupon; i++) {
             // Increase the tokendemand
-            tokenDemand += _bidsPerCoupon[i];
+            bondDemand += _bidsPerCoupon[i];
             // If enough interest at this coupon level, set coupon and break the loop
-            if (tokenDemand >= _numberOfBondsSeeked) {
+            if (bondDemand >= _numberOfBondsSought) {
                 _coupon = i;
+                _coupondefined = true;
                 break;
             }
         }
-
-        if (_coupon > 0) {
+        // If there was enough demand, emits Coupon set event and
+        // sets investor array for token issue
+        if (_coupondefined) {
             emit CouponSet(_coupon);
-            _coupondefined = true;
-            setInvestroArray();
+            setInvestorArray();
+        // Else bond issue is cancelled
         } else {
-            emit CancelBondIssue(tokenDemand, _numberOfBondsSeeked);
+            emit CancelBondIssue(bondDemand, _numberOfBondsSought);
             _cancelled = true;
         }
 
         // Refund unsuccessful investors
         refundBiddersFromCouponLevel(_coupon + 1);
-
-        return _coupon;
     }
 
-    function setInvestroArray() internal {
+    /**
+     * @dev Internal function to set the investor array for token issue.
+            Array will include all the investors who bid either at the 
+            set coupon rate or lower
+     */
+    function setInvestorArray() internal {
         for (uint256 i = _minCoupon; i <= _coupon; i++) {
             address[] memory investors = getBiddersAtCoupon(i);
             for (uint256 j = 0; j < investors.length; j++) {
@@ -377,63 +517,30 @@ contract GreenBond2 is ERC721, Ownable {
         }
     }
 
-    function getBiddersAtCoupon(uint256 coupon)
-        public
-        view
-        returns (address[] memory)
-    {
-        require(
-            coupon >= _minCoupon && coupon <= _maxCoupon,
-            "Coupon not in range"
-        );
-        return _investorListAtCouponLevel[coupon];
-    }
-
-    function getNumberOfCouponsPaid() public view returns (uint256) {
-        return _couponsPaid;
-    }
-
-    function getNumberOfCoupons() public view returns (uint256) {
-        return _totalCouponPayments;
-    }
-
-    // Function to refund unsuccessful bidders when coupon is defined
+    /**
+     * @dev Internal function to refund investors, who bid at specified
+            coupon level or above
+     */
     function refundBiddersFromCouponLevel(uint256 coupon) internal {
         for (uint256 i = coupon; i <= _maxCoupon; i++) {
             address[] memory investors = getBiddersAtCoupon(i);
             for (uint256 j = 0; j < investors.length; j++) {
                 address investor = investors[j];
-                uint256 amount = _bidsPerInvestorAtCouponLevel[investor][i];
+                uint256 amount = _requestedBondsPerInvestor[investor];
                 payable(investor).transfer(_value * amount);
                 emit CoinRefund(investor, amount * _value);
             }
         }
     }
 
-    // Just for testing
-    function getInvestorBalance(address investor)
-        public
-        view
-        returns (uint256)
-    {
-        require(investor != address(0), "Balance query for the zero address");
-        return _investedAmountPerInvestor[investor];
-    }
-
-    // Return true if the investment window is open, false otherwise.
-    function biddingWindowisOpen() public view returns (bool) {
-        return block.timestamp <= _bidClosingTime;
-    }
 
     /**
-     * @dev Function to issue bonds for investors who have registered 
-        Assumes all investors will get the requested investment
-        Can be called only when investment window is closed and the contract is unpaused
+     * @dev Function to issue bonds for investors who bid successfully.
+        Can be called only if coupon has been defined (i.e., issue has not been cancelled).
+        Only owner, the issuing institution, can call the function
      */
-
     function issueBonds()
         public
-        onlyWhileBiddingWindowClosed
         onlyOwner
     {
         require(
@@ -441,7 +548,7 @@ contract GreenBond2 is ERC721, Ownable {
             "can not issue bonds if the coupon has not been defined"
         );
 
-        uint256 bondsAvailable = _numberOfBondsSeeked;
+        uint256 bondsAvailable = _numberOfBondsSought;
 
         // Go through the investors
         for (uint256 i = 0; i < _initialInvestors.length; i++) {
@@ -449,61 +556,60 @@ contract GreenBond2 is ERC721, Ownable {
             uint256 numberOfBonds = _requestedBondsPerInvestor[investor];
 
             // If the demanded amount is more than bonds available
+            // Issue only number of bonds available
             if (numberOfBonds > bondsAvailable) {
                 // Transfer the value to company
                 _company.transfer(_value * bondsAvailable);
                 _totalDebt += _value * bondsAvailable;
+                _stakedAmountPerInvestor[investor] -= _value * bondsAvailable;
 
+                // Mint the tokens
                 for (uint256 j = 0; j < bondsAvailable; j++) {
                     _mint(investor, _bondIdTracker.current());
                     _bondIdTracker.increment();
                 }
 
                 // Refund extra amount
-                uint256 balance = _investedAmountPerInvestor[investor];
-                _investedAmountPerInvestor[investor] =
-                    balance -
-                    _value *
-                    bondsAvailable;
-                uint256 refund = _investedAmountPerInvestor[investor];
+                uint256 refund = _stakedAmountPerInvestor[investor]; 
                 payable(investor).transfer(refund);
                 emit CoinRefund(investor, refund);
+                _stakedAmountPerInvestor[investor] -= refund;
 
                 // Set bonds available to 0
                 bondsAvailable = 0;
 
                 // Else, fulfill the whole demans
             } else {
+                // Transfer the value to the company
                 _company.transfer(_value * numberOfBonds);
                 _totalDebt += _value * numberOfBonds;
+                _stakedAmountPerInvestor[investor] -= _value * numberOfBonds;
+
+                // Mint tokens
                 for (uint256 j = 0; j < numberOfBonds; j++) {
                     _mint(investor, _bondIdTracker.current());
                     _bondIdTracker.increment();
                 }
-                
+                // Update the bonds available
                 bondsAvailable -= numberOfBonds;
-            }
-            // Update Investor balance to 0
-            _investedAmountPerInvestor[investor] = 0;
+            }            
         }
     }
 
-    // Function for the borrowing company to pay coupons
-    function payCoupons() public payable {
-        // Message needs to have enough value for the copupon payments
+    /**
+     * @dev Function to make a coupon payment.
+            Can be called only by the borrowing company.
+            Requires sending enough ether to cover a coupon payment
+            (total number of bonds * coupon rate)
+     */
+    function makeCouponPayment() public payable {
         require(
             msg.sender == _company,
             "Coupon payment should come from the borrowing company"
         );
         require(
             msg.value >= _coupon * _bondIdTracker.current(),
-            "Not enough coins for coupons"
-        );
-
-        // Prevents company from paying extra coupons
-        require(
-            _couponsPaid < _totalCouponPayments,
-            "All coupon payments have already been made"
+            "Not enough ether to cover the coupon payment"
         );
 
         for (uint256 i = 0; i < _bondIdTracker.current(); i++) {
@@ -512,7 +618,7 @@ contract GreenBond2 is ERC721, Ownable {
             emit CouponPayment(investor, i);
         }
 
-        // Update coupon payment date
+        // Update the actual coupon payment date for the record
         _actualCouponPaymentDates[_couponsPaid] = block.timestamp;
         _couponsPaid++;
 
@@ -526,20 +632,23 @@ contract GreenBond2 is ERC721, Ownable {
         }
     }
 
+    /**
+     * @dev Function to check if a coupon payment was made on time
+     */
     function couponPaymentOnTime(uint256 coupon) public view returns (string memory) {
         if(coupon < 1 || coupon > _totalCouponPayments) {
-            return "Than coupon does not exists.";
+            return "That coupon does not exists.";
         }
-        // Before the due date
+        // Query before the due date
         if (block.timestamp < _couponPaymentDates[coupon - 1]) {
             if(_actualCouponPaymentDates[coupon - 1] != 0) {
-                return "Coupon paid early.";
+                return "Coupon has been paid early prior to due date.";
             }
             else {
                 return "Coupon not due yet.";
             }
         }
-        // After the due date
+        // Query after the due date
         else {
             if(_actualCouponPaymentDates[coupon - 1] == 0) {
                 return "Coupon payment is late.";
@@ -553,37 +662,15 @@ contract GreenBond2 is ERC721, Ownable {
             }
         }
     }
-    /*
-    function couponPaymentMadeOnTime(uint256 coupon)
-        public
-        view
-        returns (bool)
-    {
-        require(
-            coupon >= 1 && coupon <= _totalCouponPayments,
-            "That coupon does not exists"
-        );
-        require(
-            block.timestamp > _couponPaymentDates[coupon - 1],
-            "Coupon not due yet"
-        );
+   
 
-        if (_actualCouponPaymentDates[coupon - 1] == 0) {
-            return false;
-        }
-        // Coupon payment made before or by the agreed data
-        else if (
-            _actualCouponPaymentDates[coupon - 1] <=
-            _couponPaymentDates[coupon - 1]
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    */
-
-    // This function should be called by the borrowing company
+    /**
+     * @dev Function to make a principal payment at the maturity
+            Can be called only by the borrowing company.
+            Requires sending enough ether to cover the full principal
+            (facevalue * numer of bonds)
+            Transfers the bond tokens back to the issuing company
+     */
     function payBackBond() public payable {
         require(
             msg.sender == _company,
@@ -591,15 +678,15 @@ contract GreenBond2 is ERC721, Ownable {
         );
         require(
             msg.value >= _totalDebt,
-            "Not enough coins to settle the bond at maturity"
+            "Not enough ether to settle the bond at maturity"
         );
 
         // Interate through the bonds
         uint256 numberOfBonds = _bondIdTracker.current();
         for (uint256 i = 0; i < numberOfBonds; i++) {
             address payable investor = payable(ownerOf(i));
-            // Transfer bond from investor to owner
-            bondTransfer(investor, _owner, i);
+            // Transfer bond token from investor to owner
+            _transfer(investor, _owner, i);
             // Return funds
             investor.transfer(_value);
             // Decrement the values
@@ -610,7 +697,7 @@ contract GreenBond2 is ERC721, Ownable {
         // Set the payment date
         _actualPrincipalPaymentDate = block.timestamp;
 
-        // Refund coins there is extra money on the contract
+        // Refund any extra ether on the contract
         if (address(this).balance > 0 && msg.value > _totalDebt) {
             uint256 extraAmount = msg.value - _totalDebt;
             if (address(this).balance < extraAmount) {
@@ -623,9 +710,19 @@ contract GreenBond2 is ERC721, Ownable {
             }
         }
     }
-
+    // Internal function to transer the bonds -- MIGHT BE REDUNDANT
+    function bondTransfer(
+        address from,
+        address to,
+        uint256 bondId
+    ) internal {
+        _transfer(from, to, bondId);
+    }
+    /**
+     * @dev Function to check if the principal payment was made on time
+     */
     function principalPaidOnTime() public view returns (string memory) {
-        // Before due date
+        // Querying before the maturity date
         if(block.timestamp < _maturityDate) {
             if (_actualPrincipalPaymentDate == 0) {
                 return "Principal Payment is not due yet.";
@@ -633,7 +730,7 @@ contract GreenBond2 is ERC721, Ownable {
                 return "Principal was paid back early.";
             }
         }
-        // After
+        // Querying after the maturity date
         else {
             if(_actualPrincipalPaymentDate == 0) {
                 return "Principal payment is late.";
@@ -646,39 +743,23 @@ contract GreenBond2 is ERC721, Ownable {
             }
         }
     }
-    /*
-    // Checks if the principal amount was paid back on time
-    function principalPaymentMadeOnTime() public view returns (bool) {
-        require(block.timestamp > _maturityDate, "Bond has not matured yet");
-        if (_actualPrincipalPaymentDate == 0) {
-            return false;
-        } else if (_actualPrincipalPaymentDate > _maturityDate) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    */
-
-    // Internal function to transer the bonds
-    function bondTransfer(
-        address from,
-        address to,
-        uint256 bondId
-    ) internal {
-        _transfer(from, to, bondId);
-    }
-
+  
     /**
-     * Function to adjust the coupon
+     * @dev Function to adjust the coupon
+            Can be only called by the owner (issuing institution)
+            Need to specify the direction of the adjustment and the amount   
      */
     function adjustCoupon(bool increase, uint256 amount) external onlyOwner {
         uint256 previousCoupon = _coupon;
         if (increase) {
             _coupon = _coupon + amount;
         } else {
-            require(amount <= _coupon, "Coupon payment can't be negative");
-            _coupon = _coupon - amount;
+            // If adjustement would lead to negative coupon, set coupon to 0
+            if (amount > _coupon) {
+                _coupon = 0;
+            } else {
+                _coupon = _coupon - amount;
+            }       
         }
         emit CouponAdjustment(previousCoupon, _coupon);
     }

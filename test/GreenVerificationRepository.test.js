@@ -9,7 +9,7 @@ require('chai')
   .use(require('chai-as-promised'))
   .should()
 
-contract('GreenVerification', function (accounts) {
+contract('GreenVerificationRepository', function (accounts) {
     const verifier = accounts[1];
     const investor = accounts[2];
     const symbol = "GREEN";
@@ -39,8 +39,6 @@ contract('GreenVerification', function (accounts) {
         // Only green verifier/owner can add results
         await repository.addVerification(symbol, 0, {from: investor}).should.be.rejected;
 
-        // Need to vote between set option 0 - 2
-        await repository.addVerification(symbol, 3, {from: verifier}).should.be.rejected;
 
         
         // Result is recorded correctly

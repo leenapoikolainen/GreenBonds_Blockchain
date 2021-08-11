@@ -12,8 +12,8 @@ contract('GreenVerification', function (accounts) {
     const verifier = accounts[1];
     const investor = accounts[2];
     const symbol = "GREEN";
+    let verification;
    
- 
     beforeEach(async function() {
         verification = await GreenVerification.new(symbol, {from: verifier});  
     });
@@ -38,23 +38,22 @@ contract('GreenVerification', function (accounts) {
         // Only green verifier/owner can add results
         await verification.addResult(0, {from: investor}).should.be.rejected;
 
-        // Need to vote between set option 0 - 2
-        await verification.addResult(3, {from: verifier}).should.be.rejected
-
+        
         // Result is recorded correctly
-        let result = await verification.addResult(0, {from: verifier})
+        let result = await verification.addResult(50, {from: verifier})
         const event = result.logs[0].args;
-        assert.equal(event.recordedResult, 0)
+        assert.equal(event.recordedResult, 50)
         
         result = await verification.getResult(1)
-        assert.equal(result, 0)
+        assert.equal(result, 50)
         
-        await verification.addResult(2, {from: verifier})
+        await verification.addResult(90, {from: verifier})
         result = await verification.getResult(2)
-        assert.equal(result, 2)
+        assert.equal(result, 90)
 
         let numberOfResults = await verification.getNumberOfResults()
         assert.equal(numberOfResults, 2)
+        
     })
 
 })

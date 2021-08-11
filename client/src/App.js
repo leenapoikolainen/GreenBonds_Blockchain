@@ -14,6 +14,7 @@ import Investor2 from './pages/investor2';
 import Regulation from './pages/regulation';
 import Certifier from './pages/certificate';
 import Verifier from './pages/verifier';
+import VerificationRepo from './pages/verificationRepo';
 
 
 // import Navbar from './components/Navbar';
@@ -49,6 +50,7 @@ class App extends Component {
               <Route path='/regulation' component={Regulation}/>
               <Route path='/certifier' component={Certifier}/>
               <Route path='/verifier' component={Verifier}/>
+              <Route path='/verification' component={VerificationRepo}/>
             </Switch>
           </div>
         </Router>

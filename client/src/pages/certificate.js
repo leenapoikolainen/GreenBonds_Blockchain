@@ -27,7 +27,7 @@ class Certifier extends Component {
             const greenCertifier = new web3.eth.Contract(GreenCertifier.abi, networkData.address)
 
             this.setState({ greenCertifier })
-  
+
             const certifier = await greenCertifier.methods.getOwner().call()
             this.setState({ certifier })
 
@@ -65,7 +65,7 @@ class Certifier extends Component {
         this.setState({ certificateAddress })
     }
 
-    getProjects = async(company) => {
+    getProjects = async (company) => {
         const projects = await this.state.greenCertifier.methods.getCertifiedProjects(company).call()
 
         const projectList = projects.map((project) =>
@@ -82,7 +82,7 @@ class Certifier extends Component {
             greenCertifier: null,
             certificateStatus: '',
             certificateAddress: '',
-           
+
         }
     }
 
@@ -164,7 +164,7 @@ class Certifier extends Component {
                         </form>
 
                     </div>
-                    
+
                     <div className="mt-4">
                         <h3>Get certificate address</h3>
                         <form onSubmit={(event) => {
@@ -217,11 +217,11 @@ class Certifier extends Component {
                             />
                         </form>
                         <div className="mt-3">
-                            
+
                             <ul>{this.state.projectList}</ul>
                         </div>
                     </div>
-                    
+
                 </div>
 
             </>

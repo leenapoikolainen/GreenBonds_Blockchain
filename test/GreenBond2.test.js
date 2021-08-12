@@ -98,10 +98,10 @@ contract('GreenBond2', function (accounts) {
             await bond.registerBid(5, 2, {from: investor, value: web3.utils.toWei('100', 'Wei')}).should.be.rejected
             
             // Register investment during bidding time  
-            let result = await bond.registerBid(1, 2, {from: investor, value: web3.utils.toWei('300', 'Wei')})
+            let result = await bond.registerBid(2, 2, {from: investor, value: web3.utils.toWei('300', 'Wei')})
             const bid = result.logs[0].args
             assert.equal(bid.bidder, investor)
-            assert.equal(bid.coupon, 1)
+            assert.equal(bid.coupon, 2)
             assert.equal(bid.numberOfBonds, 2)
 
             // Investor is refunded correctly
@@ -140,7 +140,7 @@ contract('GreenBond2', function (accounts) {
 
         // SCENARIO WHEN DEMAND IS NOT MET
 
-        /*
+        
         before(async () => {
             // Make another investments
             await bond.registerBid(3, 2, {from: investor3, value: web3.utils.toWei('200', 'Wei')})
@@ -175,7 +175,7 @@ contract('GreenBond2', function (accounts) {
             await bond.issueBonds({from: owner}).should.be.rejected
         })
 
-        */
+        /*
 
 
         // SCENARIO WHEN DEMAND IS  MET
@@ -421,6 +421,7 @@ contract('GreenBond2', function (accounts) {
             let count = await bond.bondCount()
             assert.equal(count.toNumber(), 0)
         })
+        */
         
         /*
         it('check bond payback time correctly', async function () {
@@ -432,8 +433,7 @@ contract('GreenBond2', function (accounts) {
         })
       
         */
-    })
-    
+    })  
     
 })
 

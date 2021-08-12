@@ -65,7 +65,7 @@ contract GreenBond3 is ERC721, Ownable {
     uint256 private _term;
 
     // Coupon payment schedule (per year)
-    uint256 private _couponsPerYear;
+    uint256 private _couponsPerTerm;
 
     // Total number of coupons. Calculated as term * number of coupons per year
     uint256 private _totalCouponPayments;
@@ -154,7 +154,7 @@ contract GreenBond3 is ERC721, Ownable {
         uint256 maxCoupon,
         uint256 bidClosingTime,
         uint256 term,
-        uint256 couponsPerYear,
+        uint256 couponsPerTerm,
         string memory baseBondURI
     ) ERC721(name, symbol) {
         require(company != address(0), "Company address can not be 0x0");
@@ -179,17 +179,21 @@ contract GreenBond3 is ERC721, Ownable {
         
         _issueDate = _bidClosingTime + 1 days;
         _term = term;
-        _couponsPerYear = couponsPerYear;
-        _totalCouponPayments = term;
+        _couponsPerTerm = couponsPerTerm;
+        _totalCouponPayments = term * _couponsPerTerm;
         _maturityDate = _issueDate + term * 1 days;
         _actualPrincipalPaymentDate = 0; // default to 0
-        uint256 timeBetweenpayments = 1 days;
+        uint256 timeBetweenpayments = 1 days / couponsPerTerm;
 
         // Setting up the coupon payment dates
         for (uint256 i = 1; i <= _totalCouponPayments; i++) {
             _couponPaymentDates.push(_issueDate + timeBetweenpayments * i);
             _actualCouponPaymentDates.push(0);
         }
+    }
+
+    function getBidsPerCoupon(uint256 coupon) public view returns (uint256) {
+        return _bidsPerCoupon[coupon];
     }
 
     /**
@@ -224,11 +228,7 @@ contract GreenBond3 is ERC721, Ownable {
         return _coupon;
     }
  
-    /* REDUNDANT
-    function getName() public view returns (string memory) {
-        return name();
-    }
-    */
+ 
 
     /**
      * @dev Get number of bonds sought
@@ -529,7 +529,14 @@ contract GreenBond3 is ERC721, Ownable {
             coupon level or above
      */
     function refundBiddersFromCouponLevel(uint256 coupon) internal {
-        for (uint256 i = coupon; i <= _maxCoupon; i++) {
+        uint256 min;
+        if (coupon < _minCoupon) {
+            min = _minCoupon;
+        } else {
+            min = coupon;
+        }
+
+        for (uint256 i = min; i <= _maxCoupon; i++) {
             address[] memory investors = getBiddersAtCoupon(i);
             for (uint256 j = 0; j < investors.length; j++) {
                 address investor = investors[j];

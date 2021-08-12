@@ -11,7 +11,6 @@ class Verifier extends Component {
         this.setState({ target2 })
         this.setState({ target3 })
         this.setState({ target4 })
-
     }
 
     calculate = (kpi1, kpi2, kpi3, kpi4) => {

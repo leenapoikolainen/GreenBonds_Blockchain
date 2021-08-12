@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import Web3 from 'web3'
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond2.json';
+import GreenBond from '../contracts/GreenBond3.json';
 
 class Issuer extends Component {
 
@@ -228,9 +228,16 @@ class Issuer extends Component {
                                 Bond issue confirmed.
                             </div>
                             : 
-                            <div className="alert alert-danger" role="alert">
-                                Bond issue cancelled.
+                            <div></div>
+                        }
+                    </div>
+                    <div className="container mr-auto ml-auto mb-5">
+                        {this.state.cancelled
+                            ? <div className="alert alert-danger" role="alert">
+                                Bond issue was cancelled.
                             </div>
+                            : 
+                            <div></div>
                         }
                     </div>
 

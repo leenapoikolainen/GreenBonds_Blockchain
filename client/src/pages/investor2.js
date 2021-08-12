@@ -1,4 +1,5 @@
 import React, { Component, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Web3 from 'web3';
 
 import GreenBond from '../contracts/GreenBond2.json';
@@ -170,7 +171,7 @@ class Investor2 extends Component {
                         </tr>
                         <tr>
                             <td>{this.state.company}</td>
-                            <td>{this.state.project}</td>
+                            <td><Link to="/buybonds">{this.state.project}</Link></td>
                             <td><b>{this.state.biddingOpen ? "Open" : "Closed"}</b></td>
                             <td>{this.state.bidClosingTime}</td>
                             <td>{this.state.coupon}</td>

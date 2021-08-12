@@ -1,8 +1,9 @@
 import React, { Component, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Web3 from 'web3'
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond2.json';
+import GreenBond from '../contracts/GreenBond3.json';
 
 class BuyBonds extends Component {
 
@@ -174,6 +175,9 @@ class BuyBonds extends Component {
 									<td>{this.state.bidClosingTime}</td>
 								</tr>
 							</table>
+						</div>
+						<div className="container mr-auto ml-auto">
+							<p><Link to="/bondlist">Back to list</Link></p>
 						</div>
 					</div>
 					<hr/>

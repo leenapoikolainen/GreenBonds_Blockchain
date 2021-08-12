@@ -92,14 +92,14 @@ contract GreenBond3 is ERC721, Ownable {
     uint256[] private _actualCouponPaymentDates;
 
     // Records for investor bid details
-    mapping(address => uint256) _stakedAmountPerInvestor;
-    mapping(address => uint256) _requestedBondsPerInvestor;
-    mapping(address => uint256) _couponPerInvestor;
-    mapping(address => bool) _investorHasBid;
+    mapping(address => uint256) private _stakedAmountPerInvestor;
+    mapping(address => uint256) private _requestedBondsPerInvestor;
+    mapping(address => uint256) private _couponPerInvestor;
+    mapping(address => bool) private _investorHasBid;
 
     // Records for coupon definition
-    mapping(uint256 => uint256) _bidsPerCoupon;
-    mapping(uint256 => address[]) _investorListAtCouponLevel;
+    mapping(uint256 => uint256) private _bidsPerCoupon;
+    mapping(uint256 => address[]) private _investorListAtCouponLevel;
 
     // EVENTS
 
@@ -192,10 +192,6 @@ contract GreenBond3 is ERC721, Ownable {
         }
     }
 
-    function getBidsPerCoupon(uint256 coupon) public view returns (uint256) {
-        return _bidsPerCoupon[coupon];
-    }
-
     /**
      * @dev Get borrowing company.
      */
@@ -229,7 +225,6 @@ contract GreenBond3 is ERC721, Ownable {
     }
  
  
-
     /**
      * @dev Get number of bonds sought
      */

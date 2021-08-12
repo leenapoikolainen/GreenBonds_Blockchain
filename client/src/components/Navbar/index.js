@@ -18,15 +18,16 @@ const Navbar = () => {
                 <NavLink to='/about' activeStyle>
                     About
                 </NavLink>
+                <NavLink to='/bondlist' activeStyle>
+                    Bond list
+                </NavLink>
                 <NavLink to='/buybonds' activeStyle>
                     Register Bid
                 </NavLink>
                 <NavLink to='/investor' activeStyle>
                     Bond List (Ropsten)
                 </NavLink>
-                <NavLink to='/bondlist' activeStyle>
-                    Bond list
-                </NavLink>
+                
                 <NavLink to='/company' activeStyle>
                     Company
                 </NavLink>

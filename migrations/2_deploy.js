@@ -28,10 +28,10 @@ let symbol2 = "BLUE";
 let numberOfBondsSeeked2 = 5;
 let minCoupon2 = 2;
 let maxCoupon2 = 8;
-let closingDate2 = 1628775780;
+let closingDate2 = 1628784300;
 let term2 = 3; // 3 days
 let couponsPerYear2 = 1; // daily
-let baseURI2 = "test";
+let baseURI2 = "https://test/";
 
 
             
@@ -41,10 +41,10 @@ module.exports = async function (deployer) {
     //    term, couponsPerYear, baseURI);
     //await deployer.deploy(GreenBond2, company, name, symbol, numberOfBondsSeeked, minCoupon, maxCoupon, closingDate,
     //    term, couponsPerYear, baseURI);
-    /*
+    
     await deployer.deploy(GreenBond3, company2, name2, symbol2, numberOfBondsSeeked2, minCoupon2, maxCoupon2, closingDate2,
         term2, couponsPerYear2, baseURI2);
-    */
+    
     //await deployer.deploy(GreenVerificationRepo);
 
     //await deployer.deploy(GreenBond, name, symbol, baseURI, company, faceValue, couponRate, issueDate, term, couponsPerYear);

@@ -10,11 +10,14 @@ import BuyBonds from './pages/buybonds';
 import Company from './pages/company';
 import Issuer from './pages/issuer';
 import Investor from './pages/investor';
-import Investor2 from './pages/investor2';
+import BondList from './pages/bondlist';
 import Regulation from './pages/regulation';
 import Certifier from './pages/certificate';
 import Verifier from './pages/verifier';
 import VerificationRepo from './pages/verificationRepo';
+import Blue from './pages/blue';
+import BlueBuy from './pages/blueBuy';
+import BlueIssuer from './pages/blueIssuer';
 
 
 // import Navbar from './components/Navbar';
@@ -44,13 +47,16 @@ class App extends Component {
               <Route path='/about' component={About} />
               <Route path='/buybonds' component={BuyBonds} />
               <Route path='/investor' component={Investor} />
-              <Route path='/bondlist' component={Investor2} />
+              <Route path='/bondlist' component={BondList} />
               <Route path='/issuer' component={Issuer}/>
               <Route path='/company' component={Company}/>
               <Route path='/regulation' component={Regulation}/>
               <Route path='/certifier' component={Certifier}/>
               <Route path='/verifier' component={Verifier}/>
               <Route path='/verification' component={VerificationRepo}/>
+              <Route path='/blue' component={Blue}/>
+              <Route path='/buyblue' component={BlueBuy}/>
+              <Route path='/issuerblue' component={BlueIssuer}/>
             </Switch>
           </div>
         </Router>

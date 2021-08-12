@@ -1,11 +1,13 @@
 import React, { Component, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Web3 from 'web3'
+import BlueDetails from '../components/blue';
 
 
 // Import smart Contracts
 import GreenBond from '../contracts/GreenBond3.json';
 
-class Issuer extends Component {
+class BlueIssuer extends Component {
 
     async componentWillMount() {
         await this.loadBlockchainData()
@@ -28,17 +30,12 @@ class Issuer extends Component {
 
 
             // Bond details
-            const company = await greenBond.methods.getCompany().call()
-            this.setState({ company })
-
-            const project = await greenBond.methods.name().call()
-            this.setState({ project })
+            const symbol = await greenBond.methods.symbol().call()
+			this.setState({ symbol })
 
             // Get time
-            let d = new Date()
-            let time = d.getTime()
-            let date = this.timeConverter(time)
-            this.setState({ date })
+            let date = new Date()
+            let time = date.getTime()
 
             // bid closing time
             const bidClosingTimeStamp = await greenBond.methods.getBidClosingTime().call()
@@ -71,20 +68,6 @@ class Issuer extends Component {
             this.setState({ couponConfirmed })
 
 
-
-            /*
-            for (var i = 1; i <= numberOfInvestors; i++) {
-                const investor = await greenBond.methods._investors(i - 1).call()
-                const balance = await greenBond.methods.getInvestorBalance(investor).call()
-                this.setState({
-                    investors: [...this.state.investors, investor]
-                })
-                this.setState({
-                    balances: [...this.state.balances, balance]
-                })
-            }
-            */
-
             // Token count
             const tokens = await greenBond.methods.bondCount().call()
             this.setState({ tokens })
@@ -96,7 +79,7 @@ class Issuer extends Component {
             this.setState({ issuerTokens })
 
             const URI = await greenBond.methods.getBaseURI().call()
-            this.setState({URI})
+            this.setState({ URI })
 
         } else {
             window.alert('Smart contract not deployed to detected network.')
@@ -165,37 +148,17 @@ class Issuer extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    <h2 >Bond Details</h2>
-                    <table className="table mt-5">
-                        <tr>
-                            <td>Company</td>
-                            <td>{this.state.company}</td>
-                        </tr>
-                        <tr>
-                            <td>Project</td>
-                            <td>{this.state.project}</td>
-                        </tr>
-                        <tr>
-                            <td>Bid Closing time</td>
-                            <td>{this.state.bidClosingTime}</td>
-                        </tr>
-                        <tr>
-                            <td>Issue Date</td>
-                            <td>{this.state.issueDate}</td>
-                        </tr>
-                        <tr>
-                            <td>Bond URI</td>
-                            <td>{this.state.URI}</td>
-                        </tr>
-                    </table>
+                        <p><Link to="/blue">Back to Bond details</Link></p>
                 </div>
-                <hr />
                 <div className="container mr-auto ml-auto">
-                    <h2>These can only be used by: {this.state.issuer}</h2>
+                    <div className="alert alert-secondary text-center" role="alert">
+                        <p>This page is only for Issuer: {this.state.issuer}</p>
+                    </div>
+                        <h2>Bond: {this.state.symbol}</h2>              
                 </div>
-                <hr />
-                <div className="container mr-auto ml-auto">
+                
 
+                <div className="container mr-auto ml-auto mt-5">
                     <h2>Define Coupon</h2>
                     <p>{this.state.biddingOpen
                         ? <p>Bidding is open. Can't define coupon yet</p>
@@ -234,7 +197,7 @@ class Issuer extends Component {
                             ? <div className="alert alert-success" role="alert">
                                 Bond issue confirmed.
                             </div>
-                            : 
+                            :
                             <div></div>
                         }
                     </div>
@@ -243,7 +206,7 @@ class Issuer extends Component {
                             ? <div className="alert alert-danger" role="alert">
                                 Bond issue was cancelled.
                             </div>
-                            : 
+                            :
                             <div></div>
                         }
                     </div>
@@ -254,8 +217,8 @@ class Issuer extends Component {
                 <div className="container mr-auto ml-auto">
                     <h2>Issue Tokens</h2>
                     <p>Expected Issue Date: {this.state.issueDate}</p>
-                    
-                    
+
+
                     <form onSubmit={(event) => {
                         event.preventDefault()
                         this.issue()
@@ -272,7 +235,7 @@ class Issuer extends Component {
                             ? <div className="alert alert-success" role="alert">
                                 Bonds issue active.
                             </div>
-                            : 
+                            :
                             <div className="alert alert-secondary" role="alert">
                                 Bonds issue deactive.
                             </div>
@@ -289,6 +252,6 @@ class Issuer extends Component {
             </>
         )
     }
-};
+}
 
-export default Issuer;
+export default BlueIssuer;

@@ -224,11 +224,6 @@ contract GreenBond2 is ERC721, Ownable {
         return _coupon;
     }
  
-    /* REDUNDANT
-    function getName() public view returns (string memory) {
-        return name();
-    }
-    */
 
     /**
      * @dev Get number of bonds sought

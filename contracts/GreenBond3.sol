@@ -340,9 +340,18 @@ contract GreenBond3 is ERC721, Ownable {
     }
 
     /**
+     * @dev Overridden function to get base URI
+     */
+     /*
+    function _baseURI() internal view override returns (string memory) {
+        return _baseBondURI;
+    }
+    */
+
+    /**
      * @dev Get the base URI for bond metadata
      */
-    function _baseURI() internal view override returns (string memory) {
+    function getBaseURI() external view returns (string memory) {
         return _baseBondURI;
     }
 

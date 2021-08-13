@@ -31,6 +31,13 @@ import PurpleIssuer from './pages/purpleIssuer';
 import PurpleCompany from './pages/purpleCompany';
 import PurpleRegulator from './pages/purpleRegulator';
 
+// Pages for bond RED
+import Red from './pages/red';
+import RedBuy from './pages/redBuy'
+import RedIssuer from './pages/redIssuer';
+import RedCompany from './pages/redCompany';
+import RedRegulator from './pages/redRegulator';
+
 // import Navbar from './components/Navbar';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -77,6 +84,12 @@ class App extends Component {
               <Route path='/issuerpurple' component={PurpleIssuer} />
               <Route path='/companypurple' component={PurpleCompany} />
               <Route path='/regulatorpurple' component={PurpleRegulator} />
+
+              <Route path='/red' component={Red} />
+              <Route path='/buyred' component={RedBuy} />
+              <Route path='/issuerred' component={RedIssuer} />
+              <Route path='/companyred' component={RedCompany} />
+              <Route path='/regulatorred' component={RedRegulator} />
 
             </Switch>
           </div>

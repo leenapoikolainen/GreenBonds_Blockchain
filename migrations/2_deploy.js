@@ -8,18 +8,18 @@ const BondPriceAuction = artifacts.require("BondPriceAuction");
 const GreenVerificationRepo = artifacts.require("GreenVerificationRepository")
 
 
-// Variables for green bond constructor
+// Variables for greenBond2 - RED
 //let company = "0xe5dc3eFEcDc0f2Ee5672Fa287CE80733F81FCB78"; // Ropsten 2 on MetaMask
-let company = "0x94ef9712F0C40CF8a1786944DcE2399df547853b"; // Ganache account 10
-let name = "Project1";
-let symbol = "GREEN";
-let numberOfBondsSeeked = 10;
+let company = "0x10A46e292b93721723854034Ea6f45d15C548CE9"; // Ganache account 8
+let name = "Project Evergreen";
+let symbol = "RED";
+let numberOfBondsSeeked = 15;
 let minCoupon = 1;
 let maxCoupon = 5;
-let closingDate = 1628691300; // Aug 11 2021 15:15:00 GMT+0100 (British Summer Time)
+let closingDate = 1629284400; // Aug 18 2021 12:00:00 GMT+0100 (British Summer Time)
 let term = 1; // 1 year
 let couponsPerYear = 2 // semiannual
-let baseURI = "https://storage.cloud.google.com/metadata_platform/";
+let baseURI = "https://ipfs.io/ipfs/QmTYVFgAhC5Sc4ZHzyaauwdYi6BfTCZ4hBoXdXhxjQph1u";
 
 
 // Variables for greenbond3 - BLUE
@@ -49,10 +49,10 @@ let baseURI3 = "https://ipfs.io/ipfs/QmcY4G8JiUH5CJDtqXtjusKVZvRBHNxXWURHuYgdhxu
             
        
 module.exports = async function (deployer) {
-    //await deployer.deploy(GreenBond, company, name, symbol, numberOfBondsSeeked, minCoupon, maxCoupon, closingDate,
-    //    term, couponsPerYear, baseURI);
-    //await deployer.deploy(GreenBond2, company, name, symbol, numberOfBondsSeeked, minCoupon, maxCoupon, closingDate,
-    //    term, couponsPerYear, baseURI);
+
+    // RED BOND - yearly
+    await deployer.deploy(GreenBond2, company, name, symbol, numberOfBondsSeeked, minCoupon, maxCoupon, closingDate,
+        term, couponsPerYear, baseURI);
     
     // BLUE BOND
     /*
@@ -61,10 +61,10 @@ module.exports = async function (deployer) {
     */
 
     // PURPLE BOND
-    
+    /*
     await deployer.deploy(BondPurple, company3, name3, symbol3, numberOfBondsSeeked3, minCoupon3, maxCoupon3, closingDate3,
         term3, couponsPerTerm3, baseURI3)
-    
+    */
     //await deployer.deploy(GreenVerificationRepo);
 
     //await deployer.deploy(GreenBond, name, symbol, baseURI, company, faceValue, couponRate, issueDate, term, couponsPerYear);

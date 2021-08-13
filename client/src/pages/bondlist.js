@@ -237,7 +237,7 @@ class BondList extends Component {
                             <td>{this.state.coupon}</td>
                             <td>{this.state.maturityDate}</td>
                             <td>{this.state.status}</td>
-                            <td>link</td>
+                            <td><Link to="/red">Details</Link></td>
                         </tr>
                         <tr>
                             <td>{this.state.company2}</td>

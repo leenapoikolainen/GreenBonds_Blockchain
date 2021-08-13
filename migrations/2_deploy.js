@@ -1,6 +1,7 @@
 const GreenBond = artifacts.require("GreenBond")
 const GreenBond2 = artifacts.require("GreenBond2");
 const GreenBond3 = artifacts.require("GreenBond3");
+const BondPurple = artifacts.require("BondPurple")
 const GreenCertifier = artifacts.require("GreenCertifier");
 const GreenCertificate = artifacts.require("GreenCertificate");
 const BondPriceAuction = artifacts.require("BondPriceAuction");
@@ -21,7 +22,7 @@ let couponsPerYear = 2 // semiannual
 let baseURI = "https://storage.cloud.google.com/metadata_platform/";
 
 
-// Variables for greenbond3
+// Variables for greenbond3 - BLUE
 let company2 = "0x94ef9712F0C40CF8a1786944DcE2399df547853b"; // Ganache account 10
 let name2 = "Daily Coupons"
 let symbol2 = "BLUE";
@@ -33,6 +34,17 @@ let term2 = 3; // 3 days
 let couponsPerYear2 = 1; // daily
 let baseURI2 = "https://test/";
 
+// Variables for greenbond PURPLE
+let company3 = "0x4f6E10546E192Ad15e0028bEa91E8c0EA4ba2C60"; // Ganache account 9
+let name3 = "Building A";
+let symbol3 = "PURPLE";
+let numberOfBondsSeeked3 = 10;
+let minCoupon3 = 5;
+let maxCoupon3 = 15;
+let closingDate3 = 1629111600; // 16 Aug 2021, 12:00
+let term3 = 10; // 10 days
+let couponsPerTerm3 = 1; //daily coupons
+let baseURI3 = "https://ipfs.io/ipfs/QmcY4G8JiUH5CJDtqXtjusKVZvRBHNxXWURHuYgdhxu85X"; 
 
             
        
@@ -42,8 +54,16 @@ module.exports = async function (deployer) {
     //await deployer.deploy(GreenBond2, company, name, symbol, numberOfBondsSeeked, minCoupon, maxCoupon, closingDate,
     //    term, couponsPerYear, baseURI);
     
+    // BLUE BOND
+    /*
     await deployer.deploy(GreenBond3, company2, name2, symbol2, numberOfBondsSeeked2, minCoupon2, maxCoupon2, closingDate2,
         term2, couponsPerYear2, baseURI2);
+    */
+
+    // PURPLE BOND
+    
+    await deployer.deploy(BondPurple, company3, name3, symbol3, numberOfBondsSeeked3, minCoupon3, maxCoupon3, closingDate3,
+        term3, couponsPerTerm3, baseURI3)
     
     //await deployer.deploy(GreenVerificationRepo);
 

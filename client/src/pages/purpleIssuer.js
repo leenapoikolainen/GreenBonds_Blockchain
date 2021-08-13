@@ -2,14 +2,13 @@ import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Web3 from 'web3'
 
-
 // Import link button
-import ButtonBack from '../components/backToBlue';
+import ButtonBack from '../components/backToPurple';
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond3.json';
+import GreenBond from '../contracts/BondPurple.json';
 
-class BlueIssuer extends Component {
+class PurpleIssuer extends Component {
 
     async componentWillMount() {
         await this.loadBlockchainData()
@@ -153,11 +152,10 @@ class BlueIssuer extends Component {
                     <div className="alert alert-secondary text-center" role="alert">
                         <p>This page is only for Issuer: {this.state.issuer}</p>
                     </div>
-                        <h2>Bond: {this.state.symbol}</h2>    
-                        <ButtonBack />          
+                        <h2>Bond: {this.state.symbol}</h2> 
+                        <ButtonBack />             
                 </div>
-
-                <hr/>    
+                <hr/>          
 
                 <div className="container mr-auto ml-auto mt-4">
                     <h2>Define Coupon</h2>
@@ -255,4 +253,4 @@ class BlueIssuer extends Component {
     }
 }
 
-export default BlueIssuer;
+export default PurpleIssuer;

@@ -2,6 +2,9 @@ import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Web3 from 'web3'
 
+// Import link button
+import ButtonBack from '../components/backToBlue';
+
 // Import smart Contracts
 import GreenBond from '../contracts/GreenBond3.json';
 
@@ -79,6 +82,7 @@ class BlueCompany extends Component {
             const couponsPaid = await greenBond.methods.getNumberOfCouponsPaid().call()
             this.setState({ couponsPaid })
 
+            // Actual coupon payments
             var dateArray = []
             for (var i = 1; i <= couponsPaid; i++) {
                 let date = await greenBond.methods.getActualCouponDate(i).call()
@@ -149,10 +153,8 @@ class BlueCompany extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    <p><Link to="/blue">Back to Bond details</Link></p>
-                </div>
-                <div className="container mr-auto ml-auto">
                     <h2>Bond: {this.state.symbol}</h2>
+                    
                 </div>
 
                 <div className="container mr-auto ml-auto">
@@ -170,6 +172,7 @@ class BlueCompany extends Component {
                             Bond issue has not been confirmed.
                         </div>
                     }
+                    <ButtonBack />
                 </div>
 
                 <hr />

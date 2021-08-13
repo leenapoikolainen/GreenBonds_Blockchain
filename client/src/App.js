@@ -24,6 +24,12 @@ import BlueIssuer from './pages/blueIssuer';
 import BlueCompany from './pages/blueCompany';
 import BlueRegulator from './pages/blueRegulator';
 
+// Pages for bond BLUE
+import Purple from './pages/purple';
+import PurpleBuy from './pages/purpleBuy';
+import PurpleIssuer from './pages/purpleIssuer';
+import PurpleCompany from './pages/purpleCompany';
+import PurpleRegulator from './pages/purpleRegulator';
 
 // import Navbar from './components/Navbar';
 
@@ -59,11 +65,19 @@ class App extends Component {
               <Route path='/certifier' component={Certifier} />
               <Route path='/verifier' component={Verifier} />
               <Route path='/verifications' component={VerificationRepo} />
+
               <Route path='/blue' component={Blue} />
               <Route path='/buyblue' component={BlueBuy} />
               <Route path='/issuerblue' component={BlueIssuer} />
               <Route path='/companyblue' component={BlueCompany} />
               <Route path='/regulatorblue' component={BlueRegulator} />
+
+              <Route path='/purple' component={Purple} />
+              <Route path='/buypurple' component={PurpleBuy} />
+              <Route path='/issuerpurple' component={PurpleIssuer} />
+              <Route path='/companypurple' component={PurpleCompany} />
+              <Route path='/regulatorpurple' component={PurpleRegulator} />
+
             </Switch>
           </div>
         </Router>

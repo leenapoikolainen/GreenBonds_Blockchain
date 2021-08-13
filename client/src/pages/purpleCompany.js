@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import Web3 from 'web3'
 
 // Import link button
-import ButtonBack from '../components/backToBlue';
+import ButtonBack from '../components/backToPurple';
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond3.json';
+import GreenBond from '../contracts/BondPurple.json';
 
-class BlueRegulator extends Component {
+class PurpleCompany extends Component {
     async componentWillMount() {
         await this.loadBlockchainData()
     }
@@ -41,25 +41,48 @@ class BlueRegulator extends Component {
             const greenBond = new web3.eth.Contract(GreenBond.abi, networkData.address)
             this.setState({ greenBond })
 
+            // Getting bond details      
+
             const symbol = await greenBond.methods.symbol().call()
             this.setState({ symbol })
+
+
+            const faceValue = await greenBond.methods.getFaceValue().call()
+            this.setState({ faceValue })
+
+            const numberOfBonds = await greenBond.methods.getNumberOfBondsSought().call()
+            this.setState({ numberOfBonds })
 
 
             const maturityDateTimeStamp = await greenBond.methods.getMaturityDate().call()
             const maturityDate = this.timeConverter(maturityDateTimeStamp)
             this.setState({ maturityDate })
 
-            // Expected coupon payment dates
             let couponDates = await greenBond.methods.getCouponDates().call()
             const couponList = couponDates.map((date) =>
                 <li>{this.timeConverter(date)}</li>
             );
             this.setState({ couponList })
 
-            // Actual coupon payment dates
+            // Status
+            const cancelled = await greenBond.methods.cancelled().call()
+            this.setState({ cancelled })
+
+            const couponConfirmed = await greenBond.methods.couponDefined().call()
+            this.setState({ couponConfirmed })
+
+            // Set coupon
+            let coupon = await greenBond.methods.getCoupon().call()
+            this.setState({ coupon })
+
+            // Coupons payment count
+            const coupons = await greenBond.methods.getNumberOfCoupons().call()
+            this.setState({ coupons })
+
             const couponsPaid = await greenBond.methods.getNumberOfCouponsPaid().call()
             this.setState({ couponsPaid })
 
+            // Actual coupon payments
             var dateArray = []
             for (var i = 1; i <= couponsPaid; i++) {
                 let date = await greenBond.methods.getActualCouponDate(i).call()
@@ -71,18 +94,6 @@ class BlueRegulator extends Component {
 
             );
             this.setState({ actualDatesList })
-
-            // Status
-            const cancelled = await greenBond.methods.cancelled().call()
-            this.setState({ cancelled })
-
-            const couponConfirmed = await greenBond.methods.couponDefined().call()
-            this.setState({ couponConfirmed })
-
-
-
-
-
 
             // Get actual principal payment date
             const principalPaymentDateTimeStamp = await greenBond.methods.getActualPricipalPaymentDate().call()
@@ -98,8 +109,11 @@ class BlueRegulator extends Component {
 
             this.setState({ principalPaymentMade })
 
+
             const principalPaymentDate = this.timeConverter(principalPaymentDateTimeStamp)
             this.setState({ principalPaymentDate })
+
+
 
         } else {
             window.alert('Smart contract not deployed to detected network.')
@@ -112,17 +126,18 @@ class BlueRegulator extends Component {
     }
 
 
-    couponMadeOnTime = async (coupon) => {
-        let couponResult = await this.state.greenBond.methods.couponPaymentOnTime(coupon).call({ from: this.state.account })
-        this.setState({ couponResult })
+
+    payCoupon = (bonds) => {
+        let amount = (bonds * this.state.coupon).toString()
+        console.log(amount)
+        this.state.greenBond.methods.makeCouponPayment().send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
     }
 
-    principalMadeOnTime = async () => {
-        let principalResult = await this.state.greenBond.methods.principalPaidOnTime().call({ from: this.state.account })
-        this.setState({ principalResult })
+    payPrincipal = (bonds) => {
+        let amount = (bonds * this.state.faceValue).toString()
+        console.log(amount)
+        this.state.greenBond.methods.payBackBond().send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
     }
-
-
 
     constructor(props) {
         super(props)
@@ -130,22 +145,21 @@ class BlueRegulator extends Component {
             account: '',
             contract: null,
             couponPaymentDates: [],
-            couponResult: '',
-            principalResult: '',
+
         }
     }
 
     render() {
         return (
             <>
+                <div className="container mr-auto ml-auto">
+                    <h2>Bond: {this.state.symbol}</h2>
+                </div>
 
                 <div className="container mr-auto ml-auto">
-                    <div className="container mr-auto ml-auto">
-                        <h2>Bond: {this.state.symbol}</h2>
-                    </div>
                     {this.state.cancelled
                         ? <div className="alert alert-danger" role="alert">
-                            Bond Issue was cancelled due to inadequate demand.
+                            Bond Issue has been cancelled due to inadequate demand.
                         </div>
                         : <div> </div>
                     }
@@ -158,73 +172,55 @@ class BlueRegulator extends Component {
                         </div>
                     }
                     <ButtonBack />
-
                 </div>
-                <hr />
 
-                <div className="container mr-auto ml-auto">
-                    <h2>Check coupon payments</h2>
-                    <p>Expected coupon payment dates:</p>
-                    <ul>{this.state.couponList}</ul>
-                    <p>Actual coupon payment dates:</p>
-                    <ul>{this.state.actualDatesList}</ul>
+                <hr />
+                <div className="container mr-auto ml-auto mb-5">
+                    <h2>Pay coupon</h2>
                     <form onSubmit={(event) => {
                         event.preventDefault()
-                        const coupon = this.coupon.value
-                        this.couponMadeOnTime(coupon)
+                        const bonds = this.state.numberOfBonds
+                        this.payCoupon(bonds)
                     }}>
-                        <label for="coupon">Coupon</label>
-                        <input
-                            id='coupon'
-                            type='number'
-                            className='form-control mb-1'
-                            min='1'
-                            required
-                            ref={(input) => { this.coupon = input }}
-                        />
-
                         <input
                             type='submit'
-                            className='btn btn-block btn-primary mt-4'
-                            value='Check'
+                            className='btn btn-block btn-primary'
+                            value='Make coupon payment'
                         />
                     </form>
-                    <div className="mt-4">
-                        <p>{this.state.couponResult}</p>
+                    <div className="mt-2">
+                        <p>Coupons paid: {this.state.couponsPaid}/{this.state.coupons}</p>
+                        <ul>{this.state.actualDatesList}</ul>
                     </div>
-
                 </div>
+
                 <hr />
 
-                <div className="container mr-auto ml-auto">
-                    <h2>Check Principal Payment</h2>
-                    <p>Expected Principal Payment Date: </p>
-                    <ul><li>{this.state.maturityDate}</li></ul>
-                    <p>Actual Principal Payment Date: </p>
-                    <ul>{this.state.principalPaymentMade
-                        ? <li>{this.state.principalPaymentDate}</li>
-                        : <li><i>Not paid yet</i></li>
-
-                    }</ul>
-
+                <div className="container mr-auto ml-auto mb-5">
+                    <h2>Pay Back Principal</h2>
+                    <p>Maturity Date: {this.state.maturityDate}</p>
                     <form onSubmit={(event) => {
                         event.preventDefault()
-                        this.principalMadeOnTime()
+                        const bonds = this.state.numberOfBonds
+                        this.payPrincipal(bonds)
                     }}>
-
                         <input
                             type='submit'
-                            className='btn btn-block btn-primary mt-4'
-                            value='Check'
+                            className='btn btn-block btn-primary'
+                            value='Make principal payment'
                         />
+
                     </form>
-                    <div className="mt-4">
-                        <p>{this.state.principalResult}</p>
+
+                    <div className="mt-2">
+                        {this.state.principalPaymentMade
+                            ? <p>Principal paid back on: <i> {this.state.principalPaymentDate} </i></p>
+                            : <p>Principal has not been paid back yet</p>}
                     </div>
 
-                </div>
-                <hr />
 
+
+                </div>
 
             </>
 
@@ -233,4 +229,4 @@ class BlueRegulator extends Component {
     }
 }
 
-export default BlueRegulator;
+export default PurpleCompany;

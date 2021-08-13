@@ -4,6 +4,7 @@ import Web3 from 'web3';
 
 import GreenBond from '../contracts/GreenBond2.json';
 import GreenBond2 from '../contracts/GreenBond3.json';
+import BondPurple from '../contracts/BondPurple.json';
 
 class BondList extends Component {
     async componentWillMount() {
@@ -23,6 +24,7 @@ class BondList extends Component {
             window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
         }
     }
+
     async loadBlockchainData() {
         const web3 = window.web3
         // Load account 
@@ -33,6 +35,7 @@ class BondList extends Component {
         const networkId = await web3.eth.net.getId()
         const networkData = GreenBond.networks[networkId]
         const networkData2 = GreenBond2.networks[networkId]
+        const networkData3 = BondPurple.networks[networkId]
 
         if (networkData) {
             // Get the Green bond contract
@@ -137,7 +140,55 @@ class BondList extends Component {
             }
         }
 
+        if (networkData3) {
+            // Get the Green bond contract
+            const purpleBond = new web3.eth.Contract(BondPurple.abi, networkData3.address)
+            this.setState({ purpleBond })
 
+            // First bond
+            const company3 = await purpleBond.methods.getCompany().call()
+            this.setState({ company3 })
+
+            const project3 = await purpleBond.methods.name().call()
+            this.setState({ project3 })
+
+            const symbol3 = await purpleBond.methods.symbol().call()
+            this.setState({ symbol3 })
+
+            const bidClosingTimeStamp3 = await purpleBond.methods.getBidClosingTime().call()
+            const bidClosingTime3 = this.timeConverter(bidClosingTimeStamp3)
+            this.setState({ bidClosingTime3 })
+
+            const timeNow = Date.now()
+            let biddingOpen3
+            if (timeNow / 1000 - bidClosingTimeStamp3 > 0) {
+                biddingOpen3 = false
+            } else {
+                biddingOpen3 = true
+            }
+            this.setState({ biddingOpen3 })
+
+            const coupon3 = await purpleBond.methods.getCoupon().call()
+            this.setState({ coupon3 })
+
+            const maturityDateTimeStamp = await purpleBond.methods.getMaturityDate().call()
+            const maturityDate3 = this.timeConverter(maturityDateTimeStamp)
+            this.setState({ maturityDate3 })
+
+            const cancelled = await purpleBond.methods.cancelled().call()
+            const confirmed = await purpleBond.methods.couponDefined().call()
+
+            if (cancelled) {
+                const status3 = "Cancelled"
+                this.setState({ status3 })
+            } else if (confirmed) {
+                const status3 = "Confirmed"
+                this.setState({ status3 })
+            } else {
+                const status3 = "Unconfirmed"
+                this.setState({ status3 })
+            }
+        }
     }
 
     timeConverter(UNIX_timestamp) {
@@ -198,6 +249,17 @@ class BondList extends Component {
                             <td>{this.state.maturityDate2}</td>
                             <td>{this.state.status2}</td>
                             <td><Link to="/blue">Details</Link></td>
+                        </tr>
+                        <tr>
+                            <td>{this.state.company3}</td>
+                            <td>{this.state.project3}</td>
+                            <td>{this.state.symbol3}</td>
+                            <td>{this.state.bidClosingTime3}</td>
+                            <td><i>{this.state.biddingOpen3 ? "OPEN" : "CLOSED"}</i></td>
+                            <td>{this.state.coupon3}</td>
+                            <td>{this.state.maturityDate3}</td>
+                            <td>{this.state.status3}</td>
+                            <td><Link to="/purple">Details</Link></td>
                         </tr>
                     </tbody>
                     </table>

@@ -3,12 +3,11 @@ import { Link } from 'react-router-dom';
 import Web3 from 'web3'
 
 // Import link button
-import ButtonBack from '../components/backToBlue';
-
+import ButtonBack from '../components/backToPurple';
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond3.json';
+import GreenBond from '../contracts/BondPurple.json';
 
-class BlueRegulator extends Component {
+class PurpleRegulator extends Component {
     async componentWillMount() {
         await this.loadBlockchainData()
     }
@@ -79,11 +78,6 @@ class BlueRegulator extends Component {
             const couponConfirmed = await greenBond.methods.couponDefined().call()
             this.setState({ couponConfirmed })
 
-
-
-
-
-
             // Get actual principal payment date
             const principalPaymentDateTimeStamp = await greenBond.methods.getActualPricipalPaymentDate().call()
 
@@ -137,9 +131,8 @@ class BlueRegulator extends Component {
 
     render() {
         return (
-            <>
-
-                <div className="container mr-auto ml-auto">
+            <>  
+                <div className="container mr-auto ml-auto">       
                     <div className="container mr-auto ml-auto">
                         <h2>Bond: {this.state.symbol}</h2>
                     </div>
@@ -158,7 +151,6 @@ class BlueRegulator extends Component {
                         </div>
                     }
                     <ButtonBack />
-
                 </div>
                 <hr />
 
@@ -233,4 +225,4 @@ class BlueRegulator extends Component {
     }
 }
 
-export default BlueRegulator;
+export default PurpleRegulator;

@@ -190,7 +190,7 @@ class BondList extends Component {
                         </tr>
                         <tr>
                             <td>{this.state.company2}</td>
-                            <td><Link to="/buybonds">{this.state.project2}</Link></td>
+                            <td>{this.state.project2}</td>
                             <td>{this.state.symbol2}</td>
                             <td>{this.state.bidClosingTime2}</td>
                             <td><i>{this.state.biddingOpen2 ? "OPEN" : "CLOSED"}</i></td>

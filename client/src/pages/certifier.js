@@ -9,9 +9,21 @@ import GreenCertifier from '../contracts/GreenCertifier.json'
 class Certifier extends Component {
 
     async componentWillMount() {
-        await this.loadBlockchainData()
+        await this.loadBlockchainData()  
+        await this.loadWeb3()     
     }
 
+    async loadWeb3() {
+		if (window.ethereum) {
+			window.web3 = new Web3(window.ethereum)
+		}
+		else if (window.web3) {
+			window.web3 = new Web3(window.web3.currentProvider)
+		}
+		else {
+			window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+		}
+	}
     async loadBlockchainData() {
         const web3 = new Web3(window.web3.currentProvider)
 
@@ -91,12 +103,11 @@ class Certifier extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    <p>You're logged in from address: {this.state.account}</p>
-                    <h2>Green Certifier</h2>
-                    <p>Address: {this.state.certifier}</p>
-                    <table className="table mt-5">
-
-                    </table>
+                    <div className="alert alert-secondary text-center" role="alert">
+                        <p>Certificate Issuer: {this.state.certifier}</p>
+                    </div>
+                   
+                    
                 </div>
 
                 <div className="container mr-auto ml-auto">

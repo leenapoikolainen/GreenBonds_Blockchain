@@ -56,7 +56,7 @@ class VerificationRepo extends Component {
             window.alert('Smart contract not deployed to detected network.')
         }
 
-        
+
     }
 
     calculate = (kpi1, kpi2, kpi3, kpi4) => {
@@ -115,6 +115,7 @@ class VerificationRepo extends Component {
             contract: null,
             couponPaymentDates: [],
             finalScore: 0,
+            resultList: [],
         }
     }
 
@@ -122,48 +123,8 @@ class VerificationRepo extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    <p>Green Verifier: {this.state.verifier}</p>
-                </div>
-
-                <div className="container mr-auto ml-auto">
-                    <div className="border border-success py-4 px-4 mb-5">
-                        <h2>Scoring KPI target achievement</h2>
-                        <p>The bond KPIs can be retrieved from the green certificate,
-                            which lists the categories and the targets.
-                            The Green Verifier assessess the company's performance
-                            against these KPIs and calculates an overall performace score.
-                            The overall performance score is an average of the performance against
-                            each individual KPI.
-                        </p>
-                        <p>The result is recorded on the blockchain,
-                            and the coupon is adjusted as explained below:
-                        </p>
-                        <table className="table">
-                            <tr>
-                                <th>Overall Score</th>
-                                <th>Coupon Adjustment</th>
-                            </tr>
-                            <tr>
-                                <td>Below 50%</td>
-                                <td>+2 bp</td>
-                            </tr>
-                            <tr>
-                                <td>50 - 90%</td>
-                                <td>+1 bp</td>
-                            </tr>
-                            <tr>
-                                <td>91 - 110%</td>
-                                <td>No adjustment</td>
-                            </tr>
-                            <tr>
-                                <td>110 - 150%</td>
-                                <td>- 1 bp</td>
-                            </tr>
-                            <tr>
-                                <td>Over 150%</td>
-                                <td>- 2 bp</td>
-                            </tr>
-                        </table>
+                    <div className="alert alert-secondary text-center" role="alert">
+                        <p>Verifier: {this.state.verifier}</p>
                     </div>
 
                     <h2>Calculate score</h2>
@@ -362,18 +323,53 @@ class VerificationRepo extends Component {
                                 />
                             </form>
                             <div className="mt-3">
-
                                 <ul>{this.state.resultList}</ul>
                             </div>
                         </div>
-
+                    </div>
+                    <div className="border border-success py-4 px-4 mb-5">
+                        <h2>Scoring KPI target achievement</h2>
+                        <p>The bond KPIs can be retrieved from the green certificate,
+                            which lists the categories and the targets.
+                            The Green Verifier assessess the company's performance
+                            against these KPIs and calculates an overall performace score.
+                            The overall performance score is an average of the performance against
+                            each individual KPI.
+                        </p>
+                        <p>The result is recorded on the blockchain,
+                            and the coupon is adjusted as explained below:
+                        </p>
+                        <table className="table">
+                            <tr>
+                                <th>Overall Score</th>
+                                <th>Coupon Adjustment</th>
+                            </tr>
+                            <tr>
+                                <td>Below 50%</td>
+                                <td>+2 bp</td>
+                            </tr>
+                            <tr>
+                                <td>50 - 90%</td>
+                                <td>+1 bp</td>
+                            </tr>
+                            <tr>
+                                <td>91 - 110%</td>
+                                <td>No adjustment</td>
+                            </tr>
+                            <tr>
+                                <td>110 - 150%</td>
+                                <td>- 1 bp</td>
+                            </tr>
+                            <tr>
+                                <td>Over 150%</td>
+                                <td>- 2 bp</td>
+                            </tr>
+                        </table>
                     </div>
 
                 </div>
 
             </>
-
-
         );
     }
 }

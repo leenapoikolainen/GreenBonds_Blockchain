@@ -9,6 +9,7 @@ class BuyBonds extends Component {
 
 	async componentWillMount() {
 		await this.loadBlockchainData()
+		await this.loadWeb3()
 	}
 
 	async loadWeb3() {

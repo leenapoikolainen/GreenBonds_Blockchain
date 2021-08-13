@@ -1,7 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import React, { Component, useState } from 'react';
-import Navbar from './components/Navbar/index';
+import Web3 from 'web3'
+import Navbar from './components/Navbar/option2';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 // Pages
@@ -12,7 +13,7 @@ import Issuer from './pages/issuer';
 import Investor from './pages/investor';
 import BondList from './pages/bondlist';
 import Regulation from './pages/regulation';
-import Certifier from './pages/certificate';
+import Certifier from './pages/certifier';
 import Verifier from './pages/verifier';
 import VerificationRepo from './pages/verificationRepo';
 
@@ -29,12 +30,12 @@ import BlueRegulator from './pages/blueRegulator';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-
 class App extends Component {
+
   
   constructor(props) {
     super(props)
-    this.state = {    
+    this.state = {
     }
   }
 
@@ -45,24 +46,24 @@ class App extends Component {
           <div>
             <Navbar />
             <div className="container-fluid mt-5"></div>
-         
+
             <Switch>
               <Route path='/' exact component={About} />
               <Route path='/about' component={About} />
               <Route path='/buybonds' component={BuyBonds} />
               <Route path='/investor' component={Investor} />
               <Route path='/bondlist' component={BondList} />
-              <Route path='/issuer' component={Issuer}/>
-              <Route path='/company' component={Company}/>
-              <Route path='/regulation' component={Regulation}/>
-              <Route path='/certifier' component={Certifier}/>
-              <Route path='/verifier' component={Verifier}/>
-              <Route path='/verification' component={VerificationRepo}/>
-              <Route path='/blue' component={Blue}/>
-              <Route path='/buyblue' component={BlueBuy}/>
-              <Route path='/issuerblue' component={BlueIssuer}/>
-              <Route path='/companyblue' component={BlueCompany}/>
-              <Route path='/regulatorblue' component={BlueRegulator}/>
+              <Route path='/issuer' component={Issuer} />
+              <Route path='/company' component={Company} />
+              <Route path='/regulation' component={Regulation} />
+              <Route path='/certifier' component={Certifier} />
+              <Route path='/verifier' component={Verifier} />
+              <Route path='/verifications' component={VerificationRepo} />
+              <Route path='/blue' component={Blue} />
+              <Route path='/buyblue' component={BlueBuy} />
+              <Route path='/issuerblue' component={BlueIssuer} />
+              <Route path='/companyblue' component={BlueCompany} />
+              <Route path='/regulatorblue' component={BlueRegulator} />
             </Switch>
           </div>
         </Router>

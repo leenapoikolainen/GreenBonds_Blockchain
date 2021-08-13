@@ -328,16 +328,20 @@ class VerificationRepo extends Component {
                         </div>
                     </div>
                     <div className="border border-success py-4 px-4 mb-5">
-                        <h2>Scoring KPI target achievement</h2>
-                        <p>The bond KPIs can be retrieved from the green certificate,
-                            which lists the categories and the targets.
+                        <h2>KPI target achievement and coupon adjustment</h2>
+                        <p> The bond KPIs are industry specific, and the above criteria
+                            applies to all bonds on this platform.
                             The Green Verifier assessess the company's performance
-                            against these KPIs and calculates an overall performace score.
-                            The overall performance score is an average of the performance against
-                            each individual KPI.
+                            against these KPIs and calculates an overall performace score,
+                            which is calculated as an average of the percentage performance against
+                            each individual KPI. Assement is done before each coupon payment,
+                            and the result is recorded on the bond-specific smart contract
+                            on the blockchain.
                         </p>
-                        <p>The result is recorded on the blockchain,
-                            and the coupon is adjusted as explained below:
+                        <p> The issuing institution checks the  bond specific results before
+                            each coupon payment is due, and adjusts the coupon based on the below table.
+                            Missing the goals can lead to an increase in the coupon rate, where as
+                            overperforming can reduce the coupon rate.
                         </p>
                         <table className="table">
                             <tr>
@@ -346,11 +350,11 @@ class VerificationRepo extends Component {
                             </tr>
                             <tr>
                                 <td>Below 50%</td>
-                                <td>+2 bp</td>
+                                <td>+20 bp</td>
                             </tr>
                             <tr>
                                 <td>50 - 90%</td>
-                                <td>+1 bp</td>
+                                <td>+10 bp</td>
                             </tr>
                             <tr>
                                 <td>91 - 110%</td>
@@ -358,11 +362,11 @@ class VerificationRepo extends Component {
                             </tr>
                             <tr>
                                 <td>110 - 150%</td>
-                                <td>- 1 bp</td>
+                                <td>- 10 bp</td>
                             </tr>
                             <tr>
                                 <td>Over 150%</td>
-                                <td>- 2 bp</td>
+                                <td>- 20 bp</td>
                             </tr>
                         </table>
                     </div>

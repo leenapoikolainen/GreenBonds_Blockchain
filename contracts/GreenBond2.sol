@@ -342,9 +342,10 @@ contract GreenBond2 is ERC721, Ownable {
     /**
      * @dev Get the base URI for bond metadata
      */
-    function _baseURI() internal view override returns (string memory) {
+    function getBaseURI() external view returns (string memory) {
         return _baseBondURI;
     }
+
 
     /**
      * @dev Get staked amount per investor
@@ -524,7 +525,14 @@ contract GreenBond2 is ERC721, Ownable {
             coupon level or above
      */
     function refundBiddersFromCouponLevel(uint256 coupon) internal {
-        for (uint256 i = coupon; i <= _maxCoupon; i++) {
+        uint256 min;
+        if (coupon < _minCoupon) {
+            min = _minCoupon;
+        } else {
+            min = coupon;
+        }
+        
+        for (uint256 i = min; i <= _maxCoupon; i++) {
             address[] memory investors = getBiddersAtCoupon(i);
             for (uint256 j = 0; j < investors.length; j++) {
                 address investor = investors[j];

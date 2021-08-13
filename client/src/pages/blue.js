@@ -33,8 +33,8 @@ class Blue extends Component {
 					<ul>
 						<li><Link to="/buyblue">Investor Page</Link></li>
 						<li><Link to="/issuerblue">Issuer Page</Link></li>
-						<li><Link to="">Company Page</Link></li>
-						<li><Link to="">Regulator Page</Link></li>
+						<li><Link to="/companyblue">Company Page</Link></li>
+						<li><Link to='/regulatorblue'>Regulator Page</Link></li>
 					</ul>
 				</div>
 

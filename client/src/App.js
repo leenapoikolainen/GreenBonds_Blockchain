@@ -15,9 +15,13 @@ import Regulation from './pages/regulation';
 import Certifier from './pages/certificate';
 import Verifier from './pages/verifier';
 import VerificationRepo from './pages/verificationRepo';
+
+// Pages for bond BLUE
 import Blue from './pages/blue';
 import BlueBuy from './pages/blueBuy';
 import BlueIssuer from './pages/blueIssuer';
+import BlueCompany from './pages/blueCompany';
+import BlueRegulator from './pages/blueRegulator';
 
 
 // import Navbar from './components/Navbar';
@@ -57,6 +61,8 @@ class App extends Component {
               <Route path='/blue' component={Blue}/>
               <Route path='/buyblue' component={BlueBuy}/>
               <Route path='/issuerblue' component={BlueIssuer}/>
+              <Route path='/companyblue' component={BlueCompany}/>
+              <Route path='/regulatorblue' component={BlueRegulator}/>
             </Switch>
           </div>
         </Router>

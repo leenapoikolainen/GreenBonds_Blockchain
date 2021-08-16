@@ -761,6 +761,7 @@ contract GreenBond3 is ERC721, Ownable {
             Need to specify the direction of the adjustment and the amount   
      */
     function adjustCoupon(bool increase, uint256 amount) external onlyOwner {
+        require(block.timestamp > _issueDate && _coupondefined, "Coupon can only be adjusted after the bond has been issued");
         uint256 previousCoupon = _coupon;
         if (increase) {
             _coupon = _coupon + amount;

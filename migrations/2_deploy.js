@@ -28,7 +28,7 @@ let symbol2 = "BLUE";
 let numberOfBondsSeeked2 = 5;
 let minCoupon2 = 2;
 let maxCoupon2 = 8;
-let closingDate2 = 1628784300;
+let closingDate2 = 1629133800;
 let term2 = 3; // 3 days
 let couponsPerYear2 = 1; // daily
 let baseURI2 = "https://test/";
@@ -85,11 +85,11 @@ module.exports = async function (deployer) {
     await deployer.deploy(BondPurple, company3, name3, symbol3, numberOfBondsSeeked3, minCoupon3, maxCoupon3, closingDate3,
         term3, couponsPerTerm3, baseURI3)
     */
-    //await deployer.deploy(GreenVerificationRepo);
 
-    //await deployer.deploy(GreenBond, name, symbol, baseURI, company, faceValue, couponRate, issueDate, term, couponsPerYear);
-    //await deployer.deploy(GreenBond, "Green Bond", "GREEN", "https://storage.cloud.google.com/metadata_platform/",
-    //"0xe5dc3eFEcDc0f2Ee5672Fa287CE80733F81FCB78", 100, 1, 1625558400);
+    // Verification Repo
+    await deployer.deploy(GreenVerificationRepo);
+
+    // Certification Repo
     //await deployer.deploy(GreenCertifier);
-    //await deployer.deploy(GreenCertificate,"0x3331d4e0c9d9a34edd4031ee03d0f7642e29b729");
+
 }

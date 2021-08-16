@@ -1,7 +1,8 @@
 const GreenBond = artifacts.require("GreenBond")
 const GreenBond2 = artifacts.require("GreenBond2");
 const GreenBond3 = artifacts.require("GreenBond3");
-const BondPurple = artifacts.require("BondPurple")
+const BondPurple = artifacts.require("BondPurple");
+const BondRopsten = artifacts.require("BondRopsten");
 const GreenCertifier = artifacts.require("GreenCertifier");
 const GreenCertificate = artifacts.require("GreenCertificate");
 const BondPriceAuction = artifacts.require("BondPriceAuction");
@@ -46,14 +47,33 @@ let term3 = 10; // 10 days
 let couponsPerTerm3 = 1; //daily coupons
 let baseURI3 = "https://ipfs.io/ipfs/QmcY4G8JiUH5CJDtqXtjusKVZvRBHNxXWURHuYgdhxu85X"; 
 
+// Variables for Bond on Ropsten
+
+let company4 = "0xe5dc3eFEcDc0f2Ee5672Fa287CE80733F81FCB78"; // Ropsten 2
+let name4 = "North Star";
+let symbol4 = "YELLOW";
+let numberOfBondsSeeked4 = 10;
+let minCoupon4 = 5;
+let maxCoupon4 = 15;
+let closingDate4 = 1629111600; // 16 Aug 2021, 12:00
+let term4 = 10; // 10 days
+let couponsPerTerm4 = 1; //daily coupons
+let baseURI4 = "https://ipfs.io/ipfs/QmcY4G8JiUH5CJDtqXtjusKVZvRBHNxXWURHuYgdhxu85X"; 
+
+
             
        
 module.exports = async function (deployer) {
 
+    // ROPSTEN BOND - daily
+    await deployer.deploy(BondRopsten, company4, name4, symbol4, numberOfBondsSeeked4, minCoupon4, maxCoupon4, closingDate4,
+        term4, couponsPerTerm4, baseURI4);
     // RED BOND - yearly
+    /*
     await deployer.deploy(GreenBond2, company, name, symbol, numberOfBondsSeeked, minCoupon, maxCoupon, closingDate,
         term, couponsPerYear, baseURI);
-    
+    */
+
     // BLUE BOND
     /*
     await deployer.deploy(GreenBond3, company2, name2, symbol2, numberOfBondsSeeked2, minCoupon2, maxCoupon2, closingDate2,

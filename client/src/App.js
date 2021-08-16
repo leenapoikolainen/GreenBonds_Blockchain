@@ -11,11 +11,15 @@ import BuyBonds from './pages/buybonds';
 import Company from './pages/company';
 import Issuer from './pages/issuer';
 import Investor from './pages/investor';
-import BondList from './pages/bondlist';
+
 import Regulation from './pages/regulation';
 import Certifier from './pages/certifier';
 import Verifier from './pages/verifier';
 import VerificationRepo from './pages/verificationRepo';
+
+// Bond lists
+import BondList from './pages/bondlist';
+import BondListRopsten from './pages/bondlistRopsten';
 
 // Pages for bond BLUE
 import Blue from './pages/blue';
@@ -37,6 +41,14 @@ import RedBuy from './pages/redBuy'
 import RedIssuer from './pages/redIssuer';
 import RedCompany from './pages/redCompany';
 import RedRegulator from './pages/redRegulator';
+
+
+// Pages for bond YELLOW
+import Yellow from './pages/yellow';
+import YellowBuy from './pages/yellowBuy';
+import YellowIssuer from './pages/yellowIssuer';
+import YellowCompany from './pages/yellowCompany';
+import YellowRegulator from './pages/yellowRegulator';
 
 // import Navbar from './components/Navbar';
 
@@ -65,13 +77,16 @@ class App extends Component {
               <Route path='/about' component={About} />
               <Route path='/buybonds' component={BuyBonds} />
               <Route path='/investor' component={Investor} />
-              <Route path='/bondlist' component={BondList} />
+              
               <Route path='/issuer' component={Issuer} />
               <Route path='/company' component={Company} />
               <Route path='/regulation' component={Regulation} />
               <Route path='/certifier' component={Certifier} />
               <Route path='/verifier' component={Verifier} />
               <Route path='/verifications' component={VerificationRepo} />
+
+              <Route path='/bondlist' component={BondList} />
+              <Route path='/bondlist2' component={BondListRopsten} />
 
               <Route path='/blue' component={Blue} />
               <Route path='/buyblue' component={BlueBuy} />
@@ -90,6 +105,12 @@ class App extends Component {
               <Route path='/issuerred' component={RedIssuer} />
               <Route path='/companyred' component={RedCompany} />
               <Route path='/regulatorred' component={RedRegulator} />
+
+              <Route path='/yellow' component={Yellow} />
+              <Route path='/buyyellow' component={YellowBuy} />
+              <Route path='/issueryellow' component={YellowIssuer} />
+              <Route path='/companyyellow' component={YellowCompany} />
+              <Route path='/regulatoryellow' component={YellowRegulator} />
 
             </Switch>
           </div>

@@ -6,6 +6,7 @@ import GreenBond from '../contracts/GreenBond2.json';
 import GreenBond2 from '../contracts/GreenBond3.json';
 import BondPurple from '../contracts/BondPurple.json';
 
+
 class BondList extends Component {
     async componentWillMount() {
         await this.loadWeb3()
@@ -263,9 +264,7 @@ class BondList extends Component {
                         </tr>
                     </tbody>
                     </table>
-                    </div>
-                    
-
+                    </div>  
                 </div>
                 <hr />
 

@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import Web3 from 'web3'
 
 // Import link button
-import ButtonBack from '../components/backToRed';
+import ButtonBack from '../components/backToYellow';
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond2.json';
+import GreenBond from '../contracts/BondRopsten.json';
 
 
-class BuyRed extends Component {
+class YellowBuy extends Component {
 
 	async componentWillMount() {
 		await this.loadBlockchainData()
@@ -128,9 +128,11 @@ class BuyRed extends Component {
 			<div className="container-fluid mt-5">
                     <div className="container mr-auto ml-auto">
                         <h2>Bond: {this.state.symbol}</h2>
-						<ButtonBack />
+                        <ButtonBack />
+                        
                     </div>
-					<hr/>               
+                    
+                    <hr />
 
 					<div className="row mt-4">
 						<div className="container mr-auto ml-auto">
@@ -190,4 +192,4 @@ class BuyRed extends Component {
 	}
 }
 
-export default BuyRed;
+export default YellowBuy;

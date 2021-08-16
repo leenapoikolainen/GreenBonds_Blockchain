@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import Web3 from 'web3'
 
 // Import link button
-import ButtonBack from '../components/backToRed';
+import ButtonBack from '../components/backToYellow';
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond2.json';
+import GreenBond from '../contracts/BondRopsten.json';
 
-class RedCompany extends Component {
+class YellowCompany extends Component {
     async componentWillMount() {
         await this.loadBlockchainData()
     }
@@ -229,4 +229,4 @@ class RedCompany extends Component {
     }
 }
 
-export default RedCompany;
+export default YellowCompany;

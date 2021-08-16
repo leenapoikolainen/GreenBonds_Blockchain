@@ -58,7 +58,10 @@ class Option2 extends Component {
                             About
                         </NavLink>
                         <NavLink to='/bondlist' activeStyle>
-                            Bond list
+                            Private network bonds
+                        </NavLink>
+                        <NavLink to='/bondlist2' activeStyle>
+                            Ropsten Bonds
                         </NavLink>
                         <NavLink to='/certifier' activeStyle>
                             Certificates

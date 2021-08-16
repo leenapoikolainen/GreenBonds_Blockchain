@@ -1,11 +1,9 @@
-const GreenBond = artifacts.require("GreenBond")
 const GreenBond2 = artifacts.require("GreenBond2");
 const GreenBond3 = artifacts.require("GreenBond3");
 const BondPurple = artifacts.require("BondPurple");
 const BondRopsten = artifacts.require("BondRopsten");
 const GreenCertifier = artifacts.require("GreenCertifier");
 const GreenCertificate = artifacts.require("GreenCertificate");
-const BondPriceAuction = artifacts.require("BondPriceAuction");
 const GreenVerificationRepo = artifacts.require("GreenVerificationRepository")
 
 
@@ -66,9 +64,11 @@ let baseURI4 = "https://ipfs.io/ipfs/QmcY4G8JiUH5CJDtqXtjusKVZvRBHNxXWURHuYgdhxu
 module.exports = async function (deployer) {
 
     // ROPSTEN BOND - daily
+    /*
     await deployer.deploy(BondRopsten, company4, name4, symbol4, numberOfBondsSeeked4, minCoupon4, maxCoupon4, closingDate4,
         term4, couponsPerTerm4, baseURI4);
-    // RED BOND - yearly
+    */
+        // RED BOND - yearly
     /*
     await deployer.deploy(GreenBond2, company, name, symbol, numberOfBondsSeeked, minCoupon, maxCoupon, closingDate,
         term, couponsPerYear, baseURI);

@@ -2,3 +2,7 @@
 /build
 node_modules
 secret.json
+coverage
+coverage.json
+coverageEnv
+.solcover.js

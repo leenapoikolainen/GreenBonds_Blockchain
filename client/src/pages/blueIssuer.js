@@ -30,10 +30,10 @@ class BlueIssuer extends Component {
             const greenBond = new web3.eth.Contract(GreenBond.abi, networkData.address)
             this.setState({ greenBond })
 
-
             // Bond details
             const symbol = await greenBond.methods.symbol().call()
-			this.setState({ symbol })
+            this.setState({ symbol })
+
 
             // Get time
             let date = new Date()
@@ -97,6 +97,16 @@ class BlueIssuer extends Component {
         this.state.greenBond.methods.defineCoupon().send({ from: this.state.account })
     }
 
+    adjustCoupon = (direction, amount) => {
+        console.log(direction)
+        console.log(amount)
+        if (direction == "Increase") {
+            this.state.greenBond.methods.adjustCoupon(true, amount).send({ from: this.state.account })
+        } else {
+            this.state.greenBond.methods.adjustCoupon(false, amount).send({ from: this.state.account })
+        }
+    }
+
     timeConverter(UNIX_timestamp) {
         var dateObject = new Date(UNIX_timestamp * 1000);
         return dateObject.toLocaleString()
@@ -153,11 +163,11 @@ class BlueIssuer extends Component {
                     <div className="alert alert-secondary text-center" role="alert">
                         <p>This page is only for Issuer: {this.state.issuer}</p>
                     </div>
-                        <h2>Bond: {this.state.symbol}</h2>    
-                        <ButtonBack />          
+                    <h2>Bond: {this.state.symbol}</h2>
+                    <ButtonBack />
                 </div>
 
-                <hr/>    
+                <hr />
 
                 <div className="container mr-auto ml-auto mt-4">
                     <h2>Define Coupon</h2>
@@ -247,7 +257,50 @@ class BlueIssuer extends Component {
                         <p>Number of bonds in circulation: {this.state.tokens}</p>
                         <p>Number of bonds returned to issuer: {this.state.issuerTokens}</p>
                     </div>
+                </div>
+                <hr />
+                <div className="container mr-auto ml-auto">
+                    <h2>Adjust Coupon</h2>
+                    <p>Coupons can only be adjusted after the issue date {this.state.issueDate} </p>
 
+                    <form onSubmit={(event) => {
+                        event.preventDefault()
+                        const direction = this.direction.value
+                        const amount = this.amount.value
+                        this.adjustCoupon(direction, amount)
+                    }}>
+                        <label for="direction">Adjustment direction</label>
+                        <select
+                            className="form-control"
+                            id="direction"
+                            value={this.state.value}
+                            ref={(value) => { this.direction = value }}
+                        >
+                            <option value="Increase">Increase</option>
+                            <option value="Decrease">Decrese</option>
+                        </select>
+                        <label for="amount">Amount</label>
+							<input
+								id='amount'
+								type='number'
+								className='form-control mb-1'
+								min='0'
+								ref={(input) => { this.amount = input }}
+							/>
+
+                        <input
+                            type='submit'
+                            className='btn btn-block btn-primary mt-4'
+                            value='ADJUST'
+                        />
+                    </form>
+
+                    <div className="container mr-auto ml-auto mt-5 mb-5">
+                        <p>Coupon: {this.state.coupon}</p>
+                    
+                    </div>
+
+                  
                 </div>
 
             </>

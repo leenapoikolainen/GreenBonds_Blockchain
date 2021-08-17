@@ -95,7 +95,7 @@ class BlueDetails extends Component {
 			const confirmed = await greenBond.methods.couponDefined().call()
 			this.setState({ confirmed })
 
-			const coupon = await greenBond.methods.getCouponDates().call()
+			const coupon = await greenBond.methods.getCoupon().call()
 			this.setState({ coupon })
 
 		} else {

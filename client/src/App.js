@@ -2,8 +2,11 @@ import logo from './logo.svg';
 import './App.css';
 import React, { Component, useState } from 'react';
 import Web3 from 'web3'
-import Navbar from './components/Navbar/option2';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+
+// Navbar
+import Navbar from './components/Navbar/option3';
 
 // Pages
 import About from './pages/about';

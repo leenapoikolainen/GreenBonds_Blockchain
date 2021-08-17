@@ -217,50 +217,42 @@ class BondList extends Component {
                     <table className="table">
                     <thead className="thead-dark">
                         <tr>
+                            <th>Details</th>
                             <th>Company</th>
                             <th>Project</th>
                             <th>Symbol</th>
-                            <th>Bidsing Closes</th>
-                            <th>Bidding</th>  
-                            <th>Coupon</th>
-                            <th>Maturity Date</th>
                             <th>Status</th>
-                            <th>Details</th>
+                            <th>Bidding</th>        
+                            <th>Deadline</th>                                       
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td><Link to="/red">Details</Link></td>
                             <td>{this.state.company}</td>
                             <td>{this.state.project}</td>
                             <td>{this.state.symbol}</td>
-                            <td>{this.state.bidClosingTime}</td>
-                            <td><i>{this.state.biddingOpen ? "OPEN" : "CLOSED"}</i></td>
-                            <td>{this.state.coupon}</td>
-                            <td>{this.state.maturityDate}</td>
                             <td>{this.state.status}</td>
-                            <td><Link to="/red">Details</Link></td>
+                            <td><i>{this.state.biddingOpen ? "OPEN" : "CLOSED"}</i></td>  
+                            <td>{this.state.bidClosingTime}</td>                     
                         </tr>
                         <tr>
+                            <td><Link to="/blue">Details</Link></td>
                             <td>{this.state.company2}</td>
                             <td>{this.state.project2}</td>
                             <td>{this.state.symbol2}</td>
-                            <td>{this.state.bidClosingTime2}</td>
-                            <td><i>{this.state.biddingOpen2 ? "OPEN" : "CLOSED"}</i></td>
-                            <td>{this.state.coupon2}</td>
-                            <td>{this.state.maturityDate2}</td>
                             <td>{this.state.status2}</td>
-                            <td><Link to="/blue">Details</Link></td>
+                            <td><i>{this.state.biddingOpen2 ? "OPEN" : "CLOSED"}</i></td>
+                            <td>{this.state.bidClosingTime2}</td>  
                         </tr>
                         <tr>
+                            <td><Link to="/purple">Details</Link></td>
                             <td>{this.state.company3}</td>
                             <td>{this.state.project3}</td>
                             <td>{this.state.symbol3}</td>
-                            <td>{this.state.bidClosingTime3}</td>
-                            <td><i>{this.state.biddingOpen3 ? "OPEN" : "CLOSED"}</i></td>
-                            <td>{this.state.coupon3}</td>
-                            <td>{this.state.maturityDate3}</td>
                             <td>{this.state.status3}</td>
-                            <td><Link to="/purple">Details</Link></td>
+                            <td><i>{this.state.biddingOpen3 ? "OPEN" : "CLOSED"}</i></td> 
+                            <td>{this.state.bidClosingTime3}</td>
                         </tr>
                     </tbody>
                     </table>

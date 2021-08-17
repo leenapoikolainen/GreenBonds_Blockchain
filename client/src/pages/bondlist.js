@@ -215,7 +215,7 @@ class BondList extends Component {
                     <h1>List of bonds</h1>
                     <div className="table-responsive mt-4">
                     <table className="table">
-                    <thead class="thead-dark">
+                    <thead className="thead-dark">
                         <tr>
                             <th>Company</th>
                             <th>Project</th>

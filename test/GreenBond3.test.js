@@ -52,11 +52,13 @@ contract('GreenBond3', function (accounts) {
             assert.notEqual(address, null)
             assert.notEqual(address, undefined)
         })
-        it('has the right name and symbol', async function () {
-            const name = await bond.name();
-            const symbol = await bond.symbol();
+        it('has the right name, symbol and company', async function () {
+            const name = await bond.name()
+            const symbol = await bond.symbol()
+            let comp = await bond.getCompany()
             assert.equal(name, 'Green Bond')
             assert.equal(symbol, "GREEN")
+            assert.equal(comp, company)
         })
         it('has the right value and coupons', async function () {
             const _value = await bond.getFaceValue()
@@ -84,6 +86,23 @@ contract('GreenBond3', function (accounts) {
             let couponDate = await bond.getCouponDate(1);
             let expectedCouponDate = expectedIssueDate + duration.days(1)
             assert.equal(couponDate.toNumber(), expectedCouponDate)
+
+            let numberOfCoupons = await bond.getNumberOfCoupons()
+            let expectedNumber = term * couponsPerTerm
+            assert.equal(numberOfCoupons, expectedNumber)
+        })
+
+        it('has the right bond details', async function() {
+            let bonds = await bond.getNumberOfBondsSought()
+            assert.equal(bonds, numberOfBondsSeeked)
+            let _term = await bond.getTerm()
+            assert.equal(_term, term)
+            // Total debt 0 before issue
+            let totalDebt = await bond.getTotalDebt()
+            assert.equal(totalDebt, 0)
+
+            let URI = await bond.getBaseURI()
+            assert.equal(URI, baseURI)
         })
     })
 
@@ -97,6 +116,13 @@ contract('GreenBond3', function (accounts) {
             
             // Register investment during bidding time  
             let result = await bond.registerBid(2, 2, {from: investor, value: web3.utils.toWei('300', 'Wei')})
+            
+            let requestedBonds = await bond.getRequestedBondsPerInvestor(investor)
+            assert.equal(requestedBonds, 2)
+            
+            let bidCoupon = await bond.getCouponPerInvestor(investor)
+            assert.equal(bidCoupon, 2)
+
             const bid = result.logs[0].args
             assert.equal(bid.bidder, investor)
             assert.equal(bid.coupon, 2)
@@ -123,6 +149,8 @@ contract('GreenBond3', function (accounts) {
         it('Issuing bonds is not possible when investment window is still open', async function() {
             // Test issuing tokens
             await bond.issueBonds({from: owner}).should.be.rejected
+            let issued = await bond.issued()
+            assert.isFalse(issued)
         })
         it('The bond count is 0 before issuing bonds', async function() {
             let count = await bond.bondCount()
@@ -130,6 +158,8 @@ contract('GreenBond3', function (accounts) {
         })    
         it('defining coupon is not possible, when bidding time is still open', async function() {
             await bond.defineCoupon({from: owner}).should.be.rejected
+            let couponDefined = await bond.couponDefined()
+            assert.isFalse(couponDefined)
         })
     })
 
@@ -138,7 +168,7 @@ contract('GreenBond3', function (accounts) {
 
         // SCENARIO WHEN DEMAND IS NOT MET
 
-        
+        /*        
         before(async () => {
             // Make another investments
             await bond.registerBid(3, 2, {from: investor3, value: web3.utils.toWei('200', 'Wei')})
@@ -168,8 +198,8 @@ contract('GreenBond3', function (accounts) {
         it('can not issue bonds, when issue has been cancelled', async function() {
             await bond.issueBonds({from: owner}).should.be.rejected
         })
-
-        /*
+        */
+        
 
 
         // SCENARIO WHEN DEMAND IS  MET
@@ -187,6 +217,10 @@ contract('GreenBond3', function (accounts) {
         })
         it('coupon is set correctly and unsuccesful bidders are refunded', async function() {
             let result = await bond.defineCoupon({from: owner})
+
+            let couponDefined = await bond.couponDefined()
+            assert.isTrue(couponDefined)
+
             let couponSet = result.logs[0].args
             assert.equal(couponSet.coupon, 2)
 
@@ -205,6 +239,9 @@ contract('GreenBond3', function (accounts) {
             oldBalance = new web3.utils.BN(oldBalance) 
         
             let result = await bond.issueBonds({from: owner})
+
+            let issued = await bond.issued()
+            assert.isTrue(issued)
      
             // First two transfers are for investor 1 (logs 0 - 1)
             const transfer1 = result.logs[0].args;
@@ -248,9 +285,16 @@ contract('GreenBond3', function (accounts) {
             // Function call needs to contain enough coins
             await bond.makeCouponPayment({from: company, value: web3.utils.toWei('10', 'Wei')}).should.be.rejected
 
+            // Actual coupon payment is 0 before payment
+            let actualDate = await bond.getActualCouponDate(1)
+            assert.equal(actualDate, 0)
+
             // Pay coupons (coupon is 2, for 10 bonds)
             let result = await bond.makeCouponPayment({from: company, value: web3.utils.toWei('20', 'Wei')})
             
+            let numberOfCouponsPaid = await bond.getNumberOfCouponsPaid()
+            assert.equal(numberOfCouponsPaid, 1)
+
             // First two coupons for investor 1 (logs 0 - 1), next 8 for investor 2 (logs 2 - 9)
             const coupon1 = result.logs[0].args;
             const coupon3 = result.logs[2].args;   
@@ -286,7 +330,7 @@ contract('GreenBond3', function (accounts) {
         
         it('can check coupon payment schedule', async function() {
             // Coupon does not exist
-            let result = await bond.couponPaymentOnTime(6)
+            let result = await bond.couponPaymentOnTime(11)
             assert.equal(result, "That coupon does not exists.")  
             
             // Coupon paid early
@@ -365,6 +409,10 @@ contract('GreenBond3', function (accounts) {
             // If not called by the borrowing company, reject
             await bond.payBackBond({from: owner, value: web3.utils.toWei('1000', 'Wei')}).should.be.rejected
             
+            // Actual payment date 0 before payment
+            let paymentDate = await bond.getActualPricipalPaymentDate()
+            assert.equal(paymentDate, 0)
+            
             let result = await bond.payBackBond({from: company, value: web3.utils.toWei('1500', 'Wei')})
                  
             // First two events are approval and transfer
@@ -415,18 +463,12 @@ contract('GreenBond3', function (accounts) {
             let count = await bond.bondCount()
             assert.equal(count.toNumber(), 0)
         })
-        */
         
-        /*
+        
         it('check bond payback time correctly', async function () {
-            // When not matured yet
-            await bond.principalPaymentMadeOnTime().should.be.rejected
-            await timeMachine.advanceTimeAndBlock(duration.years(1)); // + 1 year
-            let result = await bond.principalPaymentMadeOnTime()
-            assert.isTrue(result)
+            let result = await bond.principalPaidOnTime()
+            assert.equal(result, "Principal was paid back late.")
         })
-      
-        */
     })  
     
 })

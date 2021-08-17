@@ -23,10 +23,17 @@ require('chai')
         assert.notEqual(address, null)
         assert.notEqual(address, undefined)
     })
+    it('has the right details', async function() {
+        let owner = await certifierContract.getOwner()
+        assert.equal(owner, greenCertifier)
+    })
     it('can create new certificate', async function() {
         // No certification exists for the company in the beginning
         let certificationExists = await certifierContract.isCertifiedCompany(company)
         assert.isFalse(certificationExists)
+
+        // Only owner can create certificates
+        await certifierContract.createCertificate(company, "Project A", {from: company}).should.be.rejected
 
         let result = await certifierContract.createCertificate(company, "Project A", {from: greenCertifier})
         
@@ -35,6 +42,10 @@ require('chai')
         assert.isTrue(certificationExists)
 
         // Get certificate
+        
+        // If no certificate exits, query rejected
+        await certifierContract.getCompanyCertificateAddress(greenCertifier).should.be.rejected
+        
         let certificate = await certifierContract.getCompanyCertificateAddress(company)
 
         let event = result.logs[0].args;
@@ -45,6 +56,10 @@ require('chai')
         assert.equal(event.project, "Project A")
 
         // Check the list of projects is correct
+
+        // If no certificate exits, query rejected
+        await certifierContract.getCertifiedProjects(greenCertifier).should.be.rejected
+        
         let list = await certifierContract.getCertifiedProjects(company)
         assert.equal(list[0], "Project A")
 
@@ -58,6 +73,9 @@ require('chai')
         //console.log(await certifierContract.getCertifiedProjects(company))
     })  
     it('can query if a specific project is certified', async function() {
+        // Requires to have certificate
+        await certifierContract.isCeritifiedProject(greenCertifier, "Project A").should.be.rejected
+        
         await certifierContract.createCertificate(company, "Project A", {from: greenCertifier})
         let isCertified = await certifierContract.isCeritifiedProject(company, "Project B")
         assert.isFalse(isCertified)

@@ -23,11 +23,16 @@ require('chai')
         assert.notEqual(address, null)
         assert.notEqual(address, undefined)
     })
-    it('has the right company ', async function () {
+    it('has the right company and owner', async function () {
         const certifiedCompany = await certificate.getCompany()
         assert.equal(certifiedCompany, company)
+        const owner = await certificate.getOwner()
+        assert.equal(owner, greenCertifier)
     })
     it('can add projects', async function () {
+        // Only owner can create certificates
+        await certificate.addProject("Project A", {from: company}).should.be.rejected
+        
         let result = await certificate.addProject("Project A", {from: greenCertifier})
         const event1 = result.logs[0].args
         assert.equal(event1.name.toString(), "Project A")

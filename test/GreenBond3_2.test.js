@@ -44,11 +44,6 @@ contract('GreenBond3_2', function (accounts) {
             
     });
 
-
-    describe('No bids registered during bidding', () => {   
-       
-    })
-
     
     describe('After bidding time is over', () => {
        
@@ -66,6 +61,9 @@ contract('GreenBond3_2', function (accounts) {
 
             const _coupon = await bond.getCoupon()
             assert.equal(_coupon.toNumber(), 0)
+            
+            const cancelled = await bond.cancelled()
+            assert.isTrue(cancelled)
 
         })
         it('can not issue bonds, when issue has been cancelled', async function() {

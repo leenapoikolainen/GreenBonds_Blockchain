@@ -333,9 +333,11 @@ contract GreenBond3 is ERC721, Ownable {
         return _actualPrincipalPaymentDate;
     }
 
+    /*
     function numberOfInvestors() public view returns (uint256) {
         return _initialInvestors.length;
     }
+    */
 
     /**
      * @dev Get the number of bonds issued

@@ -144,15 +144,15 @@ class BuyRed extends Component {
 					<div className="container mr-auto ml-auto">
 						<h2 className="mb-3">Register Bid</h2>
 						{this.state.biddingOpen
-							? <div className="alert alert-success" role="alert">
-								Bidding for this bond is open.
+							? <div className="alert alert-success text-center" role="alert">
+								Bidding for this bond is open until {this.state.bidClosingTime}.
 							</div>
-							: <div className="alert alert-danger" role="alert">
+							: <div className="alert alert-danger text-center" role="alert">
 								Bidding is closed - no more bids accepted.
 							</div>
 						}
 						{this.state.bondsRequested > 0
-							? <div className="alert alert-danger" role="alert">
+							? <div className="alert alert-danger text-center" role="alert">
 								You have already made a bid.
 							</div>
 							: <div></div>

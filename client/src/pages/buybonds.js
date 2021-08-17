@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Web3 from 'web3'
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond3.json';
+import GreenBond from '../contracts/BondBlue.json';
 
 class BuyBonds extends Component {
 

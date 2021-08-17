@@ -206,7 +206,7 @@ class PurpleCompany extends Component {
                             </form>
                         </div>
                         : <div className="alert alert-secondary text-center" role="alert">
-                            Bond have not been issued yet. Can't make coupon payments.
+                            Bonds have not been issued yet. Can't make coupon payments.
                         </div>
                     }
 

@@ -1,13 +1,11 @@
-import React, { Component, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
 import Web3 from 'web3'
-
 
 // Import link button
 import ButtonBack from '../components/backToBlue';
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond3.json';
+import GreenBond from '../contracts/BondBlue.json';
 
 class BlueIssuer extends Component {
 
@@ -29,6 +27,7 @@ class BlueIssuer extends Component {
             // Get the Green bond contract
             const greenBond = new web3.eth.Contract(GreenBond.abi, networkData.address)
             this.setState({ greenBond })
+
 
             // Bond details
             const symbol = await greenBond.methods.symbol().call()
@@ -69,6 +68,10 @@ class BlueIssuer extends Component {
             const couponConfirmed = await greenBond.methods.couponDefined().call()
             this.setState({ couponConfirmed })
 
+            // Coupon confirmed
+            const issued = await greenBond.methods.issued().call()
+            this.setState({ issued })
+
 
             // Token count
             const tokens = await greenBond.methods.bondCount().call()
@@ -77,6 +80,7 @@ class BlueIssuer extends Component {
             // Issuer 
             const issuer = await greenBond.methods.owner().call()
             this.setState({ issuer })
+            console.log(issuer)
             const issuerTokens = await greenBond.methods.balanceOf(issuer).call()
             this.setState({ issuerTokens })
 
@@ -98,8 +102,6 @@ class BlueIssuer extends Component {
     }
 
     adjustCoupon = (direction, amount) => {
-        console.log(direction)
-        console.log(amount)
         if (direction == "Increase") {
             this.state.greenBond.methods.adjustCoupon(true, amount).send({ from: this.state.account })
         } else {
@@ -160,147 +162,143 @@ class BlueIssuer extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    <div className="alert alert-secondary text-center" role="alert">
-                        <p>This page is only for Issuer: {this.state.issuer}</p>
-                    </div>
+                    {this.state.issuer == this.state.account
+                        ? <div className="alert alert-success text-center" role="alert">
+                            You're logged in as issuer {this.state.issuer}
+                        </div>
+                        : <div className="alert alert-danger text-center" role="alert">
+                            This page is only for issuer {this.state.issuer}
+                        </div>
+                    }
+
                     <h2>Bond: {this.state.symbol}</h2>
                     <ButtonBack />
                 </div>
-
                 <hr />
 
                 <div className="container mr-auto ml-auto mt-4">
                     <h2>Define Coupon</h2>
-                    <p>{this.state.biddingOpen
-                        ? <p>Bidding is open. Can't define coupon yet</p>
-                        : <p>Bidding is closed and
-                            {this.state.couponConfirmed ? " coupon defined." : " coupon not defined yet."}</p>
+                    {this.state.biddingOpen
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                            Bidding is still open - can't define the coupon yet.
+                        </div>
+                        : <div className="mt-4">
+                            <form onSubmit={(event) => {
+                                event.preventDefault()
+                                this.defineCoupon()
+                            }}>
+                                <input
+                                    type='submit'
+                                    className='btn btn-block btn-primary'
+                                    value='DEFINE'
+                                />
+                            </form>
+                        </div>
+                    }
 
-                    }</p>
-                    <form onSubmit={(event) => {
-                        event.preventDefault()
-                        this.defineCoupon()
-                    }}>
-                        <input
-                            type='submit'
-                            className='btn btn-block btn-primary'
-                            value='DEFINE'
-                        />
-
-
-                    </form>
                     <div className="mt-2">
-                        <i>
-                            {this.state.couponConfirmed
-                                ? <p>Coupon: {this.state.coupon}</p>
-                                : <p>Coupon: undefined</p>
-                            }
-                        </i>
-                        <i>
-                            {this.state.cancelled
-                                ? <p>Coupon: N/A</p>
-                                : <p></p>
-                            }
-                        </i>
-                    </div>
-                    <div className="container mr-auto ml-auto mb-5">
+
                         {this.state.couponConfirmed
-                            ? <div className="alert alert-success" role="alert">
-                                Bond issue confirmed.
+                            ? <div className="alert alert-success text-center" role="alert">
+                                Coupon defined: {this.state.coupon}
                             </div>
-                            :
-                            <div></div>
+                            : <div></div>
                         }
-                    </div>
-                    <div className="container mr-auto ml-auto mb-5">
+
                         {this.state.cancelled
-                            ? <div className="alert alert-danger" role="alert">
+                            ? <div className="alert alert-danger text-center" role="alert">
                                 Bond issue was cancelled.
                             </div>
-                            :
-                            <div></div>
+                            : <div></div>
                         }
-                    </div>
 
+                    </div>
                 </div>
 
                 <hr />
+
+
                 <div className="container mr-auto ml-auto">
                     <h2>Issue Tokens</h2>
                     <p>Expected Issue Date: {this.state.issueDate}</p>
 
+                    {this.state.couponConfirmed
+                        ? <div>
+                            <form onSubmit={(event) => {
+                                event.preventDefault()
+                                this.issue()
+                            }}>
+                                <input
+                                    type='submit'
+                                    className='btn btn-block btn-primary'
+                                    value='ISSUE'
+                                />
+                            </form>
+                        </div>
+                        : <div className="alert alert-secondary text-center" role="alert">
+                            Coupon has not been confirmed - can't issue bonds yet.
+                        </div>
+                    }
 
-                    <form onSubmit={(event) => {
-                        event.preventDefault()
-                        this.issue()
-                    }}>
-                        <input
-                            type='submit'
-                            className='btn btn-block btn-primary'
-                            value='ISSUE'
-                        />
-                    </form>
-
-                    <div className="container mr-auto ml-auto mt-5 mb-5">
+                    <div className="mt-2">
                         {this.state.tokens > 0
-                            ? <div className="alert alert-success" role="alert">
-                                Bonds issue active.
+                            ? <div className="alert alert-success text-center" role="alert">
+                                Issue is active.
                             </div>
-                            :
-                            <div className="alert alert-secondary" role="alert">
-                                Bonds issue deactive.
+                            : <div className="alert alert-secondary text-center" role="alert">
+                                Issue is deactive.
                             </div>
                         }
                     </div>
 
-                    <div className="mt-2 pb-5">
+
+                    <div className="mt-2 ">
                         <p>Number of bonds in circulation: {this.state.tokens}</p>
-                        <p>Number of bonds returned to issuer: {this.state.issuerTokens}</p>
                     </div>
                 </div>
+
                 <hr />
-                <div className="container mr-auto ml-auto">
+                <div className="container mr-auto ml-auto mb-5">
                     <h2>Adjust Coupon</h2>
-                    <p>Coupons can only be adjusted after the issue date {this.state.issueDate} </p>
+                    {this.state.tokens > 0
+                        ? <div>
+                            <form onSubmit={(event) => {
+                                event.preventDefault()
+                                const direction = this.direction.value
+                                const amount = this.amount.value
+                                this.adjustCoupon(direction, amount)
+                            }}>
+                                <label for="direction">Adjustment direction</label>
+                                <select
+                                    className="form-control"
+                                    id="direction"
+                                    value={this.state.value}
+                                    ref={(value) => { this.direction = value }}
+                                >
+                                    <option value="Increase">Increase</option>
+                                    <option value="Decrease">Decrese</option>
+                                </select>
+                                <label for="amount">Amount</label>
+                                <input
+                                    id='amount'
+                                    type='number'
+                                    className='form-control mb-1'
+                                    min='0'
+                                    ref={(input) => { this.amount = input }}
+                                />
 
-                    <form onSubmit={(event) => {
-                        event.preventDefault()
-                        const direction = this.direction.value
-                        const amount = this.amount.value
-                        this.adjustCoupon(direction, amount)
-                    }}>
-                        <label for="direction">Adjustment direction</label>
-                        <select
-                            className="form-control"
-                            id="direction"
-                            value={this.state.value}
-                            ref={(value) => { this.direction = value }}
-                        >
-                            <option value="Increase">Increase</option>
-                            <option value="Decrease">Decrese</option>
-                        </select>
-                        <label for="amount">Amount</label>
-							<input
-								id='amount'
-								type='number'
-								className='form-control mb-1'
-								min='0'
-								ref={(input) => { this.amount = input }}
-							/>
+                                <input
+                                    type='submit'
+                                    className='btn btn-block btn-primary mt-4'
+                                    value='ADJUST'
+                                />
+                            </form>
+                        </div>
+                        : <div className="alert alert-secondary text-center" role="alert">
+                        Issue is deactive.
+                        </div>
+                    }
 
-                        <input
-                            type='submit'
-                            className='btn btn-block btn-primary mt-4'
-                            value='ADJUST'
-                        />
-                    </form>
-
-                    <div className="container mr-auto ml-auto mt-5 mb-5">
-                        <p>Coupon: {this.state.coupon}</p>
-                    
-                    </div>
-
-                  
                 </div>
 
             </>

@@ -1,12 +1,10 @@
-import React, { Component, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
 import Web3 from 'web3'
 
 // Import link button
 import ButtonBack from '../components/backToBlue';
-
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond3.json';
+import GreenBond from '../contracts/BondBlue.json';
 
 class BlueRegulator extends Component {
     async componentWillMount() {
@@ -79,10 +77,8 @@ class BlueRegulator extends Component {
             const couponConfirmed = await greenBond.methods.couponDefined().call()
             this.setState({ couponConfirmed })
 
-
-
-
-
+            const issued = await greenBond.methods.issued().call()
+            this.setState({ issued })
 
             // Get actual principal payment date
             const principalPaymentDateTimeStamp = await greenBond.methods.getActualPricipalPaymentDate().call()
@@ -137,9 +133,8 @@ class BlueRegulator extends Component {
 
     render() {
         return (
-            <>
-
-                <div className="container mr-auto ml-auto">
+            <>  
+                <div className="container mr-auto ml-auto">       
                     <div className="container mr-auto ml-auto">
                         <h2>Bond: {this.state.symbol}</h2>
                     </div>
@@ -149,16 +144,15 @@ class BlueRegulator extends Component {
                         </div>
                         : <div> </div>
                     }
-                    {this.state.couponConfirmed
+                    {this.state.issued
                         ? <div className="alert alert-success" role="alert">
-                            Bond issue has been confirmed.
+                            Bonds have been issued.
                         </div>
                         : <div className="alert alert-secondary" role="alert">
-                            Bond issue has not been confirmed.
+                            Bonds have not been issued yet.
                         </div>
                     }
                     <ButtonBack />
-
                 </div>
                 <hr />
 

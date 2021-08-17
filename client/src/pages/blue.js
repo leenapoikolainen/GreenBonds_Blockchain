@@ -1,10 +1,10 @@
 import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-// Details
-import BlueBond from '../components/blue';
+// Bond details
+import RedBond from '../components/blue';
 
-// Button back to bond list
+// Button back
 import ButtonBack from '../components/backToBondList';
 
 class Blue extends Component {
@@ -25,15 +25,14 @@ class Blue extends Component {
 	render() {
 		return (
 			<>
-				<div className="container-fluid mt-5 px-5">
+                <div className="container-fluid mt-5 px-5">
 					<ButtonBack />
-					<h2 className="mt-3">Bond Details</h2>
+					<h2 className="mt-3">Bond Details:</h2>
 				</div>
-				<BlueBond />
-
+				<RedBond />
 
 				<div className="container-fluid mt-5 px-5">	
-					<h2>Links</h2>
+					<h2>Links: </h2>
 					<ul>
 						<li><Link to="/buyblue">Investor Page</Link></li>
 						<li><Link to="/issuerblue">Issuer Page</Link></li>
@@ -41,10 +40,6 @@ class Blue extends Component {
 						<li><Link to='/regulatorblue'>Regulator Page</Link></li>
 					</ul>
 				</div>
-
-				
-					
-				
 
 
 			</>

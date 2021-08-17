@@ -1,9 +1,8 @@
-import React, { Component, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
 import Web3 from 'web3'
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond3.json'
+import GreenBond from '../contracts/BondBlue.json'
 
 class BlueDetails extends Component {
 
@@ -57,7 +56,6 @@ class BlueDetails extends Component {
 			const numberOfBondsSeeked = await greenBond.methods.getNumberOfBondsSought().call()
 			this.setState({ numberOfBondsSeeked })
 
-
 			const bidClosingTimeStamp = await greenBond.methods.getBidClosingTime().call()
 			const bidClosingTime = this.timeConverter(bidClosingTimeStamp)
 			this.setState({ bidClosingTime })
@@ -68,6 +66,7 @@ class BlueDetails extends Component {
 
 			const URI = await greenBond.methods.getBaseURI().call()
 			this.setState({ URI })
+
 
 			// Bidding open
 			const timeNow = Date.now()
@@ -80,18 +79,24 @@ class BlueDetails extends Component {
 			this.setState({ biddingOpen })
 
 			let couponDates = await greenBond.methods.getCouponDates().call()
-            const couponList = couponDates.map((date) =>
-                <li>{this.timeConverter(date)}</li>
-            );
-            this.setState({ couponList })
+			const couponList = couponDates.map((date) =>
+				<li>{this.timeConverter(date)}</li>
+			);
+			this.setState({ couponList })
 
 			const term = await greenBond.methods.getTerm().call()
-            this.setState({ term })
+			this.setState({ term })
 
 			const maturityDateTimeStamp = await greenBond.methods.getMaturityDate().call()
-            const maturityDate = this.timeConverter(maturityDateTimeStamp)
-            this.setState({ maturityDate })
+			const maturityDate = this.timeConverter(maturityDateTimeStamp)
+			this.setState({ maturityDate })
 
+			// Coupon status
+			const confirmed = await greenBond.methods.couponDefined().call()
+			this.setState({ confirmed })
+
+			const coupon = await greenBond.methods.getCouponDates().call()
+			this.setState({ coupon })
 
 		} else {
 			window.alert('Smart contract not deployed to detected network.')
@@ -102,8 +107,6 @@ class BlueDetails extends Component {
 		var dateObject = new Date(UNIX_timestamp * 1000);
 		return dateObject.toLocaleString()
 	}
-
-
 
 
 	constructor(props) {
@@ -117,8 +120,18 @@ class BlueDetails extends Component {
 		return (
 
 			<div className="row">
+				<div className="container mr-auto ml-auto mt-4">
+					{this.state.biddingOpen
+						? <div className="alert alert-success" role="alert">
+							Bidding for this bond is open.
+						</div>
+						: <div className="alert alert-danger" role="alert">
+							Bidding for this bond is closed.
+						</div>
+					}
+				</div>
 				<div className="container mr-auto ml-auto">
-					<table className="table mt-5">
+					<table className="table mt-4">
 						<tr>
 							<td>Company</td>
 							<td>{this.state.company}</td>
@@ -136,7 +149,7 @@ class BlueDetails extends Component {
 							<td>{this.state.minCoupon} - {this.state.maxCoupon}</td>
 						</tr>
 						<tr>
-							<td>Number of Bonds Seeked</td>
+							<td>Number of Bonds Sought</td>
 							<td>{this.state.numberOfBondsSeeked}</td>
 						</tr>
 						<tr>
@@ -149,7 +162,7 @@ class BlueDetails extends Component {
 						</tr>
 						<tr>
 							<td>Term</td>
-							<td>{this.state.term} days</td>
+							<td>{this.state.term} year</td>
 						</tr>
 						<tr>
 							<td>Maturity Date</td>
@@ -159,20 +172,16 @@ class BlueDetails extends Component {
 							<td>More details</td>
 							<td>{this.state.URI}</td>
 						</tr>
+						<tr>
+							<td>Coupon</td>
+							{this.state.confirmed 
+								? <td>{this.state.coupon}</td>
+								: <td><i>Not confirmed</i></td>
+							}
+						</tr>
 					</table>
 					<p><b>Coupon Dates:</b></p>
 					<ul>{this.state.couponList}</ul>
-				</div>
-
-				<div className="container mr-auto ml-auto">
-					{this.state.biddingOpen
-						? <div className="alert alert-success" role="alert">
-							Bidding for this bond is open.
-						</div>
-						: <div className="alert alert-danger" role="alert">
-							Bidding for this bond is closed.
-						</div>
-					}
 				</div>
 			</div>
 

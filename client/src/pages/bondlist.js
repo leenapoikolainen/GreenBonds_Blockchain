@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import Web3 from 'web3';
 
 import GreenBond from '../contracts/GreenBond2.json';
-import GreenBond2 from '../contracts/GreenBond3.json';
 import BondPurple from '../contracts/BondPurple.json';
+import BondBlue from '../contracts/BondBlue.json';
 
 
 class BondList extends Component {
@@ -35,7 +35,7 @@ class BondList extends Component {
         // Network connection
         const networkId = await web3.eth.net.getId()
         const networkData = GreenBond.networks[networkId]
-        const networkData2 = GreenBond2.networks[networkId]
+        const networkData2 = BondBlue.networks[networkId]
         const networkData3 = BondPurple.networks[networkId]
 
         if (networkData) {
@@ -84,7 +84,7 @@ class BondList extends Component {
                 this.setState({ status })
             } else if (!confirmed) {
                 const status = "Unconfirmed"
-                this.setStatus({ status })
+                this.setState({ status })
             } else if (tokens > 0) {
                 const status = "Active"
                 this.setState({ status })
@@ -99,7 +99,7 @@ class BondList extends Component {
 
         if (networkData2) {
             // Get the Green bond contract
-            const greenBond2 = new web3.eth.Contract(GreenBond2.abi, networkData2.address)
+            const greenBond2 = new web3.eth.Contract(BondBlue.abi, networkData2.address)
             this.setState({ greenBond2 })
 
             // First bond
@@ -135,14 +135,20 @@ class BondList extends Component {
             const cancelled = await greenBond2.methods.cancelled().call()
             const confirmed = await greenBond2.methods.couponDefined().call()
 
+            const tokens = await greenBond2.methods.bondCount().call()
+            this.setState({ tokens })
+
             if (cancelled) {
                 const status2 = "Cancelled"
                 this.setState({ status2 })
-            } else if (confirmed) {
-                const status2 = "Confirmed"
+            } else if (!confirmed) {
+                const status2 = "Unconfirmed"
+                this.setState({ status2 })
+            } else if (tokens > 0) {
+                const status2 = "Active"
                 this.setState({ status2 })
             } else {
-                const status2 = "Unconfirmed"
+                const status2 = "Matured"
                 this.setState({ status2 })
             }
         }
@@ -185,15 +191,20 @@ class BondList extends Component {
             const cancelled = await purpleBond.methods.cancelled().call()
             const confirmed = await purpleBond.methods.couponDefined().call()
             
+            const tokens = await purpleBond.methods.bondCount().call()
+            this.setState({ tokens })
 
             if (cancelled) {
                 const status3 = "Cancelled"
                 this.setState({ status3 })
-            } else if (confirmed) {
-                const status3 = "Confirmed"
+            } else if (!confirmed) {
+                const status3= "Unconfirmed"
+                this.setState({ status3 })
+            } else if (tokens > 0) {
+                const status3 = "Active"
                 this.setState({ status3 })
             } else {
-                const status3 = "Unconfirmed"
+                const status3 = "Matured"
                 this.setState({ status3 })
             }
         }

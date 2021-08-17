@@ -36,6 +36,7 @@ contract GreenBond3 is ERC721, Ownable {
     // Bond state controllers
     bool private _coupondefined = false;
     bool private _cancelled = false;
+    bool private _issued = false;
 
     // List of initial investors
     address[] private _initialInvestors; 
@@ -268,7 +269,7 @@ contract GreenBond3 is ERC721, Ownable {
     }
 
     /**
-     * @dev Query bond status (cancelled/coupon defined)
+     * @dev Query bond status (cancelled/coupon defined/issued)
      */
     function couponDefined() public view returns (bool) {
         return _coupondefined;
@@ -276,6 +277,10 @@ contract GreenBond3 is ERC721, Ownable {
 
     function cancelled() public view returns (bool) {
         return _cancelled;
+    }
+
+    function issued() public view returns (bool) {
+        return _issued;
     }
 
     /**
@@ -338,15 +343,6 @@ contract GreenBond3 is ERC721, Ownable {
     function bondCount() public view returns (uint256) {
         return _bondIdTracker.current();
     }
-
-    /**
-     * @dev Overridden function to get base URI
-     */
-     /*
-    function _baseURI() internal view override returns (string memory) {
-        return _baseBondURI;
-    }
-    */
 
     /**
      * @dev Get the base URI for bond metadata
@@ -612,6 +608,7 @@ contract GreenBond3 is ERC721, Ownable {
                 bondsAvailable -= numberOfBonds;
             }            
         }
+        _issued = true;
     }
 
     /**

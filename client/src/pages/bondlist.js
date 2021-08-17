@@ -240,7 +240,10 @@ class BondList extends Component {
                             <td>{this.state.project}</td>
                             <td>{this.state.symbol}</td>
                             <td>{this.state.status}</td>
-                            <td><i>{this.state.biddingOpen ? "OPEN" : "CLOSED"}</i></td>  
+                            {this.state.biddingOpen
+                                ? <td className="text-success">Open</td>
+                                : <td className="text-danger">Closed</td>
+                            }   
                             <td>{this.state.bidClosingTime}</td>                     
                         </tr>
                         <tr>
@@ -249,7 +252,10 @@ class BondList extends Component {
                             <td>{this.state.project2}</td>
                             <td>{this.state.symbol2}</td>
                             <td>{this.state.status2}</td>
-                            <td><i>{this.state.biddingOpen2 ? "OPEN" : "CLOSED"}</i></td>
+                            {this.state.biddingOpen2
+                                ? <td className="text-success">Open</td>
+                                : <td className="text-danger">Closed</td>
+                            }   
                             <td>{this.state.bidClosingTime2}</td>  
                         </tr>
                         <tr>
@@ -258,7 +264,10 @@ class BondList extends Component {
                             <td>{this.state.project3}</td>
                             <td>{this.state.symbol3}</td>
                             <td>{this.state.status3}</td>
-                            <td><i>{this.state.biddingOpen3 ? "OPEN" : "CLOSED"}</i></td> 
+                            {this.state.biddingOpen3
+                                ? <td className="text-success">Open</td>
+                                : <td className="text-danger">Closed</td>
+                            }   
                             <td>{this.state.bidClosingTime3}</td>
                         </tr>
                     </tbody>

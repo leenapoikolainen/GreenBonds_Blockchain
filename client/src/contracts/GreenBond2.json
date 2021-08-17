@@ -64443,12 +64443,12 @@
         }
       },
       "links": {},
-      "address": "0x731D368C749c25e396bF6C948B9D15aC2689e5f3",
-      "transactionHash": "0xef81739f7f4478884b7580e943fe437e885d8388fa44669c478343a2e75f4b82"
+      "address": "0x30D70d54bb29b4468f935e5c196bbaAeb7dD8007",
+      "transactionHash": "0x8050094d4b4357c417e043bf75f8f161f53cec746da646108971cb5dd0e06231"
     }
   },
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-08-16T17:59:30.742Z",
+  "updatedAt": "2021-08-17T10:04:57.531Z",
   "networkType": "ethereum",
   "devdoc": {
     "events": {

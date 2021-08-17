@@ -1,5 +1,4 @@
-import React, { Component, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
 import Web3 from 'web3'
 
 // Import link button
@@ -32,7 +31,8 @@ class RedIssuer extends Component {
 
             // Bond details
             const symbol = await greenBond.methods.symbol().call()
-			this.setState({ symbol })
+            this.setState({ symbol })
+
 
             // Get time
             let date = new Date()
@@ -149,101 +149,99 @@ class RedIssuer extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    <div className="alert alert-secondary text-center" role="alert">
-                        <p>This page is only for Issuer: {this.state.issuer}</p>
-                    </div>
-                        <h2>Bond: {this.state.symbol}</h2> 
-                        <ButtonBack />             
+                    {this.state.issuer == this.state.account
+                        ? <div className="alert alert-success text-center" role="alert">
+                            You're logged in as issuer {this.state.issuer}
+                        </div>
+                        : <div className="alert alert-danger text-center" role="alert">
+                            This page is only for issuer {this.state.issuer}
+                        </div>
+                    }
+
+                    <h2>Bond: {this.state.symbol}</h2>
+                    <ButtonBack />
                 </div>
-                <hr/>          
+                <hr />
 
                 <div className="container mr-auto ml-auto mt-4">
                     <h2>Define Coupon</h2>
-                    <p>{this.state.biddingOpen
-                        ? <p>Bidding is open. Can't define coupon yet</p>
-                        : <p>Bidding is closed and
-                            {this.state.couponConfirmed ? " coupon defined." : " coupon not defined yet."}</p>
+                    {this.state.biddingOpen
+                        ? <div className="alert alert-danger text-center" role="alert">
+                            Bidding is still open - can't define the coupon yet.
+                        </div>
+                        : <div className="mt-4">
+                            <form onSubmit={(event) => {
+                                event.preventDefault()
+                                this.defineCoupon()
+                            }}>
+                                <input
+                                    type='submit'
+                                    className='btn btn-block btn-primary'
+                                    value='DEFINE'
+                                />
+                            </form>
+                        </div>
+                    }
 
-                    }</p>
-                    <form onSubmit={(event) => {
-                        event.preventDefault()
-                        this.defineCoupon()
-                    }}>
-                        <input
-                            type='submit'
-                            className='btn btn-block btn-primary'
-                            value='DEFINE'
-                        />
-
-
-                    </form>
                     <div className="mt-2">
-                        <i>
-                            {this.state.couponConfirmed
-                                ? <p>Coupon: {this.state.coupon}</p>
-                                : <p>Coupon: undefined</p>
-                            }
-                        </i>
-                        <i>
-                            {this.state.cancelled
-                                ? <p>Coupon: N/A</p>
-                                : <p></p>
-                            }
-                        </i>
-                    </div>
-                    <div className="container mr-auto ml-auto mb-5">
+
                         {this.state.couponConfirmed
-                            ? <div className="alert alert-success" role="alert">
-                                Bond issue confirmed.
+                            ? <div className="alert alert-success text-center" role="alert">
+                                Coupon defined: {this.state.coupon}
                             </div>
-                            :
-                            <div></div>
+                            : <div></div>
                         }
-                    </div>
-                    <div className="container mr-auto ml-auto mb-5">
+
                         {this.state.cancelled
-                            ? <div className="alert alert-danger" role="alert">
+                            ? <div className="alert alert-danger text-center" role="alert">
                                 Bond issue was cancelled.
                             </div>
-                            :
-                            <div></div>
+                            : <div></div>
                         }
-                    </div>
 
+                    </div>
                 </div>
 
                 <hr />
+
+
                 <div className="container mr-auto ml-auto">
                     <h2>Issue Tokens</h2>
                     <p>Expected Issue Date: {this.state.issueDate}</p>
 
+                    {this.state.couponConfirmed
+                        ? <div>
+                            <form onSubmit={(event) => {
+                                event.preventDefault()
+                                this.issue()
+                            }}>
+                                <input
+                                    type='submit'
+                                    className='btn btn-block btn-primary'
+                                    value='ISSUE'
+                                />
+                            </form>
+                        </div>
+                        : <div className="alert alert-danger text-center" role="alert">
+                            Coupon has not been confirmed.
+                        </div>
+                    }
 
-                    <form onSubmit={(event) => {
-                        event.preventDefault()
-                        this.issue()
-                    }}>
-                        <input
-                            type='submit'
-                            className='btn btn-block btn-primary'
-                            value='ISSUE'
-                        />
-                    </form>
-
-                    <div className="container mr-auto ml-auto mt-5 mb-5">
+                    <div className="mt-2">
                         {this.state.tokens > 0
-                            ? <div className="alert alert-success" role="alert">
-                                Bonds issue active.
+                            ? <div className="alert alert-success text-center" role="alert">
+                                Issue is active.
                             </div>
-                            :
-                            <div className="alert alert-secondary" role="alert">
-                                Bonds issue deactive.
+                            : <div className="alert alert-secondary text-center" role="alert">
+                                Issue is deactive.
                             </div>
                         }
                     </div>
+                   
+                    <hr/>
 
                     <div className="mt-2 pb-5">
                         <p>Number of bonds in circulation: {this.state.tokens}</p>
-                        <p>Number of bonds returned to issuer: {this.state.issuerTokens}</p>
                     </div>
 
                 </div>

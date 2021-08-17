@@ -1,5 +1,4 @@
-import React, { Component, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component} from 'react';
 import Web3 from 'web3'
 
 // Import link button
@@ -127,7 +126,7 @@ class BuyRed extends Component {
 			numberOfTokens: 0,
 			tokensOwned: 0,
 			coupon: 0,
-		
+
 		}
 	}
 
@@ -154,43 +153,45 @@ class BuyRed extends Component {
 						}
 						{this.state.bondsRequested > 0
 							? <div className="alert alert-danger" role="alert">
-							You have already made a bid.
+								You have already made a bid.
 							</div>
 							: <div></div>
 						}
-						
+
 						{this.state.biddingOpen
-							? <div><form onSubmit={(event) => {
-								event.preventDefault()
-								const coupon = this.coupon.value
-								const numberOfBonds = this.numberOfBonds.value
-								this.registerbid(coupon, numberOfBonds)
-							}}>
-								<label for="coupon">Coupon (within range {this.state.minCoupon} - {this.state.maxCoupon}) </label>
-								<input
-									id='coupon'
-									type='number'
-									className='form-control mb-1'
-									min='0'
-									ref={(input) => { this.coupon = input }}
-								/>
-								<label for="numberOfBonds">Number Of Bonds (face value {this.state.value})</label>
-								<input
-									id='numberOfBonds'
-									type='number'
-									className='form-control mb-1'
-									min='0'
-									ref={(input) => { this.numberOfBonds = input }}
-								/>
-								<input
-									type='submit'
-									className='btn btn-block btn-primary mt-4'
-									value='INVEST'
-								/>
-							</form></div>
+							? <div>
+								<form onSubmit={(event) => {
+									event.preventDefault()
+									const coupon = this.coupon.value
+									const numberOfBonds = this.numberOfBonds.value
+									this.registerbid(coupon, numberOfBonds)
+								}}>
+									<label for="coupon">Coupon (within range {this.state.minCoupon} - {this.state.maxCoupon}) </label>
+									<input
+										id='coupon'
+										type='number'
+										className='form-control mb-1'
+										min='0'
+										ref={(input) => { this.coupon = input }}
+									/>
+									<label for="numberOfBonds">Number Of Bonds (face value {this.state.value})</label>
+									<input
+										id='numberOfBonds'
+										type='number'
+										className='form-control mb-1'
+										min='0'
+										ref={(input) => { this.numberOfBonds = input }}
+									/>
+									<input
+										type='submit'
+										className='btn btn-block btn-primary mt-4'
+										value='INVEST'
+									/>
+								</form>
+							</div>
 							: <div></div>
 						}
-						
+
 					</div>
 				</div>
 				<hr />
@@ -201,7 +202,6 @@ class BuyRed extends Component {
 						<p>Coupon bid: {this.state.coupon}</p>
 						<p>Staked balance: {this.state.balance}</p>
 					</div>
-
 				</div>
 
 

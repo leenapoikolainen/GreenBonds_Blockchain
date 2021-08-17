@@ -176,7 +176,7 @@ class RedDetails extends Component {
 						<tr>
 							<td>Coupon</td>
 							{this.state.confirmed 
-								? <td>{this.sate.coupon}</td>
+								? <td>{this.state.coupon}</td>
 								: <td><i>Not confirmed</i></td>
 							}
 						</tr>

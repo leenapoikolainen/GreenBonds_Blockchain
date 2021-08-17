@@ -15,8 +15,8 @@ let symbol = "RED";
 let numberOfBondsSeeked = 15;
 let minCoupon = 1;
 let maxCoupon = 5;
-let closingDate = 1629195000; 
-let term = 2; // 1 year
+let closingDate = 1629198600; 
+let term = 1; // 1 year
 let couponsPerYear = 2 // semiannual
 let baseURI = "https://ipfs.io/ipfs/QmTYVFgAhC5Sc4ZHzyaauwdYi6BfTCZ4hBoXdXhxjQph1u";
 

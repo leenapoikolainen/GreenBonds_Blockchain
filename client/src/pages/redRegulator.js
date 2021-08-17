@@ -78,6 +78,9 @@ class RedRegulator extends Component {
             const couponConfirmed = await greenBond.methods.couponDefined().call()
             this.setState({ couponConfirmed })
 
+            const issued = await greenBond.methods.issued().call()
+            this.setState({ issued })
+
             // Get actual principal payment date
             const principalPaymentDateTimeStamp = await greenBond.methods.getActualPricipalPaymentDate().call()
 
@@ -142,12 +145,12 @@ class RedRegulator extends Component {
                         </div>
                         : <div> </div>
                     }
-                    {this.state.couponConfirmed
+                    {this.state.issued
                         ? <div className="alert alert-success" role="alert">
-                            Bond issue has been confirmed.
+                            Bonds have been issued.
                         </div>
                         : <div className="alert alert-secondary" role="alert">
-                            Bond issue has not been confirmed.
+                            Bonds have not been issued yet.
                         </div>
                     }
                     <ButtonBack />

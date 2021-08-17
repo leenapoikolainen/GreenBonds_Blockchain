@@ -36,6 +36,7 @@ contract GreenBond2 is ERC721, Ownable {
     // Bond state controllers
     bool private _coupondefined = false;
     bool private _cancelled = false;
+    bool private _issued = false;
 
     // List of initial investors
     address[] private _initialInvestors; 
@@ -276,6 +277,10 @@ contract GreenBond2 is ERC721, Ownable {
 
     function cancelled() public view returns (bool) {
         return _cancelled;
+    }
+
+    function issued() public view returns (bool) {
+        return _issued;
     }
 
     /**
@@ -604,6 +609,7 @@ contract GreenBond2 is ERC721, Ownable {
                 bondsAvailable -= numberOfBonds;
             }            
         }
+        _issued = true;
     }
 
     /**

@@ -75,15 +75,21 @@ class BondList extends Component {
 
             const cancelled = await greenBond.methods.cancelled().call()
             const confirmed = await greenBond.methods.couponDefined().call()
+            
+            const tokens = await greenBond.methods.bondCount().call()
+            this.setState({ tokens })
 
             if (cancelled) {
                 const status = "Cancelled"
                 this.setState({ status })
-            } else if (confirmed) {
-                const status = "Confirmed"
+            } else if (!confirmed) {
+                const status = "Unconfirmed"
+                this.setStatus({ status })
+            } else if (tokens > 0) {
+                const status = "Active"
                 this.setState({ status })
             } else {
-                const status = "Unconfirmed"
+                const status = "Matured"
                 this.setState({ status })
             }
 
@@ -178,6 +184,7 @@ class BondList extends Component {
 
             const cancelled = await purpleBond.methods.cancelled().call()
             const confirmed = await purpleBond.methods.couponDefined().call()
+            
 
             if (cancelled) {
                 const status3 = "Cancelled"

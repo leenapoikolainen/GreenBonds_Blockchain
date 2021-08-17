@@ -166,7 +166,7 @@ class RedIssuer extends Component {
                 <div className="container mr-auto ml-auto mt-4">
                     <h2>Define Coupon</h2>
                     {this.state.biddingOpen
-                        ? <div className="alert alert-danger text-center" role="alert">
+                        ? <div className="alert alert-secondary text-center" role="alert">
                             Bidding is still open - can't define the coupon yet.
                         </div>
                         : <div className="mt-4">
@@ -222,8 +222,8 @@ class RedIssuer extends Component {
                                 />
                             </form>
                         </div>
-                        : <div className="alert alert-danger text-center" role="alert">
-                            Coupon has not been confirmed.
+                        : <div className="alert alert-secondary text-center" role="alert">
+                            Coupon has not been confirmed - can't issue bonds yet.
                         </div>
                     }
 

@@ -36,6 +36,7 @@ contract BondPurple is ERC721, Ownable {
     // Bond state controllers
     bool private _coupondefined = false;
     bool private _cancelled = false;
+    bool private _issued = false;
 
     // List of initial investors
     address[] private _initialInvestors; 
@@ -268,7 +269,7 @@ contract BondPurple is ERC721, Ownable {
     }
 
     /**
-     * @dev Query bond status (cancelled/coupon defined)
+     * @dev Query bond status (cancelled/coupon defined/issued)
      */
     function couponDefined() public view returns (bool) {
         return _coupondefined;
@@ -276,6 +277,10 @@ contract BondPurple is ERC721, Ownable {
 
     function cancelled() public view returns (bool) {
         return _cancelled;
+    }
+
+    function issued() public view returns (bool) {
+        return _issued;
     }
 
     /**
@@ -603,6 +608,7 @@ contract BondPurple is ERC721, Ownable {
                 bondsAvailable -= numberOfBonds;
             }            
         }
+        _issued = true;
     }
 
     /**
@@ -752,6 +758,7 @@ contract BondPurple is ERC721, Ownable {
             Need to specify the direction of the adjustment and the amount   
      */
     function adjustCoupon(bool increase, uint256 amount) external onlyOwner {
+        //require(block.timestamp > _issueDate && _coupondefined, "Coupon can only be adjusted after the bond has been issued");
         uint256 previousCoupon = _coupon;
         if (increase) {
             _coupon = _coupon + amount;

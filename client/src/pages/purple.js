@@ -27,14 +27,12 @@ class Purple extends Component {
 			<>
                 <div className="container-fluid mt-5 px-5">
 					<ButtonBack />
-					<h2 className="mt-3">Bond Details</h2>
+					<h2 className="mt-3">Bond Details:</h2>
 				</div>
 				<PurpleBond />
-				
-
 
 				<div className="container-fluid mt-5 px-5">	
-					<h2>Links</h2>
+					<h2>Links: </h2>
 					<ul>
 						<li><Link to="/buypurple">Investor Page</Link></li>
 						<li><Link to="/issuerpurple">Issuer Page</Link></li>

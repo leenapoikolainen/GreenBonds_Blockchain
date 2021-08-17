@@ -68,6 +68,10 @@ class RedIssuer extends Component {
             const couponConfirmed = await greenBond.methods.couponDefined().call()
             this.setState({ couponConfirmed })
 
+            // Coupon confirmed
+            const issued = await greenBond.methods.issued().call()
+            this.setState({ issued })
+
 
             // Token count
             const tokens = await greenBond.methods.bondCount().call()
@@ -94,6 +98,14 @@ class RedIssuer extends Component {
 
     defineCoupon = () => {
         this.state.greenBond.methods.defineCoupon().send({ from: this.state.account })
+    }
+
+    adjustCoupon = (direction, amount) => {
+        if (direction == "Increase") {
+            this.state.greenBond.methods.adjustCoupon(true, amount).send({ from: this.state.account })
+        } else {
+            this.state.greenBond.methods.adjustCoupon(false, amount).send({ from: this.state.account })
+        }
     }
 
     timeConverter(UNIX_timestamp) {
@@ -237,12 +249,54 @@ class RedIssuer extends Component {
                             </div>
                         }
                     </div>
-                   
-                    <hr/>
 
-                    <div className="mt-2 pb-5">
+
+                    <div className="mt-2 ">
                         <p>Number of bonds in circulation: {this.state.tokens}</p>
                     </div>
+                </div>
+
+                <hr />
+                <div className="container mr-auto ml-auto mb-5">
+                    <h2>Adjust Coupon</h2>
+                    {this.state.tokens > 0
+                        ? <div>
+                            <form onSubmit={(event) => {
+                                event.preventDefault()
+                                const direction = this.direction.value
+                                const amount = this.amount.value
+                                this.adjustCoupon(direction, amount)
+                            }}>
+                                <label for="direction">Adjustment direction</label>
+                                <select
+                                    className="form-control"
+                                    id="direction"
+                                    value={this.state.value}
+                                    ref={(value) => { this.direction = value }}
+                                >
+                                    <option value="Increase">Increase</option>
+                                    <option value="Decrease">Decrese</option>
+                                </select>
+                                <label for="amount">Amount</label>
+                                <input
+                                    id='amount'
+                                    type='number'
+                                    className='form-control mb-1'
+                                    min='0'
+                                    ref={(input) => { this.amount = input }}
+                                />
+
+                                <input
+                                    type='submit'
+                                    className='btn btn-block btn-primary mt-4'
+                                    value='ADJUST'
+                                />
+                            </form>
+                        </div>
+                        : <div className="alert alert-secondary text-center" role="alert">
+                        Issue is deactive.
+                        </div>
+                    }
 
                 </div>
 

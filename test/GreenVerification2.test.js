@@ -44,6 +44,7 @@ contract('GreenVerification', function (accounts) {
         const event = result.logs[0].args;
         assert.equal(event.recordedResult, 50)
         
+        await verification.getResult(10).should.be.rejected
         result = await verification.getResult(1)
         assert.equal(result, 50)
         

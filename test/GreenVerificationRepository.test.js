@@ -47,6 +47,8 @@ contract('GreenVerificationRepository', function (accounts) {
         const verificationEvent = result.logs[1].args;
         
         // Get address
+        // Requires a symbol that has verificatiom
+        await repository.getVerificationAddress("NOASYMBOL").should.be.rejected
         let address = await repository.getVerificationAddress(symbol);
         
         // Address is correct
@@ -63,14 +65,20 @@ contract('GreenVerificationRepository', function (accounts) {
         await repository.addVerification(symbol, 0, {from: verifier})
         await repository.addVerification(symbol, 2, {from: verifier})
 
+        await repository.getNumberOfResults("NOTASYMBOL").should.be.rejected
         let results = await repository.getNumberOfResults(symbol)
         assert.equal(results, 3)
 
+        await repository.getResult("NOTASYMBOL", 1).should.be.rejected
         let result1 = await repository.getResult(symbol, 1)
         assert.equal(result1, 0)
         
         let result3 = await repository.getResult(symbol, 3)
         assert.equal(result3, 2) 
+
+        await repository.getResults("NOTASYMBOL").should.be.rejected
+        let resultList = await repository.getResults(symbol)
+        assert.isDefined(resultList)
     })
     
 })

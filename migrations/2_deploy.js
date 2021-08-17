@@ -82,11 +82,11 @@ module.exports = async function (deployer) {
     */
 
     // PURPLE BOND
-    
+    /*
     await deployer.deploy(BondPurple, company3, name3, symbol3, numberOfBondsSeeked3, minCoupon3, maxCoupon3, closingDate3,
         term3, couponsPerTerm3, baseURI3)
     
-
+    */
     // Verification Repo
     /*
     await deployer.deploy(GreenVerificationRepo);

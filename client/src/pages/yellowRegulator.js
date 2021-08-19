@@ -137,16 +137,16 @@ class YellowRegulator extends Component {
                         <h2>Bond: {this.state.symbol}</h2>
                     </div>
                     {this.state.cancelled
-                        ? <div className="alert alert-danger" role="alert">
-                            Bond Issue was cancelled due to inadequate demand.
+                        ? <div className="alert alert-danger text-center" role="alert">
+                            Bond issue was cancelled due to inadequate demand.
                         </div>
                         : <div> </div>
                     }
                     {this.state.couponConfirmed
-                        ? <div className="alert alert-success" role="alert">
+                        ? <div className="alert alert-success text-center" role="alert">
                             Bond issue has been confirmed.
                         </div>
-                        : <div className="alert alert-secondary" role="alert">
+                        : <div className="alert alert-secondary text-center" role="alert">
                             Bond issue has not been confirmed.
                         </div>
                     }

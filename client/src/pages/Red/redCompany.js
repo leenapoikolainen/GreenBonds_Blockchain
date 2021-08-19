@@ -168,15 +168,12 @@ class RedCompany extends Component {
                             </div>
                         }
                     </div>
-
                 </div>
-
-
 
                 <div className="container mr-auto ml-auto">
                     {this.state.cancelled
-                        ? <div className="alert alert-danger" role="alert">
-                            Bond Issue has been cancelled due to inadequate demand.
+                        ? <div className="alert alert-danger text-center" role="alert">
+                            Bond issue has been cancelled due to inadequate demand.
                         </div>
                         : <div> </div>
                     }

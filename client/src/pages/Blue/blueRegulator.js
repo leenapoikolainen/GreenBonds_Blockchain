@@ -142,16 +142,16 @@ class BlueRegulator extends Component {
                     </div>
                     <div className="mt-4">
                         {this.state.cancelled
-                            ? <div className="alert alert-danger" role="alert">
-                                Bond Issue was cancelled due to inadequate demand.
+                            ? <div className="alert alert-danger text-center" role="alert">
+                                Bond issue was cancelled due to inadequate demand.
                             </div>
                             : <div> </div>
                         }
                         {this.state.issued
-                            ? <div className="alert alert-success" role="alert">
+                            ? <div className="alert alert-success text-center" role="alert">
                                 Bonds have been issued.
                             </div>
-                            : <div className="alert alert-secondary" role="alert">
+                            : <div className="alert alert-secondary text-center" role="alert">
                                 Bonds have not been issued yet.
                             </div>
                         }

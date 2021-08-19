@@ -164,16 +164,16 @@ class Regulation extends Component {
                 <div className="container mr-auto ml-auto">
                     <h2 >Bond Details</h2>
                     {this.state.cancelled
-                        ? <div className="alert alert-danger" role="alert">
+                        ? <div className="alert alert-danger text-center" role="alert">
                             Bond Issue has been cancelled due to inadequate demand.
                         </div>
                         : <div> </div>
                     }
                     {this.state.couponConfirmed
-                        ? <div className="alert alert-success" role="alert">
+                        ? <div className="alert alert-success text-center" role="alert">
                             Bond issue has been confirmed.
                         </div>
-                        : <div className="alert alert-secondary" role="alert">
+                        : <div className="alert alert-secondary text-center" role="alert">
                             Bond issue has not been confirmed.
                         </div>
                     }

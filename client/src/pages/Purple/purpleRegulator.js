@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Web3 from 'web3'
 
-// Import link button
-import ButtonBack from '../components/backToPurple';
 // Import smart Contracts
-import GreenBond from '../contracts/BondPurple.json';
+import GreenBond from '../../contracts/BondPurple.json';
+
+// Import Pagination
+import Pagination from '../../components/Purple/pagination';
 
 class PurpleRegulator extends Component {
     async componentWillMount() {
@@ -133,26 +134,27 @@ class PurpleRegulator extends Component {
 
     render() {
         return (
-            <>  
-                <div className="container mr-auto ml-auto">       
+            <>
+                <div className="container mr-auto ml-auto">
                     <div className="container mr-auto ml-auto">
-                        <h2>Bond: {this.state.symbol}</h2>
+                        <Pagination />
                     </div>
-                    {this.state.cancelled
-                        ? <div className="alert alert-danger" role="alert">
-                            Bond Issue was cancelled due to inadequate demand.
-                        </div>
-                        : <div> </div>
-                    }
-                    {this.state.issued
-                        ? <div className="alert alert-success" role="alert">
-                            Bonds have been issued.
-                        </div>
-                        : <div className="alert alert-secondary" role="alert">
-                            Bonds have not been issued yet.
-                        </div>
-                    }
-                    <ButtonBack />
+                    <div className="mt-4">
+                        {this.state.cancelled
+                            ? <div className="alert alert-danger text-center" role="alert">
+                                Bond Issue was cancelled due to inadequate demand.
+                            </div>
+                            : <div> </div>
+                        }
+                        {this.state.issued
+                            ? <div className="alert alert-success text-center" role="alert">
+                                Bonds have been issued.
+                            </div>
+                            : <div className="alert alert-secondary text-center" role="alert">
+                                Bonds have not been issued yet.
+                            </div>
+                        }
+                    </div>
                 </div>
                 <hr />
 

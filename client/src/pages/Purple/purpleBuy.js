@@ -1,11 +1,11 @@
 import React, { Component} from 'react';
 import Web3 from 'web3'
 
-// Import link button
-import ButtonBack from '../components/backToPurple';
-
 // Import smart Contracts
-import GreenBond from '../contracts/BondPurple.json';
+import GreenBond from '../../contracts/BondPurple.json';
+
+// Import Pagination
+import Pagination from '../../components/Purple/pagination';
 
 
 class BuyPurple extends Component {
@@ -133,9 +133,8 @@ class BuyPurple extends Component {
 	render() {
 		return (
 			<div className="container-fluid mt-5">
-				<div className="container mr-auto ml-auto">
-					<h2>Invest in bond: <i>{this.state.symbol}</i></h2>
-					<ButtonBack />
+				<div className="container mr-auto ml-auto">			
+					<Pagination />
 				</div>
 				<hr />
 

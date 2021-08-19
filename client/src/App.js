@@ -30,11 +30,11 @@ import BlueCompany from './pages/Blue/blueCompany';
 import BlueRegulator from './pages/Blue/blueRegulator';
 
 // Pages for bond BLUE
-import Purple from './pages/purple';
-import PurpleBuy from './pages/purpleBuy';
-import PurpleIssuer from './pages/purpleIssuer';
-import PurpleCompany from './pages/purpleCompany';
-import PurpleRegulator from './pages/purpleRegulator';
+import Purple from './pages/Purple/purple';
+import PurpleBuy from './pages/Purple/purpleBuy';
+import PurpleIssuer from './pages/Purple/purpleIssuer';
+import PurpleCompany from './pages/Purple/purpleCompany';
+import PurpleRegulator from './pages/Purple/purpleRegulator';
 
 // Pages for bond RED
 import Red from './pages/Red/red';

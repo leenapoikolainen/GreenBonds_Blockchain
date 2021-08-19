@@ -67,7 +67,6 @@ class PurpleDetails extends Component {
 			const URI = await greenBond.methods.getBaseURI().call()
 			this.setState({ URI })
 
-
 			// Bidding open
 			const timeNow = Date.now()
 			let biddingOpen
@@ -98,8 +97,12 @@ class PurpleDetails extends Component {
 			const coupon = await greenBond.methods.getCoupon().call()
 			this.setState({ coupon })
 
-			const bondAddress =  greenBond.options.address
+			const bondAddress = greenBond.options.address
 			this.setState({ bondAddress })
+
+			// Number of tokens in circulation
+			const tokens = await greenBond.methods.bondCount().call()
+			this.setState({ tokens })
 
 		} else {
 			window.alert('Smart contract not deployed to detected network.')
@@ -125,11 +128,21 @@ class PurpleDetails extends Component {
 			<div className="row">
 				<div className="container mr-auto ml-auto mt-4">
 					{this.state.biddingOpen
-						? <div className="alert alert-success" role="alert">
+						? <div className="alert alert-success text-center" role="alert">
 							Bidding for this bond is open.
 						</div>
-						: <div className="alert alert-danger" role="alert">
+						: <div className="alert alert-danger text-center" role="alert">
 							Bidding for this bond is closed.
+						</div>
+					}
+				</div>
+				<div className="container mr-auto ml-auto">
+					{this.state.tokens > 0
+						? <div className="alert alert-success text-center" role="alert">
+							Issue is active.
+						</div>
+						: <div className="alert alert-secondary text-center" role="alert">
+							Issue is deactive.
 						</div>
 					}
 				</div>
@@ -177,7 +190,7 @@ class PurpleDetails extends Component {
 						</tr>
 						<tr>
 							<td>Coupon</td>
-							{this.state.confirmed 
+							{this.state.confirmed
 								? <td>{this.state.coupon}</td>
 								: <td><i>Not confirmed</i></td>
 							}

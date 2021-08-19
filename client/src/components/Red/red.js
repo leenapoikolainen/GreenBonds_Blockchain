@@ -102,6 +102,10 @@ class RedDetails extends Component {
 			const bondAddress =  greenBond.options.address
 			this.setState({ bondAddress })
 
+			// Number of tokens in circulation
+			const tokens = await greenBond.methods.bondCount().call()
+			this.setState({ tokens })
+
 		} else {
 			window.alert('Smart contract not deployed to detected network.')
 		}
@@ -126,11 +130,21 @@ class RedDetails extends Component {
 			<div className="row">
 				<div className="container mr-auto ml-auto mt-4">
 					{this.state.biddingOpen
-						? <div className="alert alert-success" role="alert">
+						? <div className="alert alert-success text-center" role="alert">
 							Bidding for this bond is open.
 						</div>
-						: <div className="alert alert-danger" role="alert">
+						: <div className="alert alert-danger text-center" role="alert">
 							Bidding for this bond is closed.
+						</div>
+					}
+				</div>
+				<div className="container mr-auto ml-auto">
+					{this.state.tokens > 0
+						? <div className="alert alert-success text-center" role="alert">
+							Issue is active.
+						</div>
+						: <div className="alert alert-secondary text-center" role="alert">
+							Issue is deactive.
 						</div>
 					}
 				</div>

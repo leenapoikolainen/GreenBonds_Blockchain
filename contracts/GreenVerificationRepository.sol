@@ -42,7 +42,6 @@ contract GreenVerificationRepository {
         _owner = msg.sender;
     }
 
-
     // FUNCTIONS
 
     /**

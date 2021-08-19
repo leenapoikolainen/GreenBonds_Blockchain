@@ -24,6 +24,7 @@ class BlueIssuer extends Component {
         const networkId = await web3.eth.net.getId()
         const networkData = GreenBond.networks[networkId]
         if (networkData) {
+
             // Get the Green bond contract
             const greenBond = new web3.eth.Contract(GreenBond.abi, networkData.address)
             this.setState({ greenBond })
@@ -260,6 +261,9 @@ class BlueIssuer extends Component {
                 <hr />
                 <div className="container mr-auto ml-auto mb-5">
                     <h2>Adjust Coupon</h2>
+                    <ul>
+                        <li>Coupon: {this.state.coupon}</li>
+                    </ul>
                     {this.state.tokens > 0
                         ? <div>
                             <form onSubmit={(event) => {

@@ -260,6 +260,9 @@ class PurpleIssuer extends Component {
                 <hr />
                 <div className="container mr-auto ml-auto mb-5">
                     <h2>Adjust Coupon</h2>
+                    <ul>
+                        <li>Coupon: {this.state.coupon}</li>
+                    </ul>
                     {this.state.tokens > 0
                         ? <div>
                             <form onSubmit={(event) => {

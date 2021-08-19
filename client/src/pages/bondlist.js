@@ -28,9 +28,10 @@ class BondList extends Component {
 
     async loadBlockchainData() {
         const web3 = window.web3
-        // Load account 
+        
+        // Load account
         const accounts = await web3.eth.getAccounts()
-        this.setState({ account: accounts[0] })
+		this.setState({ account: accounts[0] })
 
         // Network connection
         const networkId = await web3.eth.net.getId()
@@ -51,7 +52,6 @@ class BondList extends Component {
 
             const symbol = await greenBond.methods.symbol().call()
             this.setState({ symbol })
-
 
             const bidClosingTimeStamp = await greenBond.methods.getBidClosingTime().call()
             const bidClosingTime = this.timeConverter(bidClosingTimeStamp)
@@ -92,6 +92,10 @@ class BondList extends Component {
                 const status = "Matured"
                 this.setState({ status })
             }
+
+            const account = accounts[0];
+            const tokensOwned = await greenBond.methods.balanceOf(account).call()
+			this.setState({ tokensOwned })
 
         } else {
             window.alert('Smart contract not deployed to detected network.')
@@ -151,6 +155,10 @@ class BondList extends Component {
                 const status2 = "Matured"
                 this.setState({ status2 })
             }
+
+            const account = accounts[0];
+            const tokensOwned2 = await greenBond2.methods.balanceOf(account).call()
+			this.setState({ tokensOwned2 })
         }
 
         if (networkData3) {
@@ -207,7 +215,11 @@ class BondList extends Component {
                 const status3 = "Matured"
                 this.setState({ status3 })
             }
-        }
+
+            const account = accounts[0];
+            const tokensOwned3 = await purpleBond.methods.balanceOf(account).call()
+		    this.setState({ tokensOwned3 })
+        }     
     }
 
     timeConverter(UNIX_timestamp) {
@@ -228,7 +240,6 @@ class BondList extends Component {
     render() {
         return (
             <>
-
                 <div className="container-fluid mt-5">
                     <h1>List of bonds</h1>
                     <div className="table-responsive mt-4">
@@ -241,7 +252,8 @@ class BondList extends Component {
                             <th>Symbol</th>
                             <th>Status</th>
                             <th>Bidding</th>        
-                            <th>Deadline</th>                                       
+                            <th>Deadline</th>
+                            <th>Bond tokens hold</th>                                    
                         </tr>
                     </thead>
                     <tbody>
@@ -255,7 +267,8 @@ class BondList extends Component {
                                 ? <td className="text-success">Open</td>
                                 : <td className="text-danger">Closed</td>
                             }   
-                            <td>{this.state.bidClosingTime}</td>                     
+                            <td>{this.state.bidClosingTime}</td>  
+                            <td>{this.state.tokensOwned}</td>                   
                         </tr>
                         <tr>
                             <td><Link to="/blue">Details</Link></td>
@@ -267,7 +280,8 @@ class BondList extends Component {
                                 ? <td className="text-success">Open</td>
                                 : <td className="text-danger">Closed</td>
                             }   
-                            <td>{this.state.bidClosingTime2}</td>  
+                            <td>{this.state.bidClosingTime2}</td> 
+                            <td>{this.state.tokensOwned2}</td>    
                         </tr>
                         <tr>
                             <td><Link to="/purple">Details</Link></td>
@@ -280,6 +294,7 @@ class BondList extends Component {
                                 : <td className="text-danger">Closed</td>
                             }   
                             <td>{this.state.bidClosingTime3}</td>
+                            <td>{this.state.tokensOwned3}</td>   
                         </tr>
                     </tbody>
                     </table>

@@ -44,7 +44,7 @@ contract GreenCertificateRepository {
     // FUNCTIONS
 
     /**
-     * @dev Function to retunr the owner of the certificate (Green certifier) 
+     * @dev Function to return the owner of the certificate (Green certifier) 
      */
     function getOwner() external view returns (address) {
         return _owner;

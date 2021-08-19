@@ -7,6 +7,8 @@ import RedBond from '../components/red';
 // Button back
 import ButtonBack from '../components/backToBondList';
 
+import Pagination from '../components/Red/pagination';
+
 class Red extends Component {
 
 	timeConverter(UNIX_timestamp) {
@@ -25,23 +27,14 @@ class Red extends Component {
 	render() {
 		return (
 			<>
-                <div className="container-fluid mt-5 px-5">
-					<ButtonBack />
-					<h2 className="mt-3">Bond Details:</h2>
-				</div>
-				<RedBond />
-
-				<div className="container-fluid mt-5 px-5">	
-					<h2>Links: </h2>
-					<ul>
-						<li><Link to="/buyred">Investor Page</Link></li>
-						<li><Link to="/issuerred">Issuer Page</Link></li>
-						<li><Link to="/companyred">Company Page</Link></li>
-						<li><Link to='/regulatorred'>Regulator Page</Link></li>
-					</ul>
-				</div>
-
-
+				<main className="mb-5">
+					<div className="container-fluid mt-5 px-5">
+						<ButtonBack />
+						<Pagination />
+						<h2 className="mt-3">Bond Details:</h2>
+					</div>
+					<RedBond />
+				</main>
 			</>
 		);
 	}

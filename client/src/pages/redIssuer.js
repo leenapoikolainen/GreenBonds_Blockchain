@@ -7,6 +7,8 @@ import ButtonBack from '../components/backToRed';
 // Import smart Contracts
 import GreenBond from '../contracts/GreenBond2.json';
 
+import Pagination from '../components/Red/pagination';
+
 class RedIssuer extends Component {
 
     async componentWillMount() {
@@ -161,17 +163,17 @@ class RedIssuer extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    {this.state.issuer == this.state.account
-                        ? <div className="alert alert-success text-center" role="alert">
-                            You're logged in as issuer {this.state.issuer}
-                        </div>
-                        : <div className="alert alert-danger text-center" role="alert">
-                            This page is only for issuer {this.state.issuer}
-                        </div>
-                    }
-
-                    <h2>Bond: {this.state.symbol}</h2>
-                    <ButtonBack />
+                    <Pagination />
+                    <div className="mt-4">
+                        {this.state.issuer == this.state.account
+                            ? <div className="alert alert-success text-center" role="alert">
+                                You're logged in as issuer {this.state.issuer}
+                            </div>
+                            : <div className="alert alert-danger text-center" role="alert">
+                                This page is only for issuer {this.state.issuer}
+                            </div>
+                        }
+                    </div>
                 </div>
                 <hr />
 
@@ -294,7 +296,7 @@ class RedIssuer extends Component {
                             </form>
                         </div>
                         : <div className="alert alert-secondary text-center" role="alert">
-                        Issue is deactive.
+                            Issue is deactive.
                         </div>
                     }
 

@@ -8,6 +8,8 @@ import ButtonBack from '../components/backToRed';
 // Import smart Contracts
 import GreenBond from '../contracts/GreenBond2.json';
 
+import Pagination from '../components/Red/pagination';
+
 class RedCompany extends Component {
     async componentWillMount() {
         await this.loadBlockchainData()
@@ -156,16 +158,18 @@ class RedCompany extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    {this.state.company == this.state.account
-                        ? <div className="alert alert-success text-center" role="alert">
-                            You're logged in as the borrowing company {this.state.company}
-                        </div>
-                        : <div className="alert alert-danger text-center" role="alert">
-                            This page is only for the borrowing company {this.state.company}
-                        </div>
-                    }
-                    <h2>Bond: {this.state.symbol}</h2>
-                    <ButtonBack />
+                    <Pagination />
+                    <div className="mt-4">
+                        {this.state.company == this.state.account
+                            ? <div className="alert alert-success text-center" role="alert">
+                                You're logged in as the borrowing company {this.state.company}
+                            </div>
+                            : <div className="alert alert-danger text-center" role="alert">
+                                This page is only for the borrowing company {this.state.company}
+                            </div>
+                        }
+                    </div>
+
                 </div>
 
 
@@ -223,10 +227,10 @@ class RedCompany extends Component {
                     <h2>Pay Back Principal</h2>
                     <p><b>Maturity Date:</b> {this.state.maturityDate}</p>
                     {this.state.principalPaymentMade
-                            ? <div className="alert alert-danger text-center" role="alert">
-                                Note: Principal was paid back on: <i> {this.state.principalPaymentDate} </i>
-                                </div>
-                            : <div></div>
+                        ? <div className="alert alert-danger text-center" role="alert">
+                            Note: Principal was paid back on: <i> {this.state.principalPaymentDate} </i>
+                        </div>
+                        : <div></div>
                     }
                     {this.state.issued
                         ? <div>

@@ -7,6 +7,8 @@ import ButtonBack from '../components/backToRed';
 // Import smart Contracts
 import GreenBond from '../contracts/GreenBond2.json';
 
+import Pagination from '../components/Red/pagination';
+
 
 class BuyRed extends Component {
 
@@ -134,8 +136,8 @@ class BuyRed extends Component {
 		return (
 			<div className="container-fluid mt-5">
 				<div className="container mr-auto ml-auto">
-					<h2>Invest in bond: <i>{this.state.symbol}</i></h2>
-					<ButtonBack />
+					
+					<Pagination />
 				</div>
 				<hr />
 

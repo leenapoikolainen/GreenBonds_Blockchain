@@ -210,7 +210,16 @@ class VerificationRepo extends Component {
 
                     </form>
                 </div>
-
+                <div className="container mr-auto ml-auto">
+                    {this.state.verifier == this.state.account
+                        ? <div className="alert alert-success text-center" role="alert">
+                            You're logged in as certifier {this.state.verifier} and can add verifications.
+                        </div>
+                        : <div className="alert alert-danger text-center" role="alert">
+                            Only verifier {this.state.verifier} can create certificates.
+                        </div>
+                    }
+                </div>
                 <div className="container mr-auto ml-auto">
                     <h2>Add Verification</h2>
 

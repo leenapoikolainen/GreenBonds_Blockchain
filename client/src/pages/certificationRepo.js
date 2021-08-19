@@ -103,6 +103,115 @@ class Certifier extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
+                    <div className="jumbotron">
+                        <h1 className="display-4">Green Certificate Repository</h1>
+                        <hr className="my-4"></hr>
+                        <p className="lead">
+                            Anyone can query the Green Certificate Repository, and check
+                            whether a company has a green certificate, and which projects
+                            have been approved for green bond financing under that certificate.
+                        </p>
+                        <p className="lead">
+                            If you are logged in as green certifier, you can also create new certificates
+                            for projects that you have assessed to be eligible for green financing.
+                        </p>
+                    </div>
+                </div>
+                <hr />
+                
+                <div className="container mr-auto ml-auto mb-5 mt-4">
+                    <h2>Check Certificates</h2>
+                    <div className="mt-4">
+                        <h3>1. Is certified company</h3>
+                        <form onSubmit={(event) => {
+                            event.preventDefault()
+                            const company = this.company.value
+                            this.isCertified(company)
+                        }}>
+                            <label for="company">Company Address</label>
+                            <input
+                                id='company'
+                                type='text'
+                                className='form-control mb-1'
+                                maxlength="42"
+                                minLength="42"
+                                required
+                                ref={(input) => { this.company = input }}
+                            />
+                            <input
+                                type='submit'
+                                className='btn btn-block btn-primary mt-4'
+                                value='Check'
+                            />
+                            <div className="mt-3">
+                                <p> <b>{this.state.certificateStatus}</b></p>
+                            </div>
+                        </form>
+                        <hr/>
+                    </div>
+
+                    <div className="mt-4">
+                        <h3>2. Get certified projects for a compnay</h3>
+                        <form onSubmit={(event) => {
+                            event.preventDefault()
+                            const address = this.address.value
+                            this.getProjects(address)
+                        }}>
+                            <label for="company">Company Address</label>
+                            <input
+                                id='company'
+                                type='text'
+                                className='form-control mb-1'
+                                maxlength="42"
+                                minLength="42"
+                                required
+                                ref={(input) => { this.address = input }}
+                            />
+                            <input
+                                type='submit'
+                                className='btn btn-block btn-primary mt-4'
+                                value='Get Projects'
+                            />
+                        </form>
+                        <div className="mt-3">
+                            <ul>{this.state.projectList}</ul>
+                        </div>
+                        <hr/>
+                    </div>
+
+                    <div className="mt-4">
+                        <h3>3. Get certificate address</h3>
+                        <form onSubmit={(event) => {
+                            event.preventDefault()
+                            const companyAddress = this.companyAddress.value
+                            this.getCertificate(companyAddress)
+                        }}>
+                            <label for="company">Company Address</label>
+                            <input
+                                id='company'
+                                type='text'
+                                className='form-control mb-1'
+                                maxlength="42"
+                                minLength="42"
+                                required
+                                ref={(input) => { this.companyAddress = input }}
+                            />
+                            <input
+                                type='submit'
+                                className='btn btn-block btn-primary mt-4'
+                                value='Get Address'
+                            />
+                        </form>
+                        <div className="mt-3">
+                            <p> <b>{this.state.certificateAddress}</b></p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div className="container mr-auto ml-auto">
                     {this.state.certifier == this.state.account
                         ? <div className="alert alert-success text-center" role="alert">
                             You're logged in as certifier {this.state.certifier} and can create certificates.
@@ -145,97 +254,6 @@ class Certifier extends Component {
                             value='Create'
                         />
                     </form>
-                </div>
-
-                <hr />
-                <div className="container mr-auto ml-auto mb-5 mt-4">
-                    <h2>Check Certificates</h2>
-                    <div className="mt-4">
-                        <h3>1. Is certified company</h3>
-                        <form onSubmit={(event) => {
-                            event.preventDefault()
-                            const company = this.company.value
-                            this.isCertified(company)
-                        }}>
-                            <label for="company">Company Address</label>
-                            <input
-                                id='company'
-                                type='text'
-                                className='form-control mb-1'
-                                maxlength="42"
-                                minLength="42"
-                                required
-                                ref={(input) => { this.company = input }}
-                            />
-                            <input
-                                type='submit'
-                                className='btn btn-block btn-primary mt-4'
-                                value='Check'
-                            />
-                            <div className="mt-3">
-                                <p> <b>{this.state.certificateStatus}</b></p>
-                            </div>
-                        </form>
-
-                    </div>
-
-                    <div className="mt-4">
-                        <h3>2. Get certified Projects</h3>
-                        <form onSubmit={(event) => {
-                            event.preventDefault()
-                            const address = this.address.value
-                            this.getProjects(address)
-                        }}>
-                            <label for="company">Company Address</label>
-                            <input
-                                id='company'
-                                type='text'
-                                className='form-control mb-1'
-                                maxlength="42"
-                                minLength="42"
-                                required
-                                ref={(input) => { this.address = input }}
-                            />
-                            <input
-                                type='submit'
-                                className='btn btn-block btn-primary mt-4'
-                                value='Get Projects'
-                            />
-                        </form>
-                        <div className="mt-3">
-
-                            <ul>{this.state.projectList}</ul>
-                        </div>
-                    </div>
-
-                    <div className="mt-4">
-                        <h3>3. Get certificate address</h3>
-                        <form onSubmit={(event) => {
-                            event.preventDefault()
-                            const companyAddress = this.companyAddress.value
-                            this.getCertificate(companyAddress)
-                        }}>
-                            <label for="company">Company Address</label>
-                            <input
-                                id='company'
-                                type='text'
-                                className='form-control mb-1'
-                                maxlength="42"
-                                minLength="42"
-                                required
-                                ref={(input) => { this.companyAddress = input }}
-                            />
-                            <input
-                                type='submit'
-                                className='btn btn-block btn-primary mt-4'
-                                value='Get Address'
-                            />
-                        </form>
-                        <div className="mt-3">
-                            <p> <b>{this.state.certificateAddress}</b></p>
-                        </div>
-                    </div>
-
                 </div>
 
             </>

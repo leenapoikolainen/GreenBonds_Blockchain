@@ -52,6 +52,9 @@ class VerificationRepo extends Component {
             const verifier = await verificationRepository.methods.getOwner().call()
             this.setState({ verifier })
 
+            const repoAddress =  verificationRepository.options.address
+			this.setState({ repoAddress })
+
         } else {
             window.alert('Smart contract not deployed to detected network.')
         }
@@ -136,6 +139,8 @@ class VerificationRepo extends Component {
                             for bonds that you have assessed. You can calculate the performance
                             score by typing in the verification results to the calculator.
                         </p>
+                        <hr className="my-4"></hr>
+                        <p>Contract address: {this.state.repoAddress}</p>
                     </div>
                 </div>
 

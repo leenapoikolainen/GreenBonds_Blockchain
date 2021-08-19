@@ -49,7 +49,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -68,7 +69,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -87,7 +89,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -106,7 +109,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -125,7 +129,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -149,7 +154,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -12691,18 +12697,18 @@
     "3": {
       "events": {},
       "links": {},
-      "address": "0x1454De7e8e56302f9E542576F2717025d53baED2",
-      "transactionHash": "0xbdcc07fb772015124e1d1ac869d10efe92afdfedf73b85ee63d69d02360533bf"
+      "address": "0x182AFff34B6FA8fd95d0Dbc5aca0C50f07B6986e",
+      "transactionHash": "0x095dd23b79acc7b8f430681380f367ae60393ef2e027268b1a79fc48ec6b922d"
     },
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xdCC7d18c17Cf5d0C80Cb50a073baC3B64dA3C389",
-      "transactionHash": "0x63c645a79e7958fb56492519f17c21098c7c5f81ee8da8b34d937e416589f38f"
+      "address": "0xE3c87B3E1470997b0549BB32652513fF2037fB85",
+      "transactionHash": "0xc4770566f5dc36948a88aecfd732bd30bd7577b042868e42c1eb7d1d2526d2dc"
     }
   },
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-08-19T08:25:42.573Z",
+  "updatedAt": "2021-08-19T12:06:16.776Z",
   "networkType": "ethereum",
   "devdoc": {
     "events": {

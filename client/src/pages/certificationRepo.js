@@ -43,6 +43,9 @@ class Certifier extends Component {
             const certifier = await greenCertifier.methods.getOwner().call()
             this.setState({ certifier })
 
+            const repoAddress =  greenCertifier.options.address
+			this.setState({ repoAddress })
+
         } else {
             window.alert('Smart contract not deployed to detected network.')
         }
@@ -115,6 +118,8 @@ class Certifier extends Component {
                             If you are logged in as green certifier, you can also create new certificates
                             for projects that you have assessed to be eligible for green financing.
                         </p>
+                        <hr className="my-4"></hr>
+                        <p>Contract address: {this.state.repoAddress}</p>
                     </div>
                 </div>
                 <hr />

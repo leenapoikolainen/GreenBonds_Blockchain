@@ -90,9 +90,9 @@ module.exports = async function (deployer) {
     
     */
     // GREEN VERIFICATION REPO
-    /*
+    
     await deployer.deploy(GreenVerificationRepo);
-    */
+    
 
     // GREEN CERTIFICATION REPO - Deployed to Ropsten and Ganache on 19th August
     /*

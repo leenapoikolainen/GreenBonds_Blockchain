@@ -7,7 +7,7 @@ import GreenBond from '../../contracts/GreenBond2.json'
 
 class RedDetails extends Component {
 
-	async componentWillMount() {
+	async componentDidMount() {
 		await this.loadBlockchainData()
 	}
 

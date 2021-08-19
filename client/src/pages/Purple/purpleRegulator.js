@@ -8,7 +8,7 @@ import GreenBond from '../../contracts/BondPurple.json';
 import Pagination from '../../components/Purple/pagination';
 
 class PurpleRegulator extends Component {
-    async componentWillMount() {
+    async componentDidMount() {
         await this.loadBlockchainData()
     }
 

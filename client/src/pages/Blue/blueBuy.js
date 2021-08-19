@@ -10,7 +10,7 @@ import Pagination from '../../components/Blue/pagination';
 
 class BuyBlue extends Component {
 
-	async componentWillMount() {
+	async componentDidMount() {
 		await this.loadBlockchainData()
 	}
 

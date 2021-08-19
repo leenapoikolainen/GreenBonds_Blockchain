@@ -6,7 +6,7 @@ import VerificationRepository from '../contracts/GreenVerificationRepository.jso
 
 
 class VerificationRepo extends Component {
-    async componentWillMount() {
+    async componentDidMount() {
         await this.loadBlockchainData()
         await this.loadWeb3()
 

@@ -8,7 +8,7 @@ import GreenCertifier from '../contracts/GreenCertificateRepository.json'
 
 class Certifier extends Component {
 
-    async componentWillMount() {
+    async componentDidMount() {
         await this.loadBlockchainData()  
         await this.loadWeb3()     
     }

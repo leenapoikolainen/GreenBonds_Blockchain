@@ -8,7 +8,7 @@ import GreenBond from '../../contracts/GreenBond2.json';
 import Pagination from '../../components/Red/pagination';
 
 class RedRegulator extends Component {
-    async componentWillMount() {
+    async componentDidMount() {
         await this.loadBlockchainData()
     }
 

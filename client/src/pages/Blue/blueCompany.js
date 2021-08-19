@@ -8,7 +8,7 @@ import GreenBond from '../../contracts/BondBlue.json';
 import Pagination from '../../components/Blue/pagination';
 
 class BlueCompany extends Component {
-    async componentWillMount() {
+    async componentDidMount() {
         await this.loadBlockchainData()
     }
 

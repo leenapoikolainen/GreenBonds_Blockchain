@@ -9,7 +9,7 @@ import Pagination from '../../components/Red/pagination';
 
 class BuyRed extends Component {
 
-	async componentWillMount() {
+	async componentDidMount() {
 		await this.loadBlockchainData()
 	}
 

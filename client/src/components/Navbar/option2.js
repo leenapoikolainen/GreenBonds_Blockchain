@@ -14,7 +14,7 @@ import {
 
 
 class Option2 extends Component {
-    async componentWillMount() {
+    async componentDidMount() {
         await this.loadWeb3()
         await this.loadBlockchainData()
         

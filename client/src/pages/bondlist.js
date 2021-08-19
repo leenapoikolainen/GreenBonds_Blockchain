@@ -8,7 +8,7 @@ import BondBlue from '../contracts/BondBlue.json';
 
 
 class BondList extends Component {
-    async componentWillMount() {
+    async componentDidMount() {
         await this.loadWeb3()
         await this.loadBlockchainData()
     }

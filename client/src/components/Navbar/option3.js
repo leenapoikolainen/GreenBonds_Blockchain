@@ -8,7 +8,7 @@ import {
 } from 'react-bootstrap'
 
 class Option3 extends Component {
-    async componentWillMount() {
+    async componentDidMount() {
         await this.loadWeb3()
         await this.loadBlockchainData()
 

@@ -6,7 +6,7 @@ import GreenBond from '../../contracts/BondPurple.json'
 
 class PurpleDetails extends Component {
 
-	async componentWillMount() {
+	async componentDidMount() {
 		await this.loadBlockchainData()
 	}
 

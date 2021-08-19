@@ -10,7 +10,7 @@ import Pagination from '../../components/Red/pagination';
 
 class RedIssuer extends Component {
 
-    async componentWillMount() {
+    async componentDidMount() {
         await this.loadBlockchainData()
     }
 

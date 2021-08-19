@@ -10,7 +10,7 @@ import Pagination from '../../components/Purple/pagination';
 
 class BuyPurple extends Component {
 
-	async componentWillMount() {
+	async componentDidMount() {
 		await this.loadBlockchainData()
 	}
 

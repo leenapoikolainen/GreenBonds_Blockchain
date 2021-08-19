@@ -7,7 +7,7 @@ import GreenBond from '../../contracts/BondBlue.json'
 
 class BlueDetails extends Component {
 
-	async componentWillMount() {
+	async componentDidMount() {
 		await this.loadBlockchainData()
 	}
 

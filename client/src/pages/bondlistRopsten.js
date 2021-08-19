@@ -6,7 +6,7 @@ import Web3 from 'web3';
 import Bond1 from '../contracts/BondRopsten.json';
 
 class BondListRopsten extends Component {
-    async componentWillMount() {
+    async componentDidMount() {
         await this.loadWeb3()
         await this.loadBlockchainData()
     }

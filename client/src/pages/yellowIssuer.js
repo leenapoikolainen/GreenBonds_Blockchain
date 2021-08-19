@@ -10,7 +10,7 @@ import GreenBond from '../contracts/BondRopsten.json';
 
 class YellowIssuer extends Component {
 
-    async componentWillMount() {
+    async componentDidMount() {
         await this.loadBlockchainData()
     }
 

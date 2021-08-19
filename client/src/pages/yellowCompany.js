@@ -9,7 +9,7 @@ import ButtonBack from '../components/backToYellow';
 import GreenBond from '../contracts/BondRopsten.json';
 
 class YellowCompany extends Component {
-    async componentWillMount() {
+    async componentDidMount() {
         await this.loadBlockchainData()
     }
 

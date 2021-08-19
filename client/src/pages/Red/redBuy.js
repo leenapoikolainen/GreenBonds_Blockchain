@@ -2,13 +2,12 @@ import React, { Component} from 'react';
 import Web3 from 'web3'
 
 // Import link button
-import ButtonBack from '../components/backToRed';
+import ButtonBack from '../../components/backToRed';
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond2.json';
+import GreenBond from '../../contracts/GreenBond2.json';
 
-import Pagination from '../components/Red/pagination';
-
+import Pagination from '../../components/Red/pagination';
 
 class BuyRed extends Component {
 
@@ -135,8 +134,7 @@ class BuyRed extends Component {
 	render() {
 		return (
 			<div className="container-fluid mt-5">
-				<div className="container mr-auto ml-auto">
-					
+				<div className="container mr-auto ml-auto">			
 					<Pagination />
 				</div>
 				<hr />

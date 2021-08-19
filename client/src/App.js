@@ -37,11 +37,11 @@ import PurpleCompany from './pages/purpleCompany';
 import PurpleRegulator from './pages/purpleRegulator';
 
 // Pages for bond RED
-import Red from './pages/red';
-import RedBuy from './pages/redBuy'
-import RedIssuer from './pages/redIssuer';
-import RedCompany from './pages/redCompany';
-import RedRegulator from './pages/redRegulator';
+import Red from './pages/Red/red';
+import RedBuy from './pages/Red/redBuy'
+import RedIssuer from './pages/Red/redIssuer';
+import RedCompany from './pages/Red/redCompany';
+import RedRegulator from './pages/Red/redRegulator';
 
 
 // Pages for bond YELLOW

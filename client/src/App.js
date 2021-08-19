@@ -9,7 +9,6 @@ import Navbar from './components/Navbar/option3';
 // Pages
 import About from './pages/about';
 
-
 import Certifier from './pages/certificationRepo';
 import Verifier from './pages/verifier';
 import VerificationRepo from './pages/verificationRepo';

@@ -3,7 +3,7 @@ import Web3 from 'web3'
 
 // Import smart Contracts
 
-import GreenCertifier from '../contracts/GreenCertifier.json'
+import GreenCertifier from '../contracts/GreenCertificateRepository.json'
 
 
 class Certifier extends Component {
@@ -103,11 +103,14 @@ class Certifier extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    <div className="alert alert-secondary text-center" role="alert">
-                        <p>Certificate Issuer: {this.state.certifier}</p>
-                    </div>
-                   
-                    
+                    {this.state.certifier == this.state.account
+                        ? <div className="alert alert-success text-center" role="alert">
+                            You're logged in as certifier {this.state.certifier} and can create certificates.
+                        </div>
+                        : <div className="alert alert-danger text-center" role="alert">
+                            Only certifier {this.state.certifier} can create certificates.
+                        </div>
+                    }
                 </div>
 
                 <div className="container mr-auto ml-auto mb-5">

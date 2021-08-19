@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.6.0;
 
-contract GreenVerification2 {
+contract GreenVerification {
   
     /**
      * @dev Modified for functions that can only be called by the  owner/green verifier

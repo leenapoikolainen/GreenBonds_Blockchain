@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.6.0;
 
-import "./GreenVerification2.sol";
+import "./GreenVerification.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 
 contract GreenVerificationRepository {
@@ -32,7 +32,7 @@ contract GreenVerificationRepository {
     // Members
     address private _owner;
     // Mapping of company to a green certificate
-    mapping(string => GreenVerification2) private _greenVerifications;
+    mapping(string => GreenVerification) private _greenVerifications;
     // Mapping for verifications
     mapping(string => bool) private _verifiedBonds;
     
@@ -83,7 +83,7 @@ contract GreenVerificationRepository {
         // Create verification for the bond if it already does not exist
         if(_verifiedBonds[symbol] == false) {
             // Create certificate
-            GreenVerification2 newVerification = new GreenVerification2(symbol);
+            GreenVerification newVerification = new GreenVerification(symbol);
             _verifiedBonds[symbol] = true;
             _greenVerifications[symbol] = newVerification;
 
@@ -92,7 +92,7 @@ contract GreenVerificationRepository {
         } 
 
         // Add result to the list
-        GreenVerification2 verification = _greenVerifications[symbol];
+        GreenVerification verification = _greenVerifications[symbol];
         verification.addResult(result); 
         emit BondVerification(symbol, result);     
     }

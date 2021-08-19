@@ -14,7 +14,7 @@ import Issuer from './pages/issuer';
 import Investor from './pages/investor';
 
 import Regulation from './pages/regulation';
-import Certifier from './pages/certifier';
+import Certifier from './pages/certificationRepo';
 import Verifier from './pages/verifier';
 import VerificationRepo from './pages/verificationRepo';
 

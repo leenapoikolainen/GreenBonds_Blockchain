@@ -2,7 +2,7 @@ const { expect, assert } = require('chai');
 const { default: Web3 } = require('web3')
 
 
-const GreenVerification = artifacts.require('GreenVerification2');
+const GreenVerification = artifacts.require('GreenVerification');
 
 require('chai')
   .use(require('chai-as-promised'))

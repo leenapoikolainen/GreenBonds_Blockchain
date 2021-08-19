@@ -6,6 +6,7 @@ const BondRopsten = artifacts.require("BondRopsten");
 const GreenCertifier = artifacts.require("GreenCertifier");
 const GreenCertificate = artifacts.require("GreenCertificate");
 const GreenVerificationRepo = artifacts.require("GreenVerificationRepository")
+const GreenCertificationRepo = artifacts.require("GreenCertificateRepository")
 
 
 // Variables for greenBond2 - RED
@@ -92,6 +93,9 @@ module.exports = async function (deployer) {
     /*
     await deployer.deploy(GreenVerificationRepo);
     */
+
+    // GREEN CERTIFICATION REPO
+    await deployer.deploy(GreenCertificationRepo)
 
     // Certification Repo
     //await deployer.deploy(GreenCertifier);

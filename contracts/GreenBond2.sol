@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 contract GreenBond2 is ERC721, Ownable {
     using Counters for Counters.Counter;
 
+
     // MODIFIERS
     /**
      * @dev Reverts if bidding time is not open

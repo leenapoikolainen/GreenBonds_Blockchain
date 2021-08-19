@@ -98,6 +98,9 @@ class RedDetails extends Component {
 			const coupon = await greenBond.methods.getCoupon().call()
 			this.setState({ coupon })
 
+			const bondAddress =  greenBond.options.address
+			this.setState({ bondAddress })
+
 		} else {
 			window.alert('Smart contract not deployed to detected network.')
 		}
@@ -178,6 +181,10 @@ class RedDetails extends Component {
 								? <td>{this.state.coupon}</td>
 								: <td><i>Not confirmed</i></td>
 							}
+						</tr>
+						<tr>
+							<td>Contract Address</td>
+							<td>{this.state.bondAddress}</td>
 						</tr>
 					</table>
 					<p><b>Coupon Dates:</b></p>

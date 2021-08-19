@@ -16,7 +16,7 @@ let symbol = "RED";
 let numberOfBondsSeeked = 15;
 let minCoupon = 1;
 let maxCoupon = 5;
-let closingDate = 1629198600; 
+let closingDate = 1629279000; 
 let term = 1; // 1 year
 let couponsPerYear = 2 // semiannual
 let baseURI = "https://ipfs.io/ipfs/QmTYVFgAhC5Sc4ZHzyaauwdYi6BfTCZ4hBoXdXhxjQph1u";
@@ -74,13 +74,13 @@ module.exports = async function (deployer) {
     /*
     await deployer.deploy(GreenBond2, company, name, symbol, numberOfBondsSeeked, minCoupon, maxCoupon, closingDate,
         term, couponsPerYear, baseURI);
-    */
+    */    
 
-    //  BLUE
-    
+    //  BLUE - yearly
+    /*
     await deployer.deploy(BondBlue, company2, name2, symbol2, numberOfBondsSeeked2, minCoupon2, maxCoupon2, closingDate2,
         term2, couponsPerYear2, baseURI2);
-    
+    */
 
     // PURPLE BOND
     /*

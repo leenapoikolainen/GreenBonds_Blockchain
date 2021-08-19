@@ -3,7 +3,7 @@ pragma solidity >=0.6.0;
 
 import "./GreenBond3.sol"; // Daily Bond
 
-contract BondPurple is GreenBond3 {
+contract BondYellow is GreenBond3 {
     constructor(
         address company,
         string memory name,

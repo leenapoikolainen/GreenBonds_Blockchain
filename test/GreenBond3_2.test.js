@@ -17,7 +17,7 @@ require('chai')
     .use(require('chai-as-promised'))
     .should()
 
-contract('GreenBond3_2', function (accounts) {
+contract('GreenBond3 - cancellation scenario', function (accounts) {
     let bond;
     let bondName = "Green Bond";
     let bondSymbol = "GREEN";
@@ -61,7 +61,7 @@ contract('GreenBond3_2', function (accounts) {
 
             const _coupon = await bond.getCoupon()
             assert.equal(_coupon.toNumber(), 0)
-            
+
             const cancelled = await bond.cancelled()
             assert.isTrue(cancelled)
 

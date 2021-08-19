@@ -2,12 +2,11 @@ import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Web3 from 'web3'
 
-// Import link button
-import ButtonBack from '../../components/backToRed';
 
 // Import smart Contracts
 import GreenBond from '../../contracts/GreenBond2.json';
 
+// Import Pagination
 import Pagination from '../../components/Red/pagination';
 
 class RedCompany extends Component {

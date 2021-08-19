@@ -104,7 +104,7 @@ class Certifier extends Component {
             <>
                 <div className="container mr-auto ml-auto">
                     <div className="jumbotron">
-                        <h1 className="display-4">Green Certificate Repository</h1>
+                        <h1 className="">Green Certificate Repository</h1>
                         <hr className="my-4"></hr>
                         <p className="lead">
                             Anyone can query the Green Certificate Repository, and check

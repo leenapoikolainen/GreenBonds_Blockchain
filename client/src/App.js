@@ -23,11 +23,11 @@ import BondList from './pages/bondlist';
 import BondListRopsten from './pages/bondlistRopsten';
 
 // Pages for bond BLUE
-import Blue from './pages/blue';
-import BlueBuy from './pages/blueBuy';
-import BlueIssuer from './pages/blueIssuer';
-import BlueCompany from './pages/blueCompany';
-import BlueRegulator from './pages/blueRegulator';
+import Blue from './pages/Blue/blue';
+import BlueBuy from './pages/Blue/blueBuy';
+import BlueIssuer from './pages/Blue/blueIssuer';
+import BlueCompany from './pages/Blue/blueCompany';
+import BlueRegulator from './pages/Blue/blueRegulator';
 
 // Pages for bond BLUE
 import Purple from './pages/purple';

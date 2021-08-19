@@ -2,11 +2,10 @@ import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Web3 from 'web3'
 
-// Import link button
-import ButtonBack from '../components/backToBlue';
-
 // Import smart Contracts
-import GreenBond from '../contracts/BondBlue.json';
+import GreenBond from '../../contracts/BondBlue.json';
+
+import Pagination from '../../components/Blue/pagination';
 
 class BlueCompany extends Component {
     async componentWillMount() {
@@ -156,19 +155,18 @@ class BlueCompany extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    {this.state.company == this.state.account
-                        ? <div className="alert alert-success text-center" role="alert">
-                            You're logged in as the borrowing company {this.state.company}
-                        </div>
-                        : <div className="alert alert-danger text-center" role="alert">
-                            This page is only for the borrowing company {this.state.company}
-                        </div>
-                    }
-                    <h2>Bond: {this.state.symbol}</h2>
-                    <ButtonBack />
+                    <Pagination />
+                    <div className="mt-4">
+                        {this.state.company == this.state.account
+                            ? <div className="alert alert-success text-center" role="alert">
+                                You're logged in as the borrowing company {this.state.company}
+                            </div>
+                            : <div className="alert alert-danger text-center" role="alert">
+                                This page is only for the borrowing company {this.state.company}
+                            </div>
+                        }
+                    </div>
                 </div>
-
-
 
                 <div className="container mr-auto ml-auto">
                     {this.state.cancelled
@@ -177,8 +175,6 @@ class BlueCompany extends Component {
                         </div>
                         : <div> </div>
                     }
-
-
                 </div>
 
                 <hr />

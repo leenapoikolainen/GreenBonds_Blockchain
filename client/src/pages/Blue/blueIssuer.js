@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Web3 from 'web3'
 
-// Import link button
-import ButtonBack from '../components/backToBlue';
-
 // Import smart Contracts
-import GreenBond from '../contracts/BondBlue.json';
+import GreenBond from '../../contracts/BondBlue.json';
+
+// Import Pagination
+import Pagination from '../../components/Blue/pagination';
 
 class BlueIssuer extends Component {
 
@@ -162,17 +162,17 @@ class BlueIssuer extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    {this.state.issuer == this.state.account
-                        ? <div className="alert alert-success text-center" role="alert">
-                            You're logged in as issuer {this.state.issuer}
-                        </div>
-                        : <div className="alert alert-danger text-center" role="alert">
-                            This page is only for issuer {this.state.issuer}
-                        </div>
-                    }
-
-                    <h2>Bond: {this.state.symbol}</h2>
-                    <ButtonBack />
+                    <Pagination />
+                    <div className="mt-4">
+                        {this.state.issuer == this.state.account
+                            ? <div className="alert alert-success text-center" role="alert">
+                                You're logged in as issuer {this.state.issuer}
+                            </div>
+                            : <div className="alert alert-danger text-center" role="alert">
+                                This page is only for issuer {this.state.issuer}
+                            </div>
+                        }
+                    </div>
                 </div>
                 <hr />
 

@@ -2,14 +2,15 @@ import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Bond details
-import Bond from '../../components/red';
+import Bond from '../../components/blue';
 
 // Button back
 import ButtonBack from '../../components/backToBondList';
 
-import Pagination from '../../components/Red/pagination';
+// Pagination
+import Pagination from '../../components/Blue/pagination';
 
-class Red extends Component {
+class Blue extends Component {
 
 	timeConverter(UNIX_timestamp) {
 		var dateObject = new Date(UNIX_timestamp * 1000);
@@ -27,7 +28,7 @@ class Red extends Component {
 	render() {
 		return (
 			<>
-				<main className="mb-5">
+                <main className="mb-5">
 					<div className="container-fluid mt-5 px-5">
 						<ButtonBack />
 						<Pagination />
@@ -35,9 +36,11 @@ class Red extends Component {
 					</div>
 					<Bond />
 				</main>
+
+
 			</>
 		);
 	}
 }
 
-export default Red;
+export default Blue;

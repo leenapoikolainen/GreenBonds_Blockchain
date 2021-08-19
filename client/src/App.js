@@ -8,12 +8,8 @@ import Navbar from './components/Navbar/option3';
 
 // Pages
 import About from './pages/about';
-import BuyBonds from './pages/buybonds';
-import Company from './pages/company';
-import Issuer from './pages/issuer';
-import Investor from './pages/investor';
 
-import Regulation from './pages/regulation';
+
 import Certifier from './pages/certificationRepo';
 import Verifier from './pages/verifier';
 import VerificationRepo from './pages/verificationRepo';
@@ -75,12 +71,8 @@ class App extends Component {
             <Switch>
               <Route path='/' exact component={About} />
               <Route path='/about' component={About} />
-              <Route path='/buybonds' component={BuyBonds} />
-              <Route path='/investor' component={Investor} />
+
               
-              <Route path='/issuer' component={Issuer} />
-              <Route path='/company' component={Company} />
-              <Route path='/regulation' component={Regulation} />
               <Route path='/certifier' component={Certifier} />
               <Route path='/verifier' component={Verifier} />
               <Route path='/verifications' component={VerificationRepo} />

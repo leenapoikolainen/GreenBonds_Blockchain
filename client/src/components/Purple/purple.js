@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import Web3 from 'web3'
 
 // Import smart Contracts
-import GreenBond from '../contracts/GreenBond2.json'
+import GreenBond from '../../contracts/BondPurple.json'
 
-class RedDetails extends Component {
+class PurpleDetails extends Component {
 
 	async componentWillMount() {
 		await this.loadBlockchainData()
@@ -197,4 +197,4 @@ class RedDetails extends Component {
 	}
 }
 
-export default RedDetails;
+export default PurpleDetails;

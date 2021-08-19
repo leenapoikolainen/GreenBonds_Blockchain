@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import Web3 from 'web3'
 
 // Import smart Contracts
-import GreenBond from '../contracts/BondBlue.json'
+import GreenBond from '../../contracts/BondBlue.json'
+
 
 class BlueDetails extends Component {
 

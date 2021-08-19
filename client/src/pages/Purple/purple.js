@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Bond details
-import Bond from '../../components/purple';
+import Bond from '../../components/Purple/purple';
 
 // Button back
 import ButtonBack from '../../components/backToBondList'

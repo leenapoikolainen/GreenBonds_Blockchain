@@ -2,11 +2,12 @@ import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Bond details
-import Bond from '../../components/red';
+import Bond from '../../components/Red/red';
 
 // Button back
 import ButtonBack from '../../components/backToBondList';
 
+// Pagination
 import Pagination from '../../components/Red/pagination';
 
 class Red extends Component {

@@ -390,7 +390,7 @@ contract GreenBond3 is ERC721, Ownable {
      * @dev Get a list of bidders at a specific coupon level
      */
     function getBiddersAtCoupon(uint256 coupon)
-        public
+        internal
         view
         returns (address[] memory)
     {
@@ -482,6 +482,8 @@ contract GreenBond3 is ERC721, Ownable {
         onlyWhileBiddingWindowClosed
         onlyOwner
     {
+        require(_coupondefined == false, "Can't define coupon more than once");
+
         // Variable for the total demand for bonds
         uint256 bondDemand = 0;
 
@@ -563,6 +565,8 @@ contract GreenBond3 is ERC721, Ownable {
             _coupondefined == true,
             "can not issue bonds if the coupon has not been defined"
         );
+
+        require(_issued == false, "Can only issue bonds once");
 
         uint256 bondsAvailable = _numberOfBondsSought;
 
@@ -760,7 +764,7 @@ contract GreenBond3 is ERC721, Ownable {
             Need to specify the direction of the adjustment and the amount   
      */
     function adjustCoupon(bool increase, uint256 amount) external onlyOwner {
-        //require(block.timestamp > _issueDate && _coupondefined, "Coupon can only be adjusted after the bond has been issued");
+        require(_issued == true, "Coupon can not be adjusted before the coupon has been issued");
         uint256 previousCoupon = _coupon;
         if (increase) {
             _coupon = _coupon + amount;

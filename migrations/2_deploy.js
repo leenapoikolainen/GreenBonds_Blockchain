@@ -89,21 +89,15 @@ module.exports = async function (deployer) {
         term3, couponsPerTerm3, baseURI3)
     
     */
-    // Verification Repo
+    // GREEN VERIFICATION REPO
     /*
     await deployer.deploy(GreenVerificationRepo);
     */
 
-    // GREEN CERTIFICATION REPO
-    await deployer.deploy(GreenCertificationRepo)
-
-    // Certification Repo
-    //await deployer.deploy(GreenCertifier);
-
-    // OLD BLUE
+    // GREEN CERTIFICATION REPO - Deployed to Ropsten and Ganache on 19th August
     /*
-    await deployer.deploy(GreenBond3, company2, name2, symbol2, numberOfBondsSeeked2, minCoupon2, maxCoupon2, closingDate2,
-        term2, couponsPerYear2, baseURI2);
+    await deployer.deploy(GreenCertificationRepo)
     */
+
 
 }

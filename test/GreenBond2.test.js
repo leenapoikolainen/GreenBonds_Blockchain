@@ -22,7 +22,6 @@ contract('GreenBond2', function (accounts) {
     let bondName = "Green Bond";
     let bondSymbol = "GREEN";
     let baseURI = "https://storage.cloud.google.com/metadata_platform/";
-    //let faceValue = 1000;
     let numberOfBondsSeeked = 10;
     let minCoupon = 1;
     let maxCoupon = 5;
@@ -38,8 +37,9 @@ contract('GreenBond2', function (accounts) {
     const investor = accounts[1];
     const investor2 = accounts[2];
     const investor3 = accounts[3];
-    const regulator = accounts[4];
     const company = accounts[8];
+
+    
 
     // Changed from beforeEach to before
     before(async function () {
@@ -84,6 +84,10 @@ contract('GreenBond2', function (accounts) {
             const issuingDay = await bond.getIssueDate()
             assert.equal(maturityDate.toNumber(), issueDate + duration.years(term))
             assert.equal(issueDate, issuingDay)
+
+            // Coupon needs to exist
+            await bond.getCouponDate(20).should.be.rejected;
+            await bond.getActualCouponDate(20).should.be.rejected;
 
             let couponDate = await bond.getCouponDate(1);
             assert.equal(couponDate, issueDate + duration.years(0.5))
@@ -227,6 +231,9 @@ contract('GreenBond2', function (accounts) {
             let couponDefined = await bond.couponDefined()
             assert.isTrue(couponDefined)
 
+            // Can't define coupon again
+            await bond.defineCoupon({from: owner}).should.be.rejected
+
             let couponSet = result.logs[0].args
             assert.equal(couponSet.coupon, 2)
 
@@ -239,6 +246,10 @@ contract('GreenBond2', function (accounts) {
             assert.equal(refund.value, 200) 
         })
 
+        it('coupon can not be adjusted before the bonds have been issued', async function () {
+            await bond.adjustCoupon(true, 1, {from: owner}).should.be.rejected
+        })
+
         it('bonds are allocated correctly when demans exceeds number of sought bonds', async function() {
             // Track balance of the company before the token issuance
             let oldBalance = await web3.eth.getBalance(company)
@@ -247,6 +258,9 @@ contract('GreenBond2', function (accounts) {
             let result = await bond.issueBonds({from: owner})
             let issued = await bond.issued()
             assert.isTrue(issued)
+
+            // Issuing again should be rejected
+            await bond.issueBonds({ from: owner}).should.be.rejected
      
             // First two transfers are for investor 1 (logs 0 - 1)
             const transfer1 = result.logs[0].args;
@@ -296,14 +310,16 @@ contract('GreenBond2', function (accounts) {
             assert.equal(actualDate, 0)
 
             // Pay coupons (coupon is 2, for 10 bonds)
-            let result = await bond.makeCouponPayment({from: company, value: web3.utils.toWei('20', 'Wei')})
+            let result = await bond.makeCouponPayment({from: company, value: web3.utils.toWei('22', 'Wei')})
             
             let numberOfCouponsPaid = await bond.getNumberOfCouponsPaid()
             assert.equal(numberOfCouponsPaid, 1)
 
             // First two coupons for investor 1 (logs 0 - 1), next 8 for investor 2 (logs 2 - 9)
             const coupon1 = result.logs[0].args;
-            const coupon3 = result.logs[2].args;   
+            const coupon3 = result.logs[2].args;
+            // Refund is event log 10   
+            const refund = result.logs[10].args;
     
             // Check event details
             assert.equal(coupon1.investor, investor)
@@ -311,6 +327,10 @@ contract('GreenBond2', function (accounts) {
         
             assert.equal(coupon3.investor, investor2)
             assert.equal(coupon3.bondId, 2)
+
+            // Refund to company
+            assert.equal(refund.account, company)
+            assert.equal(refund.value, 2)
 
 
             // Check new balance of the investors after the coupon payment
@@ -432,7 +452,6 @@ contract('GreenBond2', function (accounts) {
             const refund = result.logs[20].args;
                      
             // Check that tokens are returned to the owner of the contract
-
             assert.equal(transfer1.tokenId, 0)
             let ownerOfToken = await bond.ownerOf(0)
             assert.equal(ownerOfToken, owner)
@@ -463,7 +482,11 @@ contract('GreenBond2', function (accounts) {
             principalPayment = new web3.utils.BN(principalPayment)
     
             expectedBalance = oldBalance2.add(principalPayment)
-            assert.equal(newBalance2.toString(), expectedBalance.toString())    
+            assert.equal(newBalance2.toString(), expectedBalance.toString())
+            
+            // Check total debt is 0
+            let debtLeft = await bond.getTotalDebt()
+            assert.equal(debtLeft, 0)
         })
         
         it('the bond count is 0 after all tokens returned to owner', async function() {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.6.0;
 
-import "./GreenBond2.sol";
+import "./GreenBond2.sol"; // Yearly Bond
 
 contract BondRed is GreenBond2 {
     constructor(

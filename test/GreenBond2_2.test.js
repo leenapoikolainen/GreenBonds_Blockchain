@@ -23,7 +23,7 @@ contract('GreenBond2 - Cancellation scenario', function (accounts) {
     let bondSymbol = "GREEN";
     let baseURI = "https://storage.cloud.google.com/metadata_platform/";
     let numberOfBondsSeeked = 10;
-    let minCoupon = 1;
+    let minCoupon = 2;
     let maxCoupon = 5;
     let bidClosingTime = Math.floor(new Date().getTime() / 1000) + duration.days(2)
     let term = 10;
@@ -31,10 +31,6 @@ contract('GreenBond2 - Cancellation scenario', function (accounts) {
 
     let couponsPerTerm = 1 // daily
     const owner = accounts[0];
-    const investor = accounts[1];
-    const investor2 = accounts[2];
-    const investor3 = accounts[3];
-    const regulator = accounts[4];
     const company = accounts[8];
 
     // Changed from beforeEach to before
@@ -42,8 +38,7 @@ contract('GreenBond2 - Cancellation scenario', function (accounts) {
         bond = await GreenBond2.new(company, bondName, bondSymbol, numberOfBondsSeeked, minCoupon, maxCoupon,
             bidClosingTime, term, couponsPerTerm, baseURI, { from: owner});          
     });
-
-    
+  
     describe('After bidding time is over', () => {
        
         before(async () => {            

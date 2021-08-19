@@ -123,10 +123,166 @@ class VerificationRepo extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    <div className="alert alert-secondary text-center" role="alert">
-                        <p>Verifier: {this.state.verifier}</p>
+                    <div className="jumbotron">
+                        <h1 className="display-4">Green Verification Repository</h1>
+                        <hr className="my-4"></hr>
+                        <p className="lead">
+                            Anyone can query the Green Verification Repository, and check
+                            whether a bond's KPI achievements have been verified, and check the
+                            verification results.
+                        </p>
+                        <p className="lead">
+                            If you are logged in as green verfier, you can also add new verifications
+                            for bonds that you have assessed. You can calculate the performance
+                            score by typing in the verification results to the calculator.
+                        </p>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div className="container mr-auto ml-auto mb-5">
+                    <h2>Check verifications</h2>
+                    <div className="mt-4">
+                        <h3>Has verification</h3>
+                        <form onSubmit={(event) => {
+                            event.preventDefault()
+                            const symbol = this.symbol.value
+                            this.isVerifiedBond(symbol)
+                        }}>
+                            <label for="symbol">Bond Symbol</label>
+                            <input
+                                id='symbol'
+                                type='text'
+                                className='form-control mb-1'
+                                required
+                                ref={(input) => { this.symbol = input }}
+                            />
+                            <input
+                                type='submit'
+                                className='btn btn-block btn-primary mt-4'
+                                value='Check'
+                            />
+                            <div className="mt-3">
+                                <p> <b>{this.state.verificationStatus}</b></p>
+                            </div>
+                        </form>
+                        <hr />
                     </div>
 
+                    <div className="mt-4">
+                        <h3>Get verification address</h3>
+                        <form onSubmit={(event) => {
+                            event.preventDefault()
+                            const symbol = this.symbol.value
+                            this.getVerification(symbol)
+                        }}>
+                            <label for="symbol">Bond Symbol</label>
+                            <input
+                                id='symbol'
+                                type='text'
+                                className='form-control mb-1'
+                                required
+                                ref={(input) => { this.symbol = input }}
+                            />
+                            <input
+                                type='submit'
+                                className='btn btn-block btn-primary mt-4'
+                                value='Get Address'
+                            />
+                        </form>
+                        <div className="mt-3">
+                            <p> <b>{this.state.verificationAddress}</b></p>
+                        </div>
+                        <hr />
+                    </div>
+
+                    <div className="mt-4">
+                        <h3>Get verification results</h3>
+                        <form onSubmit={(event) => {
+                            event.preventDefault()
+                            const symbol = this.symbol.value
+                            this.getResults(symbol)
+                        }}>
+                            <label for="symbol">Bond Symbol</label>
+                            <input
+                                id='symbol'
+                                type='text'
+                                className='form-control mb-1'
+                                required
+                                ref={(input) => { this.symbol = input }}
+                            />
+                            <input
+                                type='submit'
+                                className='btn btn-block btn-primary mt-4'
+                                value='Get Results'
+                            />
+                        </form>
+                        <div className="mt-3">
+                            <ul>{this.state.resultList}</ul>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div className="container mr-auto ml-auto">
+                    <div className="border border-success py-4 px-4 mb-5">
+                        <h2>KPI target achievement and coupon adjustment</h2>
+                        <p> The bond KPIs are industry specific, and the above criteria
+                            applies to all bonds on this platform.
+                            The Green Verifier assessess the company's performance
+                            against these KPIs and calculates an overall performace score,
+                            which is calculated as an average of the percentage performance against
+                            each individual KPI. Assement is done before each coupon payment,
+                            and the result is recorded on the bond-specific smart contract
+                            on the blockchain.
+                        </p>
+                        <p> The issuing institution checks the  bond specific results before
+                            each coupon payment is due, and adjusts the coupon based on the below table.
+                            Missing the goals can lead to an increase in the coupon rate, where as
+                            overperforming can reduce the coupon rate.
+                        </p>
+                        <table className="table">
+                            <tr>
+                                <th>Overall Score</th>
+                                <th>Coupon Adjustment</th>
+                            </tr>
+                            <tr>
+                                <td>Below 50%</td>
+                                <td>+20 bp</td>
+                            </tr>
+                            <tr>
+                                <td>50 - 90%</td>
+                                <td>+10 bp</td>
+                            </tr>
+                            <tr>
+                                <td>91 - 110%</td>
+                                <td>No adjustment</td>
+                            </tr>
+                            <tr>
+                                <td>110 - 150%</td>
+                                <td>- 10 bp</td>
+                            </tr>
+                            <tr>
+                                <td>Over 150%</td>
+                                <td>- 20 bp</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <hr />
+                <div className="container mr-auto ml-auto">
+                    {this.state.verifier == this.state.account
+                        ? <div className="alert alert-success text-center" role="alert">
+                            You're logged in as certifier {this.state.verifier} and can add verifications.
+                        </div>
+                        : <div className="alert alert-danger text-center" role="alert">
+                            Only verifier {this.state.verifier} can create certificates.
+                        </div>
+                    }
+                </div>
+
+                <div className="container mr-auto ml-auto">
                     <h2>Calculate score</h2>
                     <form onSubmit={(event => {
                         event.preventDefault();
@@ -205,22 +361,13 @@ class VerificationRepo extends Component {
                         <br />
                         <br />
                         <div className="border border-danger mb-4">
-                            <p className="font-weight-bold px-3 py-4">Overall Score: {this.state.finalScore}</p>
+                            <p className="font-weight-bold px-3 py-3">Overall Score: {this.state.finalScore}</p>
                         </div>
-
                     </form>
+                    <hr />
                 </div>
-                <div className="container mr-auto ml-auto">
-                    {this.state.verifier == this.state.account
-                        ? <div className="alert alert-success text-center" role="alert">
-                            You're logged in as certifier {this.state.verifier} and can add verifications.
-                        </div>
-                        : <div className="alert alert-danger text-center" role="alert">
-                            Only verifier {this.state.verifier} can create certificates.
-                        </div>
-                    }
-                </div>
-                <div className="container mr-auto ml-auto">
+
+                <div className="container mr-auto ml-auto mb-5">
                     <h2>Add Verification</h2>
 
                     <form onSubmit={(event) => {
@@ -255,130 +402,6 @@ class VerificationRepo extends Component {
                             value='Add'
                         />
                     </form>
-                    <hr />
-                    <div className="container mr-auto ml-auto mb-5">
-                        <h2>Check verifications</h2>
-                        <div className="mt-4">
-                            <h3>Has verification</h3>
-                            <form onSubmit={(event) => {
-                                event.preventDefault()
-                                const symbol = this.symbol.value
-                                this.isVerifiedBond(symbol)
-                            }}>
-                                <label for="symbol">Bond Symbol</label>
-                                <input
-                                    id='symbol'
-                                    type='text'
-                                    className='form-control mb-1'
-                                    required
-                                    ref={(input) => { this.symbol = input }}
-                                />
-                                <input
-                                    type='submit'
-                                    className='btn btn-block btn-primary mt-4'
-                                    value='Check'
-                                />
-                                <div className="mt-3">
-                                    <p> <b>{this.state.verificationStatus}</b></p>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div className="mt-4">
-                            <h3>Get verification address</h3>
-                            <form onSubmit={(event) => {
-                                event.preventDefault()
-                                const symbol = this.symbol.value
-                                this.getVerification(symbol)
-                            }}>
-                                <label for="symbol">Bond Symbol</label>
-                                <input
-                                    id='symbol'
-                                    type='text'
-                                    className='form-control mb-1'
-                                    required
-                                    ref={(input) => { this.symbol = input }}
-                                />
-                                <input
-                                    type='submit'
-                                    className='btn btn-block btn-primary mt-4'
-                                    value='Get Address'
-                                />
-                            </form>
-                            <div className="mt-3">
-                                <p> <b>{this.state.verificationAddress}</b></p>
-                            </div>
-                        </div>
-
-                        <div className="mt-4">
-                            <h3>Get verification results</h3>
-                            <form onSubmit={(event) => {
-                                event.preventDefault()
-                                const symbol = this.symbol.value
-                                this.getResults(symbol)
-                            }}>
-                                <label for="symbol">Bond Symbol</label>
-                                <input
-                                    id='symbol'
-                                    type='text'
-                                    className='form-control mb-1'
-                                    required
-                                    ref={(input) => { this.symbol = input }}
-                                />
-                                <input
-                                    type='submit'
-                                    className='btn btn-block btn-primary mt-4'
-                                    value='Get Results'
-                                />
-                            </form>
-                            <div className="mt-3">
-                                <ul>{this.state.resultList}</ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="border border-success py-4 px-4 mb-5">
-                        <h2>KPI target achievement and coupon adjustment</h2>
-                        <p> The bond KPIs are industry specific, and the above criteria
-                            applies to all bonds on this platform.
-                            The Green Verifier assessess the company's performance
-                            against these KPIs and calculates an overall performace score,
-                            which is calculated as an average of the percentage performance against
-                            each individual KPI. Assement is done before each coupon payment,
-                            and the result is recorded on the bond-specific smart contract
-                            on the blockchain.
-                        </p>
-                        <p> The issuing institution checks the  bond specific results before
-                            each coupon payment is due, and adjusts the coupon based on the below table.
-                            Missing the goals can lead to an increase in the coupon rate, where as
-                            overperforming can reduce the coupon rate.
-                        </p>
-                        <table className="table">
-                            <tr>
-                                <th>Overall Score</th>
-                                <th>Coupon Adjustment</th>
-                            </tr>
-                            <tr>
-                                <td>Below 50%</td>
-                                <td>+20 bp</td>
-                            </tr>
-                            <tr>
-                                <td>50 - 90%</td>
-                                <td>+10 bp</td>
-                            </tr>
-                            <tr>
-                                <td>91 - 110%</td>
-                                <td>No adjustment</td>
-                            </tr>
-                            <tr>
-                                <td>110 - 150%</td>
-                                <td>- 10 bp</td>
-                            </tr>
-                            <tr>
-                                <td>Over 150%</td>
-                                <td>- 20 bp</td>
-                            </tr>
-                        </table>
-                    </div>
 
                 </div>
 

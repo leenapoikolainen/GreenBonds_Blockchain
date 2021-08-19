@@ -26,7 +26,7 @@ contract GreenCertifier {
     event ProjectCertification(address company, string project);
 
 
-    // Owner of this contract
+    // STATE VARIABLES
     address private _owner;
 
     // Mapping of company to a green certificate
@@ -34,12 +34,16 @@ contract GreenCertifier {
     // Mapping of certified companies
     mapping(address => bool) private _certifiedCompanies;
 
-
+    // CONSTRUCTOR
     constructor() {
         _owner = msg.sender;
     }
 
-    // Getter functions
+    // FUNCTIONS
+
+    /**
+     * @dev Function to return the owner 
+     */
     function getOwner() external view returns (address) {
         return _owner;
     }

@@ -102,6 +102,7 @@ class BlueDetails extends Component {
 			const bondAddress =  greenBond.options.address
 			this.setState({ bondAddress })
 
+
 		} else {
 			window.alert('Smart contract not deployed to detected network.')
 		}

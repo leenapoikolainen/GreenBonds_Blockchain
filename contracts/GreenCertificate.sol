@@ -19,7 +19,7 @@ contract GreenCertificate {
         _;
     }
 
-    // Member variables
+    // STATE VARIABLES
     address private _owner;
     address private _company;
     string[] private _projectList;
@@ -27,30 +27,45 @@ contract GreenCertificate {
     // Mapping for certified projects
     mapping(string => bool) _greenProjects;
 
+    // CONSTRUCTOR
     constructor(address company) public {
         _company = company;
         _owner = msg.sender;
     }
 
-    // Getter functions
+    // FUNCTIONS
+    /**
+     * @dev Function to return the owner of the certificate (Green certifier) 
+     */
     function getOwner() external view returns (address) {
         return _owner;
     }
 
+    /**
+     * @dev Function to return the company that is certified on the contract
+     */
     function getCompany() external view returns (address) {
         return _company;
     }
 
+    /**
+     * @dev Function to get the list of projects certified within this contract 
+     */
     function getProjects() public view returns (string[] memory) {
         return _projectList;
     }
 
-    // Function to check if a project is certified
+    /**
+     * @dev Function to check if a project is certified
+     */
     function isCertifiedProject(string calldata name) external view returns (bool) {
         return (_greenProjects[name]);
     }
 
-    // Functions to add and remove certified projects
+    /**
+     * @dev Function to add projects to the certificate.
+            Can be only called by the owner.
+     */
     function addProject(string calldata name) external onlyOwner {
         _greenProjects[name] = true;
         _projectList.push(name);

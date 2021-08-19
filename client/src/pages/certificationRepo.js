@@ -42,6 +42,7 @@ class Certifier extends Component {
 
             const certifier = await greenCertifier.methods.getOwner().call()
             this.setState({ certifier })
+            
 
             const repoAddress =  greenCertifier.options.address
 			this.setState({ repoAddress })

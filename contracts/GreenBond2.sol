@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 contract GreenBond2 is ERC721, Ownable {
     using Counters for Counters.Counter;
 
-
     // MODIFIERS
     /**
      * @dev Reverts if bidding time is not open
@@ -26,7 +25,7 @@ contract GreenBond2 is ERC721, Ownable {
         _;
     }
 
-    // MEMBER VARIABLES
+    // STATE VARIABLES
     
     // Bond ID numbers
     Counters.Counter private _bondIdTracker;
@@ -133,14 +132,13 @@ contract GreenBond2 is ERC721, Ownable {
             and the issue is cancelled.
      */
     event CancelBondIssue(uint256 actualDemand, uint256 requestedDemand);
-    
-    
+      
     /**
      * @dev Emmitted when coupon payment is adjusted
      */
     event CouponAdjustment(uint256 from, uint256 to);
     
-
+    // CONSTRUCTOR
     /**
      * @dev constructor: requires specifying the borrowing company address,
             bond name and symbol, number of bonds sought, coupon range,
@@ -194,6 +192,7 @@ contract GreenBond2 is ERC721, Ownable {
         }
     }
 
+    // FUNCTIONS
     /**
      * @dev Get borrowing company.
      */
@@ -226,7 +225,6 @@ contract GreenBond2 is ERC721, Ownable {
         return _coupon;
     }
  
-
     /**
      * @dev Get number of bonds sought
      */
@@ -334,12 +332,6 @@ contract GreenBond2 is ERC721, Ownable {
         return _actualPrincipalPaymentDate;
     }
 
-    /*
-    function numberOfInvestors() public view returns (uint256) {
-        return _initialInvestors.length;
-    }
-    */
-
     /**
      * @dev Get the number of bonds issued
      */
@@ -353,7 +345,6 @@ contract GreenBond2 is ERC721, Ownable {
     function getBaseURI() external view returns (string memory) {
         return _baseBondURI;
     }
-
 
     /**
      * @dev Get staked amount per investor
@@ -553,7 +544,6 @@ contract GreenBond2 is ERC721, Ownable {
         }
     }
 
-
     /**
      * @dev Function to issue bonds for investors who bid successfully.
         Can be called only if coupon has been defined (i.e., issue has not been cancelled).
@@ -686,7 +676,6 @@ contract GreenBond2 is ERC721, Ownable {
         }
     }
    
-
     /**
      * @dev Function to make a principal payment at the maturity
             Can be called only by the borrowing company.

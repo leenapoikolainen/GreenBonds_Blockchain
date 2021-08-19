@@ -25,7 +25,7 @@ contract GreenBond3 is ERC721, Ownable {
         _;
     }
 
-    // MEMBER VARIABLES
+    // STATE VARIABLES
     
     // Bond ID numbers
     Counters.Counter private _bondIdTracker;
@@ -132,14 +132,13 @@ contract GreenBond3 is ERC721, Ownable {
             and the issue is cancelled.
      */
     event CancelBondIssue(uint256 actualDemand, uint256 requestedDemand);
-    
-    
+      
     /**
      * @dev Emmitted when coupon payment is adjusted
      */
     event CouponAdjustment(uint256 from, uint256 to);
     
-
+    // CONSTRUCTOR
     /**
      * @dev constructor: requires specifying the borrowing company address,
             bond name and symbol, number of bonds sought, coupon range,
@@ -193,6 +192,7 @@ contract GreenBond3 is ERC721, Ownable {
         }
     }
 
+    // FUNCTIONS
     /**
      * @dev Get borrowing company.
      */
@@ -225,7 +225,6 @@ contract GreenBond3 is ERC721, Ownable {
         return _coupon;
     }
  
- 
     /**
      * @dev Get number of bonds sought
      */
@@ -234,14 +233,14 @@ contract GreenBond3 is ERC721, Ownable {
     }
 
     /**
-     * @dev Get bond term in years
+     * @dev Get bond term (days)
      */
     function getTerm() public view returns (uint256) {
         return _term;
     }
 
     /**
-     * @dev Get the total debt
+     * @dev Get the total debt borrowed
      */
     function getTotalDebt() public view returns (uint256) {
         return _totalDebt;
@@ -332,12 +331,6 @@ contract GreenBond3 is ERC721, Ownable {
     function getActualPricipalPaymentDate() public view returns (uint256) {
         return _actualPrincipalPaymentDate;
     }
-
-    /*
-    function numberOfInvestors() public view returns (uint256) {
-        return _initialInvestors.length;
-    }
-    */
 
     /**
      * @dev Get the number of bonds issued
@@ -551,7 +544,6 @@ contract GreenBond3 is ERC721, Ownable {
         }
     }
 
-
     /**
      * @dev Function to issue bonds for investors who bid successfully.
         Can be called only if coupon has been defined (i.e., issue has not been cancelled).
@@ -683,7 +675,6 @@ contract GreenBond3 is ERC721, Ownable {
             }
         }
     }
-   
 
     /**
      * @dev Function to make a principal payment at the maturity

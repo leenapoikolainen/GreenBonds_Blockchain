@@ -57,8 +57,6 @@ class Option3 extends Component {
                             <Nav.Link href="/certifier">Certificates</Nav.Link>
                             <Nav.Link href="/verifications">Verifications</Nav.Link>
                             <Nav.Link href="/bondlist">Bond List</Nav.Link>
-                            <Nav.Link href="/bondlist2">Bond List 2</Nav.Link>
-
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

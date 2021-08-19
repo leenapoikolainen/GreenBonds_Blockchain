@@ -9,8 +9,7 @@ import Navbar from './components/Navbar/option3';
 // Pages
 import About from './pages/about';
 
-import Certifier from './pages/certificationRepo';
-import Verifier from './pages/verifier';
+import CertificationRepo from './pages/certificationRepo';
 import VerificationRepo from './pages/verificationRepo';
 
 // Bond lists
@@ -68,12 +67,11 @@ class App extends Component {
             <div className="container-fluid mt-5"></div>
 
             <Switch>
+              {/* Default path */}
               <Route path='/' exact component={About} />
-              <Route path='/about' component={About} />
 
-              
-              <Route path='/certifier' component={Certifier} />
-              <Route path='/verifier' component={Verifier} />
+              <Route path='/about' component={About} />      
+              <Route path='/certifier' component={CertificationRepo} />
               <Route path='/verifications' component={VerificationRepo} />
 
               <Route path='/bondlist' component={BondList} />

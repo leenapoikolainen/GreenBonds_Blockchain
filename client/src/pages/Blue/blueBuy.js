@@ -157,7 +157,7 @@ class BuyBlue extends Component {
 							: <div></div>
 						}
 
-						{this.state.biddingOpen
+						{this.state.biddingOpen && this.state.bondsRequested <=0 
 							? <div>
 								<form onSubmit={(event) => {
 									event.preventDefault()
@@ -170,7 +170,8 @@ class BuyBlue extends Component {
 										id='coupon'
 										type='number'
 										className='form-control mb-1'
-										min='0'
+										min={this.state.minCoupon}
+										max={this.state.maxCoupon}
 										ref={(input) => { this.coupon = input }}
 									/>
 									<label for="numberOfBonds">Number Of Bonds (face value {this.state.value})</label>

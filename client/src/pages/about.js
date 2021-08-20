@@ -53,6 +53,12 @@ const About = () => {
 						</li>
 					</ul>
 				</ul>
+				<h2>Blockchain networks</h2>
+				<p>
+					The platform works for smart contracts deployed on a local Ganache blockchain 
+					network and on the public Ropsten testnet. Interacting with the smart contracts
+					happens through MetaMask browser extension.
+				</p>
 
 			</div>
 

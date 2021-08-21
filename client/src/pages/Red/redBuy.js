@@ -108,7 +108,6 @@ class BuyRed extends Component {
 	registerbid = (coupon, numberOfBonds) => {
 		var amount = (numberOfBonds * 100).toString();
 		this.state.greenBond.methods.registerBid(coupon, numberOfBonds).send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
-		this.setState({ coupon })
 		const hasBid = true;
 		this.setState({ hasBid })
 	}

@@ -30,7 +30,7 @@ let symbol2 = "BLUE";
 let numberOfBondsSeeked2 = 5;
 let minCoupon2 = 2;
 let maxCoupon2 = 8;
-let closingDate2 = 	1629543600
+let closingDate2 = 1629556200
 let term2 = 3; // 3 days
 let couponsPerYear2 = 1; // daily
 let baseURI2 = "https://test/";
@@ -91,8 +91,9 @@ module.exports = async function (deployer) {
     */
     // GREEN VERIFICATION REPO
     
+    /*
     await deployer.deploy(GreenVerificationRepo);
-    
+    */
 
     // GREEN CERTIFICATION REPO - Deployed to Ropsten and Ganache on 19th August
     /*

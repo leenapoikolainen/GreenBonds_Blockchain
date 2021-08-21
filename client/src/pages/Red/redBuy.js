@@ -156,7 +156,7 @@ class BuyRed extends Component {
 							: <div></div>
 						}
 
-						{this.state.biddingOpen & this.state.bondsRequested <= 0
+						{this.state.biddingOpen && this.state.bondsRequested <= 0
 							? <div>
 								<form onSubmit={(event) => {
 									event.preventDefault()

@@ -539,6 +539,7 @@ contract GreenBond3 is ERC721, Ownable {
                 uint256 amount = _requestedBondsPerInvestor[investors[j]];
                 payable(investors[j]).transfer(_value * amount);
                 emit CoinRefund(investors[j], amount * _value);
+                _stakedAmountPerInvestor[investors[j]] -= amount * _value;
             }
         }
     }

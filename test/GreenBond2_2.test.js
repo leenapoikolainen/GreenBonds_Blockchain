@@ -53,10 +53,9 @@ contract('GreenBond2 - Cancellation scenario', function (accounts) {
                 bidClosingTime, term, couponsPerTerm, baseURI, { from: owner}).should.be.rejected
         })
 
-        it('test', async function() {
+        it('Prints coupon date correctly', async function() {
             let list = await bond.getCouponDates()
             console.log(list[0].toNumber())
-            //assert.equal(list[0], "Project A")
         })
 
     })

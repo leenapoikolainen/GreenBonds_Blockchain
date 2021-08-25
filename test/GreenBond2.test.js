@@ -420,12 +420,11 @@ contract('GreenBond2', function (accounts) {
             assert.equal(adjustedCoupon.toNumber(), 0)
         })
        
-        it('returns payment not due when querying before due date', async function () {
+        it('returns payment not due when querying before due date and not paid yet', async function () {
             let result = await bond.principalPaidOnTime()
             assert.equal(result, "Principal Payment is not due yet.")
         })
        
-        
         it('Tokens and principal transferred at maturity', async function() {
             // Record investors' balances before the principal payback
             let oldBalance1 = await web3.eth.getBalance(investor)

@@ -142,8 +142,6 @@ class BlueIssuer extends Component {
 
     }
 
-
-
     constructor(props) {
         super(props)
         this.state = {
@@ -158,7 +156,6 @@ class BlueIssuer extends Component {
         }
     }
 
-
     render() {
         return (
             <>
@@ -166,9 +163,11 @@ class BlueIssuer extends Component {
                     <Pagination />
                     <div className="mt-4">
                         {this.state.issuer == this.state.account
-                            ? <div className="alert alert-success text-center" role="alert">
-                                You're logged in as issuer {this.state.issuer}
+                            ?  
+                            <div className="alert alert-success text-center" role="alert">
+                                You're logged in as issuer {this.state.issuer}  
                             </div>
+                           
                             : <div className="alert alert-danger text-center" role="alert">
                                 This page is only for issuer {this.state.issuer}
                             </div>
@@ -179,11 +178,15 @@ class BlueIssuer extends Component {
 
                 <div className="container mr-auto ml-auto mt-4">
                     <h2>Define Coupon</h2>
-                    {this.state.biddingOpen
+                    {this.state.biddingOpen 
                         ? <div className="alert alert-secondary text-center" role="alert">
                             Bidding is still open - can't define the coupon yet.
                         </div>
-                        : <div className="mt-4">
+                        : <div></div>
+                    }
+
+                    {!this.state.biddingOpen && this.state.issuer == this.state.account && !this.state.couponConfirmed 
+                        ? <div className="mt-4">
                             <form onSubmit={(event) => {
                                 event.preventDefault()
                                 this.defineCoupon()
@@ -195,6 +198,14 @@ class BlueIssuer extends Component {
                                 />
                             </form>
                         </div>
+                        : <div></div>
+                    }      
+
+                    {this.state.account != this.state.issuer
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Function not available.
+                        </div>
+                        : <div></div>
                     }
 
                     <div className="mt-2">
@@ -222,8 +233,14 @@ class BlueIssuer extends Component {
                 <div className="container mr-auto ml-auto">
                     <h2>Issue Tokens</h2>
                     <p>Expected Issue Date: {this.state.issueDate}</p>
-
+                    
                     {this.state.couponConfirmed
+                        ? <div></div>
+                        : <div className="alert alert-secondary text-center" role="alert">
+                            Coupon has not been confirmed - bonds can't be issued yet.
+                        </div>
+                    }
+                    {this.state.couponConfirmed && this.state.issuer == this.state.account && !this.state.issued
                         ? <div>
                             <form onSubmit={(event) => {
                                 event.preventDefault()
@@ -236,9 +253,14 @@ class BlueIssuer extends Component {
                                 />
                             </form>
                         </div>
-                        : <div className="alert alert-secondary text-center" role="alert">
-                            Coupon has not been confirmed - can't issue bonds yet.
+                        : <div> </div>
+                    }
+
+                    {this.state.account != this.state.issuer
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Function not available.
                         </div>
+                        : <div> </div>
                     }
 
                     <div className="mt-2">
@@ -264,7 +286,22 @@ class BlueIssuer extends Component {
                     <ul>
                         <li>Coupon: {this.state.coupon}</li>
                     </ul>
-                    {this.state.tokens > 0
+
+                    {this.state.tokens <= 0
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Issue is deactive.
+                    </div>
+                        : <div></div>
+                    }
+
+                    {this.state.account != this.state.issuer
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Function not available.
+                    </div>
+                        : <div></div>
+                    }
+                    
+                    {this.state.tokens > 0 && this.state.account == this.state.issuer
                         ? <div>
                             <form onSubmit={(event) => {
                                 event.preventDefault()
@@ -298,9 +335,7 @@ class BlueIssuer extends Component {
                                 />
                             </form>
                         </div>
-                        : <div className="alert alert-secondary text-center" role="alert">
-                        Issue is deactive.
-                        </div>
+                        : <div> </div>
                     }
 
                 </div>

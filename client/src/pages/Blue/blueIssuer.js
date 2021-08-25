@@ -203,7 +203,7 @@ class BlueIssuer extends Component {
 
                     {this.state.account != this.state.issuer
                         ? <div className="alert alert-secondary text-center" role="alert">
-                        Function not available.
+                        Functionality not available.
                         </div>
                         : <div></div>
                     }
@@ -258,7 +258,7 @@ class BlueIssuer extends Component {
 
                     {this.state.account != this.state.issuer
                         ? <div className="alert alert-secondary text-center" role="alert">
-                        Function not available.
+                        Functionality not available.
                         </div>
                         : <div> </div>
                     }
@@ -296,7 +296,7 @@ class BlueIssuer extends Component {
 
                     {this.state.account != this.state.issuer
                         ? <div className="alert alert-secondary text-center" role="alert">
-                        Function not available.
+                        Functionality not available.
                     </div>
                         : <div></div>
                     }

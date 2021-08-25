@@ -146,7 +146,6 @@ class BlueCompany extends Component {
             account: '',
             contract: null,
             couponPaymentDates: [],
-
         }
     }
 
@@ -182,10 +181,25 @@ class BlueCompany extends Component {
                     <h2>Pay coupon</h2>
                     <p><b>Coupon Dates:</b></p>
                     <ul>{this.state.couponList}</ul>
-                    {this.state.issued
+
+                    {this.state.account != this.state.company
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Functionality not available.
+                        </div>
+                        : <div> </div>
+                    }
+                    {!this.state.issued && this.state.account == this.state.company
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                            Bonds have not been issued yet.
+                        </div>
+                        : <div> </div>
+                    }
+                    {this.state.issued && this.state.account == this.state.company
                         ? <div>
                             {this.state.couponsPaid >= this.state.coupons
-                                ? <div className="alert alert-danger text-center" role="alert">Note: all expected coupons paid!</div>
+                                ? <div className="alert alert-danger text-center" role="alert">
+                                    Note: all expected coupons have already been paid!
+                                </div>
                                 : <div></div>
                             }
                             <form onSubmit={(event) => {
@@ -200,10 +214,9 @@ class BlueCompany extends Component {
                                 />
                             </form>
                         </div>
-                        : <div className="alert alert-secondary text-center" role="alert">
-                            Bonds have not been issued yet. Can't make coupon payments.
-                        </div>
+                        : <div> </div>
                     }
+                   
 
                     <div className="mt-2">
                         <p>Coupons paid: {this.state.couponsPaid}/{this.state.coupons}</p>
@@ -217,13 +230,27 @@ class BlueCompany extends Component {
                 <div className="container mr-auto ml-auto mb-5">
                     <h2>Pay Back Principal</h2>
                     <p><b>Maturity Date:</b> {this.state.maturityDate}</p>
+
+                    {this.state.account != this.state.company
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Functionality not available.
+                        </div>
+                        : <div> </div>
+                    }
+
                     {this.state.principalPaymentMade
                             ? <div className="alert alert-danger text-center" role="alert">
                                 Note: Principal was paid back on: <i> {this.state.principalPaymentDate} </i>
                                 </div>
                             : <div></div>
                     }
-                    {this.state.issued
+                    {!this.state.issued && this.state.account == this.state.company
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Bonds have not been issued yet. Can't make principal payment yet.
+                        </div>
+                        : <div></div>
+                    }
+                    {this.state.issued && this.state.account == this.state.company
                         ? <div>
                             <form onSubmit={(event) => {
                                 event.preventDefault()
@@ -238,9 +265,7 @@ class BlueCompany extends Component {
 
                             </form>
                         </div>
-                        : <div className="alert alert-secondary text-center" role="alert">
-                            Bonds have not been issued yet. Can't make principal payment yet.
-                        </div>
+                        : <div> </div>
                     }
 
 

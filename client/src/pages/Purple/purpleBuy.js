@@ -88,6 +88,9 @@ class BuyPurple extends Component {
 			const maxCoupon = await greenBond.methods.getMaxCoupon().call()
 			this.setState({ maxCoupon })
 
+			const tokens = await greenBond.methods.bondCount().call()
+            this.setState({ tokens })
+
 		} else {
 			window.alert('Smart contract not deployed to detected network.')
 		}
@@ -156,7 +159,7 @@ class BuyPurple extends Component {
 							: <div></div>
 						}
 
-						{this.state.biddingOpen && this.state.bondsRequested <= 0
+						{this.state.biddingOpen && this.state.bondsRequested <=0 
 							? <div>
 								<form onSubmit={(event) => {
 									event.preventDefault()
@@ -208,7 +211,25 @@ class BuyPurple extends Component {
 				<div className="row pb-5">
 					<div className="container mr-auto ml-auto">
 						<h2 className="mb-4">Your investment details</h2>
-						<p>Bonds owned: {this.state.tokensOwned}</p>
+						{this.state.tokens <= 0
+							? <div className="alert alert-secondary text-center" role="alert">
+								Issue is deactive.
+							</div>
+							: <div></div>
+						}
+						{this.state.tokensOwned > 0 && this.state.tokens > 0
+							? <div className="alert alert-success text-center" role="alert">
+								You have an active investment for {this.state.tokensOwned} bonds.
+							</div>
+							: <div></div>
+						}	
+						{this.state.tokensOwned == 0 && this.state.tokens > 0
+							? <div className="alert alert-secondary text-center" role="alert">
+								You don't own any bonds.
+							</div>
+							: <div></div>
+						}		
+					
 					</div>
 				</div>
 

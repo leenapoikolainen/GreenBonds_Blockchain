@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import Web3 from 'web3'
 
-
 // Import smart Contracts
-import GreenBond from '../../contracts/BondPurple.json'
+import GreenBond from '../../contracts/BondPurple.json';
 
-// Import pagination
-import Pagination from '../../components/Purple/pagination'
+// Import Pagination
+import Pagination from '../../components/Purple/pagination';
 
 class PurpleIssuer extends Component {
 
@@ -25,6 +24,7 @@ class PurpleIssuer extends Component {
         const networkId = await web3.eth.net.getId()
         const networkData = GreenBond.networks[networkId]
         if (networkData) {
+
             // Get the Green bond contract
             const greenBond = new web3.eth.Contract(GreenBond.abi, networkData.address)
             this.setState({ greenBond })
@@ -81,6 +81,7 @@ class PurpleIssuer extends Component {
             // Issuer 
             const issuer = await greenBond.methods.owner().call()
             this.setState({ issuer })
+            console.log(issuer)
             const issuerTokens = await greenBond.methods.balanceOf(issuer).call()
             this.setState({ issuerTokens })
 
@@ -141,8 +142,6 @@ class PurpleIssuer extends Component {
 
     }
 
-
-
     constructor(props) {
         super(props)
         this.state = {
@@ -157,7 +156,6 @@ class PurpleIssuer extends Component {
         }
     }
 
-
     render() {
         return (
             <>
@@ -165,9 +163,11 @@ class PurpleIssuer extends Component {
                     <Pagination />
                     <div className="mt-4">
                         {this.state.issuer == this.state.account
-                            ? <div className="alert alert-success text-center" role="alert">
-                                You're logged in as issuer {this.state.issuer}
+                            ?  
+                            <div className="alert alert-success text-center" role="alert">
+                                You're logged in as issuer {this.state.issuer}  
                             </div>
+                           
                             : <div className="alert alert-danger text-center" role="alert">
                                 This page is only for issuer {this.state.issuer}
                             </div>
@@ -178,11 +178,16 @@ class PurpleIssuer extends Component {
 
                 <div className="container mr-auto ml-auto mt-4">
                     <h2>Define Coupon</h2>
-                    {this.state.biddingOpen
+                    {this.state.biddingOpen 
                         ? <div className="alert alert-secondary text-center" role="alert">
                             Bidding is still open - can't define the coupon yet.
                         </div>
-                        : <div className="mt-4">
+                        : <div></div>
+                    }
+
+                    {!this.state.biddingOpen && this.state.issuer == this.state.account && !this.state.couponConfirmed 
+                    && !this.state.cancelled
+                        ? <div className="mt-4">
                             <form onSubmit={(event) => {
                                 event.preventDefault()
                                 this.defineCoupon()
@@ -194,6 +199,14 @@ class PurpleIssuer extends Component {
                                 />
                             </form>
                         </div>
+                        : <div></div>
+                    }      
+
+                    {this.state.account != this.state.issuer
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Functionality not available.
+                        </div>
+                        : <div></div>
                     }
 
                     <div className="mt-2">
@@ -221,8 +234,14 @@ class PurpleIssuer extends Component {
                 <div className="container mr-auto ml-auto">
                     <h2>Issue Tokens</h2>
                     <p>Expected Issue Date: {this.state.issueDate}</p>
-
+                    
                     {this.state.couponConfirmed
+                        ? <div></div>
+                        : <div className="alert alert-secondary text-center" role="alert">
+                            Coupon has not been confirmed - bonds can't be issued yet.
+                        </div>
+                    }
+                    {this.state.couponConfirmed && this.state.issuer == this.state.account && !this.state.issued
                         ? <div>
                             <form onSubmit={(event) => {
                                 event.preventDefault()
@@ -235,19 +254,22 @@ class PurpleIssuer extends Component {
                                 />
                             </form>
                         </div>
-                        : <div className="alert alert-secondary text-center" role="alert">
-                            Coupon has not been confirmed - can't issue bonds yet.
+                        : <div> </div>
+                    }
+
+                    {this.state.account != this.state.issuer
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Functionality not available.
                         </div>
+                        : <div> </div>
                     }
 
                     <div className="mt-2">
-                        {this.state.tokens > 0
+                        {this.state.issued
                             ? <div className="alert alert-success text-center" role="alert">
-                                Issue is active.
+                                Bond tokens were successfully issued.
                             </div>
-                            : <div className="alert alert-secondary text-center" role="alert">
-                                Issue is deactive.
-                            </div>
+                            : <div></div>
                         }
                     </div>
 
@@ -263,7 +285,22 @@ class PurpleIssuer extends Component {
                     <ul>
                         <li>Coupon: {this.state.coupon}</li>
                     </ul>
-                    {this.state.tokens > 0
+
+                    {this.state.tokens <= 0
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Issue is deactive.
+                    </div>
+                        : <div></div>
+                    }
+
+                    {this.state.account != this.state.issuer
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Functionality not available.
+                    </div>
+                        : <div></div>
+                    }
+                    
+                    {this.state.tokens > 0 && this.state.account == this.state.issuer
                         ? <div>
                             <form onSubmit={(event) => {
                                 event.preventDefault()
@@ -297,9 +334,7 @@ class PurpleIssuer extends Component {
                                 />
                             </form>
                         </div>
-                        : <div className="alert alert-secondary text-center" role="alert">
-                            Issue is deactive.
-                        </div>
+                        : <div> </div>
                     }
 
                 </div>

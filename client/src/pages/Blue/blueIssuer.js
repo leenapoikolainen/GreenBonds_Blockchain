@@ -186,6 +186,7 @@ class BlueIssuer extends Component {
                     }
 
                     {!this.state.biddingOpen && this.state.issuer == this.state.account && !this.state.couponConfirmed 
+                    && !this.state.cancelled
                         ? <div className="mt-4">
                             <form onSubmit={(event) => {
                                 event.preventDefault()
@@ -264,15 +265,13 @@ class BlueIssuer extends Component {
                     }
 
                     <div className="mt-2">
-                        {this.state.tokens > 0
+                        {this.state.issued
                             ? <div className="alert alert-success text-center" role="alert">
-                                Issue is active.
+                                Bond tokens were successfully issued.
                             </div>
-                            : <div className="alert alert-secondary text-center" role="alert">
-                                Issue is deactive.
-                            </div>
+                            : <div></div>
                         }
-                    </div>
+                    </div>  
 
 
                     <div className="mt-2 ">

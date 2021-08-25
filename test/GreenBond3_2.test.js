@@ -53,6 +53,11 @@ contract('GreenBond3 - cancellation scenario', function (accounts) {
             await GreenBond3.new('0x0', bondName, bondSymbol, numberOfBondsSeeked, minCoupon, maxCoupon,
                 bidClosingTime, term, couponsPerTerm, baseURI, { from: owner}).should.be.rejected
         })
+
+        it('Prints coupon date correctly', async function() {
+            let list = await bond.getCouponDates()
+            console.log(list[0].toNumber())
+        })
     })
 
     

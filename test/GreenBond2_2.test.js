@@ -52,6 +52,13 @@ contract('GreenBond2 - Cancellation scenario', function (accounts) {
             await GreenBond2.new('0x0', bondName, bondSymbol, numberOfBondsSeeked, minCoupon, maxCoupon,
                 bidClosingTime, term, couponsPerTerm, baseURI, { from: owner}).should.be.rejected
         })
+
+        it('test', async function() {
+            let list = await bond.getCouponDates()
+            console.log(list[0].toNumber())
+            //assert.equal(list[0], "Project A")
+        })
+
     })
   
     describe('After bidding time is over', () => {

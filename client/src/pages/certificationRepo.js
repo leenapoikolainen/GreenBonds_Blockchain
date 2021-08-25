@@ -242,6 +242,8 @@ class Certifier extends Component {
                             id='compAdd'
                             type='text'
                             className='form-control mb-1'
+                            maxlength="42"
+                            minLength="42"
                             required
                             ref={(input) => { this.compAdd = input }}
                         />

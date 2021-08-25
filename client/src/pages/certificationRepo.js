@@ -9,21 +9,21 @@ import GreenCertifier from '../contracts/GreenCertificateRepository.json'
 class Certifier extends Component {
 
     async componentDidMount() {
-        await this.loadBlockchainData()  
-        await this.loadWeb3()     
+        await this.loadBlockchainData()
+        await this.loadWeb3()
     }
 
     async loadWeb3() {
-		if (window.ethereum) {
-			window.web3 = new Web3(window.ethereum)
-		}
-		else if (window.web3) {
-			window.web3 = new Web3(window.web3.currentProvider)
-		}
-		else {
-			window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
-		}
-	}
+        if (window.ethereum) {
+            window.web3 = new Web3(window.ethereum)
+        }
+        else if (window.web3) {
+            window.web3 = new Web3(window.web3.currentProvider)
+        }
+        else {
+            window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+        }
+    }
     async loadBlockchainData() {
         const web3 = new Web3(window.web3.currentProvider)
 
@@ -42,10 +42,10 @@ class Certifier extends Component {
 
             const certifier = await greenCertifier.methods.getOwner().call()
             this.setState({ certifier })
-            
 
-            const repoAddress =  greenCertifier.options.address
-			this.setState({ repoAddress })
+
+            const repoAddress = greenCertifier.options.address
+            this.setState({ repoAddress })
 
         } else {
             window.alert('Smart contract not deployed to detected network.')
@@ -124,7 +124,7 @@ class Certifier extends Component {
                     </div>
                 </div>
                 <hr />
-                
+
                 <div className="container mr-auto ml-auto mb-5 mt-4">
                     <h2>Check Certificates</h2>
                     <div className="mt-4">
@@ -139,8 +139,9 @@ class Certifier extends Component {
                                 id='company'
                                 type='text'
                                 className='form-control mb-1'
-                                maxlength="42"
                                 minLength="42"
+                                maxlength="42"
+                                required pattern="0x.+"
                                 required
                                 ref={(input) => { this.company = input }}
                             />
@@ -153,7 +154,7 @@ class Certifier extends Component {
                                 <p> <b>{this.state.certificateStatus}</b></p>
                             </div>
                         </form>
-                        <hr/>
+                        <hr />
                     </div>
 
                     <div className="mt-4">
@@ -168,8 +169,9 @@ class Certifier extends Component {
                                 id='company'
                                 type='text'
                                 className='form-control mb-1'
-                                maxlength="42"
                                 minLength="42"
+                                maxlength="42"
+                                required pattern="0x.+"
                                 required
                                 ref={(input) => { this.address = input }}
                             />
@@ -182,7 +184,7 @@ class Certifier extends Component {
                         <div className="mt-3">
                             <ul>{this.state.projectList}</ul>
                         </div>
-                        <hr/>
+                        <hr />
                     </div>
 
                     <div className="mt-4">
@@ -197,8 +199,9 @@ class Certifier extends Component {
                                 id='company'
                                 type='text'
                                 className='form-control mb-1'
-                                maxlength="42"
                                 minLength="42"
+                                maxlength="42"
+                                required pattern="0x.+"
                                 required
                                 ref={(input) => { this.companyAddress = input }}
                             />
@@ -218,9 +221,45 @@ class Certifier extends Component {
                 <hr />
 
                 <div className="container mr-auto ml-auto">
+                    <h2>Create certificate</h2>
                     {this.state.certifier == this.state.account
-                        ? <div className="alert alert-success text-center" role="alert">
-                            You're logged in as certifier {this.state.certifier} and can create certificates.
+                        ? <div className="container mr-auto ml-auto">
+                            <div className="alert alert-success text-center" role="alert">
+                                You're logged in as certifier {this.state.certifier} and can create certificates.
+                            </div>
+                            <form onSubmit={(event) => {
+                                event.preventDefault()
+                                const compAdd = this.compAdd.value
+                                const project = this.project.value
+                                this.createCertificate(compAdd, project)
+                            }}>
+                                <label for="compAdd">Company Address</label>
+                                <input
+                                    id='compAdd'
+                                    type='text'
+                                    className='form-control mb-1'
+                                    minLength="42"
+                                    maxlength="42"
+                                    required pattern="0x.+"
+                                    required
+                                    ref={(input) => { this.compAdd = input }}
+                                />
+                                <label for="project">Project Name</label>
+                                <input
+                                    id='project'
+                                    type='text'
+                                    className='form-control mb-1'
+                                    required
+                                    ref={(input) => { this.project = input }}
+                                />
+
+                                <input
+                                    type='submit'
+                                    className='btn btn-block btn-primary mt-4'
+                                    value='Create'
+                                />
+                            </form>
+
                         </div>
                         : <div className="alert alert-danger text-center" role="alert">
                             Only certifier {this.state.certifier} can create certificates.
@@ -228,41 +267,6 @@ class Certifier extends Component {
                     }
                 </div>
 
-                <div className="container mr-auto ml-auto mb-5">
-                    <h2>Create certificate</h2>
-
-                    <form onSubmit={(event) => {
-                        event.preventDefault()
-                        const compAdd = this.compAdd.value
-                        const project = this.project.value
-                        this.createCertificate(compAdd, project)
-                    }}>
-                        <label for="compAdd">Company Address</label>
-                        <input
-                            id='compAdd'
-                            type='text'
-                            className='form-control mb-1'
-                            maxlength="42"
-                            minLength="42"
-                            required
-                            ref={(input) => { this.compAdd = input }}
-                        />
-                        <label for="project">Project Name</label>
-                        <input
-                            id='project'
-                            type='text'
-                            className='form-control mb-1'
-                            required
-                            ref={(input) => { this.project = input }}
-                        />
-                        
-                        <input
-                            type='submit'
-                            className='btn btn-block btn-primary mt-4'
-                            value='Create'
-                        />
-                    </form>
-                </div>
 
             </>
         )

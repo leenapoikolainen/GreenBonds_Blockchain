@@ -40,6 +40,21 @@ contract('GreenBond3 - cancellation scenario', function (accounts) {
             
     });
 
+    describe('Deployment', () => {
+        it('min coupon cannot be higher than max coupon', async() => {
+            await GreenBond3.new(company, bondName, bondSymbol, numberOfBondsSeeked, 5, 1,
+                bidClosingTime, term, couponsPerTerm, baseURI, { from: owner}).should.be.rejected
+        })
+        it('bid closing time cannot be in the past', async() => {
+            await GreenBond3.new(company, bondName, bondSymbol, numberOfBondsSeeked, minCoupon, maxCoupon,
+                1627209657, term, couponsPerTerm, baseURI, { from: owner}).should.be.rejected
+        })
+        it('company address cannot be zero', async() => {
+            await GreenBond3.new('0x0', bondName, bondSymbol, numberOfBondsSeeked, minCoupon, maxCoupon,
+                bidClosingTime, term, couponsPerTerm, baseURI, { from: owner}).should.be.rejected
+        })
+    })
+
     
     describe('After bidding time is over', () => {     
         before(async () => {            

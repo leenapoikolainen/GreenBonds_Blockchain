@@ -302,7 +302,7 @@ contract GreenBond2 is ERC721, Ownable {
     function getCouponDate(uint256 number) public view returns (uint256) {
         require(
             number > 0 && number <= _totalCouponPayments,
-            "No such coupon payment, check the number of coupon payments"
+            "No such coupon payment"
         );
         return _couponPaymentDates[number - 1];
     }
@@ -313,7 +313,7 @@ contract GreenBond2 is ERC721, Ownable {
     function getActualCouponDate(uint256 number) public view returns (uint256) {
         require(
             number > 0 && number <= _totalCouponPayments,
-            "No such coupon payment, check the number of coupon payments"
+            "No such coupon payment"
         );
         return _actualCouponPaymentDates[number - 1];
     }
@@ -536,10 +536,9 @@ contract GreenBond2 is ERC721, Ownable {
         for (uint256 i = min; i <= _maxCoupon; i++) {
             address[] memory investors = getBiddersAtCoupon(i);
             for (uint256 j = 0; j < investors.length; j++) {
-                address investor = investors[j];
-                uint256 amount = _requestedBondsPerInvestor[investor];
-                payable(investor).transfer(_value * amount);
-                emit CoinRefund(investor, amount * _value);
+                uint256 amount = _requestedBondsPerInvestor[investors[j]];
+                payable(investors[j]).transfer(_value * amount);
+                emit CoinRefund(investors[j], amount * _value);
             }
         }
     }
@@ -555,7 +554,7 @@ contract GreenBond2 is ERC721, Ownable {
     {
         require(
             _coupondefined == true,
-            "can not issue bonds if the coupon has not been defined"
+            "Coupon needs to be defined."
         );
 
         require(_issued == false, "Can only issue bonds once");
@@ -618,7 +617,7 @@ contract GreenBond2 is ERC721, Ownable {
     function makeCouponPayment() public payable {
         require(
             msg.sender == _company,
-            "Coupon payment should come from the borrowing company"
+            "Only for borrowing company."
         );
         require(
             msg.value >= _coupon * _bondIdTracker.current(),
@@ -686,7 +685,7 @@ contract GreenBond2 is ERC721, Ownable {
     function payBackBond() public payable {
         require(
             msg.sender == _company,
-            "Paying company should be the borrowing company"
+            "Only for borrowing company."
         );
         require(
             msg.value >= _totalDebt,
@@ -701,8 +700,7 @@ contract GreenBond2 is ERC721, Ownable {
             _transfer(investor, _owner, i);
             // Return funds
             investor.transfer(_value);
-            // Decrement the values
-            _totalDebt = _totalDebt - _value;
+            // Decrement bond count
             _bondIdTracker.decrement();
         }
 
@@ -710,17 +708,12 @@ contract GreenBond2 is ERC721, Ownable {
         _actualPrincipalPaymentDate = block.timestamp;
 
         // Refund any extra ether on the contract
-        if (address(this).balance > 0 && msg.value > _totalDebt) {
-            uint256 extraAmount = msg.value - _totalDebt;
-            if (address(this).balance < extraAmount) {
-                uint256 amount = address(this).balance;
-                payable(msg.sender).transfer(amount);
-                emit CoinRefund(msg.sender, amount);
-            } else {
-                payable(msg.sender).transfer(extraAmount);
-                emit CoinRefund(msg.sender, extraAmount);
-            }
+        if (msg.value > _totalDebt) {
+            payable(msg.sender).transfer(msg.value - _totalDebt);
+            emit CoinRefund(msg.sender, msg.value - _totalDebt);
         }
+        // Update total debt
+        _totalDebt = 0;
     }
   
     /**
@@ -755,7 +748,7 @@ contract GreenBond2 is ERC721, Ownable {
             Need to specify the direction of the adjustment and the amount   
      */
     function adjustCoupon(bool increase, uint256 amount) external onlyOwner {
-        require(_issued == true, "Coupon can not be adjusted before the coupon has been issued");
+        require(_issued == true, "Bond not issued yet.");
         uint256 previousCoupon = _coupon;
         if (increase) {
             _coupon = _coupon + amount;

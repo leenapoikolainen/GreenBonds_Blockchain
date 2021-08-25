@@ -78,10 +78,10 @@ module.exports = async function (deployer) {
     */    
 
     //  BLUE - yearly
-    
+    /*
     await deployer.deploy(BondBlue, company2, name2, symbol2, numberOfBondsSeeked2, minCoupon2, maxCoupon2, closingDate2,
         term2, couponsPerYear2, baseURI2);
-    
+    */
 
     // PURPLE BOND
     /*

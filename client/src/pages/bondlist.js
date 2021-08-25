@@ -219,7 +219,7 @@ class BondList extends Component {
             const account = accounts[0];
             const tokensOwned3 = await purpleBond.methods.balanceOf(account).call()
 		    this.setState({ tokensOwned3 })
-        }     
+        }   
     }
 
     timeConverter(UNIX_timestamp) {

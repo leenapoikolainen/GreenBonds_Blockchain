@@ -213,7 +213,7 @@ contract('GreenBond3', function (accounts) {
             await bond.registerBid(2, 10, {from: investor2, value: web3.utils.toWei('1000', 'Wei')})
             await bond.registerBid(3, 2, {from: investor3, value: web3.utils.toWei('200', 'Wei')})
             
-            // Advance time
+            // Advance time to bond closing date
             await timeMachine.advanceTimeAndBlock(duration.days(2)); // + 2 days
         })
         it('bidding not possible after bidding time is closed', async function() {
@@ -362,8 +362,8 @@ contract('GreenBond3', function (accounts) {
             assert.equal(result,"Coupon not due yet.") 
 
             // Advance time
-            await timeMachine.advanceTimeAndBlock(duration.weeks(1)) // + 1 week to issue date
-            await timeMachine.advanceTimeAndBlock(duration.years(1)) // + 1 years to 2nd coupon payment
+            await timeMachine.advanceTimeAndBlock(duration.days(1)) // + 1 day to issue date
+            await timeMachine.advanceTimeAndBlock(duration.days(2)) // + 2 days to 2nd coupon payment
 
             // 2nd coupon payment not yet paid and late
             result = await bond.couponPaymentOnTime(2)
@@ -413,7 +413,11 @@ contract('GreenBond3', function (accounts) {
             adjustedCoupon = await bond.getCoupon()
             assert.equal(adjustedCoupon.toNumber(), 0)
         })
-       
+
+        it('returns payment not due when querying before due date and not paid yet', async function () {
+            let result = await bond.principalPaidOnTime()
+            assert.equal(result, "Principal Payment is not due yet.")
+        })
         
         it('Tokens and principal transferred at maturity', async function() {
             // Record investors' balances before the principal payback
@@ -489,9 +493,15 @@ contract('GreenBond3', function (accounts) {
         })
         
         
-        it('check bond payback time correctly', async function () {
+        it('check bond payback time correctly when queried before due date', async function () {
             let result = await bond.principalPaidOnTime()
-            assert.equal(result, "Principal was paid back late.")
+            assert.equal(result, "Principal was paid back early.")
+        })
+
+        it('check bond payback time correctly when queried after due date', async function() {
+            await timeMachine.advanceTimeAndBlock(duration.days(10)); // + 10 daya
+            let result = await bond.principalPaidOnTime()
+            assert.equal(result, "Principal was paid back on time.")
         })
     })  
     

@@ -420,6 +420,10 @@ contract('GreenBond2', function (accounts) {
             assert.equal(adjustedCoupon.toNumber(), 0)
         })
        
+        it('returns payment not due when querying before due date', async function () {
+            let result = await bond.principalPaidOnTime()
+            assert.equal(result, "Principal Payment is not due yet.")
+        })
        
         
         it('Tokens and principal transferred at maturity', async function() {
@@ -493,12 +497,17 @@ contract('GreenBond2', function (accounts) {
             let count = await bond.bondCount()
             assert.equal(count.toNumber(), 0)
         })
+               
         
-        
-        
-        it('check bond payback time correctly', async function () {
+        it('check bond payback time correctly when queried before due date', async function () {
             let result = await bond.principalPaidOnTime()
             assert.equal(result, "Principal was paid back early.")
+        })
+
+        it('check bond payback time correctly when queried after due date', async function() {
+            await timeMachine.advanceTimeAndBlock(duration.years(2)); // + 2 years
+            let result = await bond.principalPaidOnTime()
+            assert.equal(result, "Principal was paid back on time.")
         })
       
         

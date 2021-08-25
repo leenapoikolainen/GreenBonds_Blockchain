@@ -29,7 +29,8 @@ const HDWalletProvider = require('@truffle/hdwallet-provider');
 module.exports = {
   plugins: [
     'truffle-plugin-verify',
-    'solidity-coverage'
+    'solidity-coverage',
+    'truffle-contract-size'
   ],
   api_keys: {
     etherscan: '159HVCR2QU83I399QCD7RZ8RB1TE6QSIWS'

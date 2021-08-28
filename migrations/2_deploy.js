@@ -58,7 +58,7 @@ const GreenCertificationRepo = artifacts.require("GreenCertificateRepository")
 
 // Company accounts
 let companyGanache = "0x94ef9712F0C40CF8a1786944DcE2399df547853b"; // Ganache account #10
-let companyRopten = "0xe5dc3eFEcDc0f2Ee5672Fa287CE80733F81FCB78";
+let companyRopsten = "0xe5dc3eFEcDc0f2Ee5672Fa287CE80733F81FCB78";
 
 // DAILY BONDS
 // 1. BLUE
@@ -108,6 +108,8 @@ let baseURIYellow = "https://ipfs.io/ipfs/QmNYTN7gbG7zrJkCa1ToDW6A8qJqqBKAf7JDfM
 
                   
 module.exports = async function (deployer) {
+    // DEPLOYMENT TO GANACHE
+    /*
     // DAILY BONDS
     await deployer.deploy(BondBlue, companyGanache, nameBlue, symbolBlue, numberOfBondsBlue, 
         minCouponBlue, maxCouponBlue, closingDateBlue, termBlue, couponsPerTermBlue ,baseURIBlue);
@@ -121,7 +123,29 @@ module.exports = async function (deployer) {
 
     await deployer.deploy(BondYellow, companyGanache, nameYellow, symbolYellow, numberOfBondsYellow, 
         minCouponYellow, maxCouponYellow, closingDateYellow, termYellow, couponsPerYearYellow, baseURIYellow)
+    */
 
+    // // DEPLOYMENT TO Ropsten
+    // DAILY BONDS
+    /*
+    await deployer.deploy(BondBlue, companyRopsten, nameBlue, symbolBlue, numberOfBondsBlue, 
+        minCouponBlue, maxCouponBlue, closingDateBlue, termBlue, couponsPerTermBlue ,baseURIBlue);
+    */
+    /*
+    await deployer.deploy(BondPurple, companyRopsten, namePurple, symbolPurple, numberOfBondsPurple, 
+        minCouponPurple, maxCouponPurple, closingDatePurple, termPurple, couponsPerTermPurple, baseURIPurple)
+    */
+    
+    // YEARLY BONDS
+    /*
+    await deployer.deploy(BondRed, companyRopsten, nameRed, symbolRed, numberOfBondsRed, 
+        minCouponRed, maxCouponRed, closingDateRed, termRed, couponsPerYearRed, baseURIRed);
+    */
+    
+    /*
+    await deployer.deploy(BondYellow, companyRopsten, nameYellow, symbolYellow, numberOfBondsYellow, 
+        minCouponYellow, maxCouponYellow, closingDateYellow, termYellow, couponsPerYearYellow, baseURIYellow)
+    */
 }
 
     // ROPSTEN BOND - daily

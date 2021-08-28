@@ -88,6 +88,9 @@ class BlueIssuer extends Component {
             const URI = await greenBond.methods.getBaseURI().call()
             this.setState({ URI })
 
+            const couponAdjusted = 0;
+            this.setState({ couponAdjusted })
+
         } else {
             window.alert('Smart contract not deployed to detected network.')
         }
@@ -108,6 +111,7 @@ class BlueIssuer extends Component {
         } else {
             this.state.greenBond.methods.adjustCoupon(false, amount).send({ from: this.state.account })
         }
+
     }
 
     timeConverter(UNIX_timestamp) {
@@ -318,7 +322,7 @@ class BlueIssuer extends Component {
                                     <option value="Increase">Increase</option>
                                     <option value="Decrease">Decrese</option>
                                 </select>
-                                <label for="amount">Amount</label>
+                                <label for="amount">Amount (in wei)</label>
                                 <input
                                     id='amount'
                                     type='number'

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.6.0;
 
-import "./GreenBond2.sol"; // Yearly Bond
+import "./GreenBond_yearly.sol"; 
 
-contract BondRed is GreenBond2 {
+contract BondRed is GreenBond_yearly {
     constructor(
         address company,
         string memory name,
@@ -15,7 +15,7 @@ contract BondRed is GreenBond2 {
         uint256 term,
         uint256 couponsPerTerm,
         string memory baseBondURI
-    ) GreenBond2(company, name, symbol, numberOfBondsSought, minCoupon, maxCoupon,
+    ) GreenBond_yearly(company, name, symbol, numberOfBondsSought, minCoupon, maxCoupon,
         bidClosingTime, term, couponsPerTerm, baseBondURI) {
 
     }

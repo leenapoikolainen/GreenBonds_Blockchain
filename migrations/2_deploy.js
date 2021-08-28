@@ -1,27 +1,9 @@
+/*
 const GreenBond2 = artifacts.require("GreenBond2");
 const GreenBond3 = artifacts.require("GreenBond3");
-const BondPurple = artifacts.require("BondPurple");
-const BondBlue = artifacts.require("BondBlue")
 const BondRopsten = artifacts.require("BondRopsten");
 const GreenCertifier = artifacts.require("GreenCertifier");
 const GreenCertificate = artifacts.require("GreenCertificate");
-const GreenVerificationRepo = artifacts.require("GreenVerificationRepository")
-const GreenCertificationRepo = artifacts.require("GreenCertificateRepository")
-
-
-// Variables for greenBond2 - RED
-//let company = "0xe5dc3eFEcDc0f2Ee5672Fa287CE80733F81FCB78"; // Ropsten 2 on MetaMask
-let company = "0x10A46e292b93721723854034Ea6f45d15C548CE9"; // Ganache account 8
-let name = "Project Evergreen";
-let symbol = "RED";
-let numberOfBondsSeeked = 15;
-let minCoupon = 1;
-let maxCoupon = 5;
-let closingDate = 1629279000; 
-let term = 1; // 1 year
-let couponsPerYear = 2 // semiannual
-let baseURI = "https://ipfs.io/ipfs/QmTYVFgAhC5Sc4ZHzyaauwdYi6BfTCZ4hBoXdXhxjQph1u";
-
 
 // Variables for greenbond3 - BLUE
 let company2 = "0x94ef9712F0C40CF8a1786944DcE2399df547853b"; // Ganache account 10
@@ -60,10 +42,87 @@ let term4 = 10; // 10 days
 let couponsPerTerm4 = 1; //daily coupons
 let baseURI4 = "https://ipfs.io/ipfs/QmcY4G8JiUH5CJDtqXtjusKVZvRBHNxXWURHuYgdhxu85X"; 
 
+*/
 
-            
-       
+// DAILY BONDS
+const BondPurple = artifacts.require("BondPurple");
+const BondBlue = artifacts.require("BondBlue");
+
+// YEARLY BONDS
+const BondRed = artifacts.require("BondRed");
+const BondYellow = artifacts.require("BondYellow");
+
+// Certification & Verification Repos
+const GreenVerificationRepo = artifacts.require("GreenVerificationRepository")
+const GreenCertificationRepo = artifacts.require("GreenCertificateRepository")
+
+// Company accounts
+let companyGanache = "0x94ef9712F0C40CF8a1786944DcE2399df547853b"; // Ganache account #10
+let companyRopten = "0xe5dc3eFEcDc0f2Ee5672Fa287CE80733F81FCB78";
+
+// DAILY BONDS
+// 1. BLUE
+let nameBlue = "Project North Star";
+let symbolBlue = "BLUE";
+let numberOfBondsBlue = 20;
+let minCouponBlue = 1;
+let maxCouponBlue = 5;
+let closingDateBlue = 1630234800; // Sunday August 29, 12:00
+let termBlue = 3; // 10 days
+let couponsPerTermBlue = 1 // daily
+let baseURIBlue = "https://ipfs.io/ipfs/QmckYBJVzPM2ndTAnk4rrpVaQr5bq2ZPBRUture3xx6bLm";
+
+// 2. PURPLE
+let namePurple = "Project Snow";
+let symbolPurple = "PURPLE";
+let numberOfBondsPurple = 10;
+let minCouponPurple = 1;
+let maxCouponPurple = 10;
+let closingDatePurple = 1630234800; // Sunday August 29, 12:00
+let termPurple = 10; // 10 days
+let couponsPerTermPurple = 1 // daily
+let baseURIPurple = "https://ipfs.io/ipfs/QmVwes2xbTK98ms4Es737nqz3YRtuwy5CUpdauFGJVG9Lj";
+
+// YEARLY BONDS
+// 3. RED
+let nameRed = "Project Evergreen";
+let symbolRed = "RED";
+let numberOfBondsRed = 15;
+let minCouponRed = 1;
+let maxCouponRed = 5;
+let closingDateRed = 1630321200; // Monday August 30, 12:00
+let termRed = 1; // 1 year
+let couponsPerYearRed = 2 // semiannual
+let baseURIRed = "https://ipfs.io/ipfs/QmTYVFgAhC5Sc4ZHzyaauwdYi6BfTCZ4hBoXdXhxjQph1u";
+
+// 4. YELLOW
+let nameYellow = "Project Supernova";
+let symbolYellow = "YELLOW";
+let numberOfBondsYellow = 10;
+let minCouponYellow = 1;
+let maxCouponYellow = 10;
+let closingDateYellow = 1630321200; // Monday August 30, 12:00
+let termYellow = 2; // 1 year
+let couponsPerYearYellow = 1 // annual
+let baseURIYellow = "https://ipfs.io/ipfs/QmNYTN7gbG7zrJkCa1ToDW6A8qJqqBKAf7JDfML6bgmDLT";
+
+                  
 module.exports = async function (deployer) {
+    // DAILY BONDS
+    await deployer.deploy(BondBlue, companyGanache, nameBlue, symbolBlue, numberOfBondsBlue, 
+        minCouponBlue, maxCouponBlue, closingDateBlue, termBlue, couponsPerTermBlue ,baseURIBlue);
+
+    await deployer.deploy(BondPurple, companyGanache, namePurple, symbolPurple, numberOfBondsPurple, 
+        minCouponPurple, maxCouponPurple, closingDatePurple, termPurple, couponsPerTermPurple, baseURIPurple)
+
+    // YEARLY BONDS
+    await deployer.deploy(BondRed, companyGanache, nameRed, symbolRed, numberOfBondsRed, 
+        minCouponRed, maxCouponRed, closingDateRed, termRed, couponsPerYearRed, baseURIRed);
+
+    await deployer.deploy(BondYellow, companyGanache, nameYellow, symbolYellow, numberOfBondsYellow, 
+        minCouponYellow, maxCouponYellow, closingDateYellow, termYellow, couponsPerYearYellow, baseURIYellow)
+
+}
 
     // ROPSTEN BOND - daily
     /*
@@ -99,6 +158,3 @@ module.exports = async function (deployer) {
     /*
     await deployer.deploy(GreenCertificationRepo)
     */
-
-
-}

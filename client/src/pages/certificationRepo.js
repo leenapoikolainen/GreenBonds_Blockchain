@@ -220,7 +220,7 @@ class Certifier extends Component {
 
                 <hr />
 
-                <div className="container mr-auto ml-auto">
+                <div className="container mr-auto ml-auto mb-5">
                     <h2>Create certificate</h2>
                     {this.state.certifier == this.state.account
                         ? <div className="container mr-auto ml-auto">

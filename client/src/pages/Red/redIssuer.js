@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Web3 from 'web3'
 
 // Import smart Contracts
-import GreenBond from '../../contracts/GreenBond2.json';
+import GreenBond from '../../contracts/BondRed.json';
 
 // Import Pagination
 import Pagination from '../../components/Red/pagination';

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.6.0;
 
-import "./GreenBond3.sol"; // Daily Bond
+import "./GreenBond_daily.sol"; 
 
-contract BondBlue is GreenBond3 {
+contract BondBlue is GreenBond_daily {
     constructor(
         address company,
         string memory name,
@@ -15,8 +15,7 @@ contract BondBlue is GreenBond3 {
         uint256 term,
         uint256 couponsPerTerm,
         string memory baseBondURI
-    ) GreenBond3(company, name, symbol, numberOfBondsSought, minCoupon, maxCoupon,
+    ) GreenBond_daily(company, name, symbol, numberOfBondsSought, minCoupon, maxCoupon,
         bidClosingTime, term, couponsPerTerm, baseBondURI) {
-
     }
 }

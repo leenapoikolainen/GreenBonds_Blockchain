@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Web3 from 'web3';
 
-import GreenBond from '../contracts/GreenBond2.json';
+import BondRed from '../contracts/BondRed.json';
 import BondPurple from '../contracts/BondPurple.json';
 import BondBlue from '../contracts/BondBlue.json';
+import BondYellow from '../contracts/BondYellow.json';
 
 
 class BondList extends Component {
@@ -35,25 +36,26 @@ class BondList extends Component {
 
         // Network connection
         const networkId = await web3.eth.net.getId()
-        const networkData = GreenBond.networks[networkId]
+        const networkData = BondRed.networks[networkId]
         const networkData2 = BondBlue.networks[networkId]
         const networkData3 = BondPurple.networks[networkId]
+        const networkData4 = BondYellow.networks[networkId]
 
         if (networkData) {
             // Get the Green bond contract
-            const greenBond = new web3.eth.Contract(GreenBond.abi, networkData.address)
-            this.setState({ greenBond })
+            const bondRed = new web3.eth.Contract(BondRed.abi, networkData.address)
+            this.setState({ bondRed })
 
-            const company = await greenBond.methods.getCompany().call()
+            const company = await bondRed.methods.getCompany().call()
             this.setState({ company })
 
-            const project = await greenBond.methods.name().call()
+            const project = await bondRed.methods.name().call()
             this.setState({ project })
 
-            const symbol = await greenBond.methods.symbol().call()
+            const symbol = await bondRed.methods.symbol().call()
             this.setState({ symbol })
 
-            const bidClosingTimeStamp = await greenBond.methods.getBidClosingTime().call()
+            const bidClosingTimeStamp = await bondRed.methods.getBidClosingTime().call()
             const bidClosingTime = this.timeConverter(bidClosingTimeStamp)
             this.setState({ bidClosingTime })
 
@@ -66,18 +68,16 @@ class BondList extends Component {
             }
             this.setState({ biddingOpen })
 
-            const coupon = await greenBond.methods.getCoupon().call()
+            const coupon = await bondRed.methods.getCoupon().call()
             this.setState({ coupon })
 
-            const maturityDateTimeStamp = await greenBond.methods.getMaturityDate().call()
+            const maturityDateTimeStamp = await bondRed.methods.getMaturityDate().call()
             const maturityDate = this.timeConverter(maturityDateTimeStamp)
             this.setState({ maturityDate })
 
-            const cancelled = await greenBond.methods.cancelled().call()
-            const confirmed = await greenBond.methods.couponDefined().call()
-            
-            const tokens = await greenBond.methods.bondCount().call()
-            this.setState({ tokens })
+            const cancelled = await bondRed.methods.cancelled().call()
+            const confirmed = await bondRed.methods.couponDefined().call()
+            const tokens = await bondRed.methods.bondCount().call()
 
             if (cancelled) {
                 const status = "Cancelled"
@@ -94,7 +94,7 @@ class BondList extends Component {
             }
 
             const account = accounts[0];
-            const tokensOwned = await greenBond.methods.balanceOf(account).call()
+            const tokensOwned = await bondRed.methods.balanceOf(account).call()
 			this.setState({ tokensOwned })
 
         } else {
@@ -103,20 +103,20 @@ class BondList extends Component {
 
         if (networkData2) {
             // Get the Green bond contract
-            const greenBond2 = new web3.eth.Contract(BondBlue.abi, networkData2.address)
-            this.setState({ greenBond2 })
+            const bondBlue = new web3.eth.Contract(BondBlue.abi, networkData2.address)
+            this.setState({ bondBlue })
 
             // First bond
-            const company2 = await greenBond2.methods.getCompany().call()
+            const company2 = await bondBlue.methods.getCompany().call()
             this.setState({ company2 })
 
-            const project2 = await greenBond2.methods.name().call()
+            const project2 = await bondBlue.methods.name().call()
             this.setState({ project2 })
 
-            const symbol2 = await greenBond2.methods.symbol().call()
+            const symbol2 = await bondBlue.methods.symbol().call()
             this.setState({ symbol2 })
 
-            const bidClosingTimeStamp2 = await greenBond2.methods.getBidClosingTime().call()
+            const bidClosingTimeStamp2 = await bondBlue.methods.getBidClosingTime().call()
             const bidClosingTime2 = this.timeConverter(bidClosingTimeStamp2)
             this.setState({ bidClosingTime2 })
 
@@ -129,18 +129,16 @@ class BondList extends Component {
             }
             this.setState({ biddingOpen2 })
 
-            const coupon2 = await greenBond2.methods.getCoupon().call()
+            const coupon2 = await bondBlue.methods.getCoupon().call()
             this.setState({ coupon2 })
 
-            const maturityDateTimeStamp = await greenBond2.methods.getMaturityDate().call()
+            const maturityDateTimeStamp = await bondBlue.methods.getMaturityDate().call()
             const maturityDate2 = this.timeConverter(maturityDateTimeStamp)
             this.setState({ maturityDate2 })
 
-            const cancelled = await greenBond2.methods.cancelled().call()
-            const confirmed = await greenBond2.methods.couponDefined().call()
-
-            const tokens = await greenBond2.methods.bondCount().call()
-            this.setState({ tokens })
+            const cancelled = await bondBlue.methods.cancelled().call()
+            const confirmed = await bondBlue.methods.couponDefined().call()
+            const tokens = await bondBlue.methods.bondCount().call()
 
             if (cancelled) {
                 const status2 = "Cancelled"
@@ -157,7 +155,7 @@ class BondList extends Component {
             }
 
             const account = accounts[0];
-            const tokensOwned2 = await greenBond2.methods.balanceOf(account).call()
+            const tokensOwned2 = await bondBlue.methods.balanceOf(account).call()
 			this.setState({ tokensOwned2 })
         }
 
@@ -197,10 +195,9 @@ class BondList extends Component {
             this.setState({ maturityDate3 })
 
             const cancelled = await purpleBond.methods.cancelled().call()
-            const confirmed = await purpleBond.methods.couponDefined().call()
-            
+            const confirmed = await purpleBond.methods.couponDefined().call()          
             const tokens = await purpleBond.methods.bondCount().call()
-            this.setState({ tokens })
+
 
             if (cancelled) {
                 const status3 = "Cancelled"
@@ -219,7 +216,65 @@ class BondList extends Component {
             const account = accounts[0];
             const tokensOwned3 = await purpleBond.methods.balanceOf(account).call()
 		    this.setState({ tokensOwned3 })
-        }   
+        }  
+
+        if (networkData4) {
+            // Get the Green bond contract
+            const yellowBond = new web3.eth.Contract(BondYellow.abi, networkData4.address)
+            this.setState({ yellowBond })
+
+            // First bond
+            const company4 = await yellowBond.methods.getCompany().call()
+            this.setState({ company4 })
+
+            const project4 = await yellowBond.methods.name().call()
+            this.setState({ project4 })
+
+            const symbol4 = await yellowBond.methods.symbol().call()
+            this.setState({ symbol4 })
+
+            const bidClosingTimeStamp4 = await yellowBond.methods.getBidClosingTime().call()
+            const bidClosingTime4 = this.timeConverter(bidClosingTimeStamp4)
+            this.setState({ bidClosingTime4 })
+
+            const timeNow = Date.now()
+            let biddingOpen4
+            if (timeNow / 1000 - bidClosingTimeStamp4 > 0) {
+                biddingOpen4 = false
+            } else {
+                biddingOpen4 = true
+            }
+            this.setState({ biddingOpen4 })
+
+            const coupon4 = await yellowBond.methods.getCoupon().call()
+            this.setState({ coupon4 })
+
+            const maturityDateTimeStamp = await yellowBond.methods.getMaturityDate().call()
+            const maturityDate4 = this.timeConverter(maturityDateTimeStamp)
+            this.setState({ maturityDate4 })
+
+            const cancelled = await yellowBond.methods.cancelled().call()
+            const confirmed = await yellowBond.methods.couponDefined().call()         
+            const tokens = await yellowBond.methods.bondCount().call()
+
+            if (cancelled) {
+                const status4 = "Cancelled"
+                this.setState({ status4 })
+            } else if (!confirmed) {
+                const status4= "Unconfirmed"
+                this.setState({ status4 })
+            } else if (tokens > 0) {
+                const status4 = "Active"
+                this.setState({ status4 })
+            } else {
+                const status4 = "Matured"
+                this.setState({ status4 })
+            }
+
+            const account = accounts[0];
+            const tokensOwned4 = await yellowBond.methods.balanceOf(account).call()
+		    this.setState({ tokensOwned4 })
+        }  
     }
 
     timeConverter(UNIX_timestamp) {
@@ -295,6 +350,19 @@ class BondList extends Component {
                             }   
                             <td>{this.state.bidClosingTime3}</td>
                             <td>{this.state.tokensOwned3}</td>   
+                        </tr>
+                        <tr>
+                            <td><Link to="/yellow">Details</Link></td>
+                            <td>{this.state.company4}</td>
+                            <td>{this.state.project4}</td>
+                            <td>{this.state.symbol4}</td>
+                            <td>{this.state.status4}</td>
+                            {this.state.biddingOpen4
+                                ? <td className="text-success">Open</td>
+                                : <td className="text-danger">Closed</td>
+                            }   
+                            <td>{this.state.bidClosingTime4}</td>
+                            <td>{this.state.tokensOwned4}</td>   
                         </tr>
                     </tbody>
                     </table>

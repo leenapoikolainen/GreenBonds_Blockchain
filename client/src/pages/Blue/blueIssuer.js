@@ -111,7 +111,6 @@ class BlueIssuer extends Component {
         } else {
             this.state.greenBond.methods.adjustCoupon(false, amount).send({ from: this.state.account })
         }
-
     }
 
     timeConverter(UNIX_timestamp) {
@@ -340,7 +339,6 @@ class BlueIssuer extends Component {
                         </div>
                         : <div> </div>
                     }
-
                 </div>
 
             </>

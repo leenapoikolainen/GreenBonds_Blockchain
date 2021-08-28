@@ -318,7 +318,7 @@ class PurpleIssuer extends Component {
                                     <option value="Increase">Increase</option>
                                     <option value="Decrease">Decrese</option>
                                 </select>
-                                <label for="amount">Amount</label>
+                                <label for="amount">Amount (in wei)</label>
                                 <input
                                     id='amount'
                                     type='number'

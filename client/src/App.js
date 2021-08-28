@@ -39,11 +39,11 @@ import RedRegulator from './pages/Red/redRegulator';
 
 
 // Pages for bond YELLOW
-import Yellow from './pages/yellow';
-import YellowBuy from './pages/yellowBuy';
-import YellowIssuer from './pages/yellowIssuer';
-import YellowCompany from './pages/yellowCompany';
-import YellowRegulator from './pages/yellowRegulator';
+import Yellow from './pages/Yellow/yellow';
+import YellowBuy from './pages/Yellow/yellowBuy';
+import YellowIssuer from './pages/Yellow/yellowIssuer';
+import YellowCompany from './pages/Yellow/yellowCompany';
+import YellowRegulator from './pages/Yellow/yellowRegulator';
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';

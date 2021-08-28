@@ -1,11 +1,11 @@
-import React, { Component, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
 import Web3 from 'web3'
 
-// Import link button
-import ButtonBack from '../components/backToYellow';
 // Import smart Contracts
-import GreenBond from '../contracts/BondRopsten.json';
+import GreenBond from '../../contracts/BondYellow.json';
+
+// Import Pagination
+import Pagination from '../../components/Yellow/pagination';
 
 class YellowRegulator extends Component {
     async componentDidMount() {
@@ -78,6 +78,9 @@ class YellowRegulator extends Component {
             const couponConfirmed = await greenBond.methods.couponDefined().call()
             this.setState({ couponConfirmed })
 
+            const issued = await greenBond.methods.issued().call()
+            this.setState({ issued })
+
             // Get actual principal payment date
             const principalPaymentDateTimeStamp = await greenBond.methods.getActualPricipalPaymentDate().call()
 
@@ -131,26 +134,27 @@ class YellowRegulator extends Component {
 
     render() {
         return (
-            <>  
-                <div className="container mr-auto ml-auto">       
+            <>
+                <div className="container mr-auto ml-auto">
                     <div className="container mr-auto ml-auto">
-                        <h2>Bond: {this.state.symbol}</h2>
+                        <Pagination />
                     </div>
-                    {this.state.cancelled
-                        ? <div className="alert alert-danger text-center" role="alert">
-                            Bond issue was cancelled due to inadequate demand.
-                        </div>
-                        : <div> </div>
-                    }
-                    {this.state.couponConfirmed
-                        ? <div className="alert alert-success text-center" role="alert">
-                            Bond issue has been confirmed.
-                        </div>
-                        : <div className="alert alert-secondary text-center" role="alert">
-                            Bond issue has not been confirmed.
-                        </div>
-                    }
-                    <ButtonBack />
+                    <div className="mt-4">
+                        {this.state.cancelled
+                            ? <div className="alert alert-danger text-center" role="alert">
+                                Bond Issue was cancelled due to inadequate demand.
+                            </div>
+                            : <div> </div>
+                        }
+                        {this.state.issued
+                            ? <div className="alert alert-success text-center" role="alert">
+                                Bonds have been issued.
+                            </div>
+                            : <div className="alert alert-secondary text-center" role="alert">
+                                Bonds have not been issued yet.
+                            </div>
+                        }
+                    </div>
                 </div>
                 <hr />
 

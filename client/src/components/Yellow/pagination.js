@@ -7,7 +7,7 @@ const Pagination = () => {
         <>
             
             <div className="container mr-auto ml-auto mt-4 text-center  border">
-                <div className="font-weight-bold">Bond Red</div>
+                <div className="font-weight-bold">Bond Yellow</div>
             <Nav className="justify-content-center">
                 <Nav.Link href="/yellow"><button className="btn btn-light">BondDetails</button></Nav.Link>
                 <Nav.Link href="/buyyellow"><button className="btn btn-light">Investor Page</button></Nav.Link>

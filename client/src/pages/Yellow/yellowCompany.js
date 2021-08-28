@@ -1,12 +1,10 @@
-import React, { Component, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
 import Web3 from 'web3'
 
-// Import link button
-import ButtonBack from '../components/backToYellow';
-
 // Import smart Contracts
-import GreenBond from '../contracts/BondRopsten.json';
+import GreenBond from '../../contracts/BondYellow.json';
+
+import Pagination from '../../components/Yellow/pagination';
 
 class YellowCompany extends Component {
     async componentDidMount() {
@@ -46,6 +44,8 @@ class YellowCompany extends Component {
             const symbol = await greenBond.methods.symbol().call()
             this.setState({ symbol })
 
+            const company = await greenBond.methods.getCompany().call()
+            this.setState({ company })
 
             const faceValue = await greenBond.methods.getFaceValue().call()
             this.setState({ faceValue })
@@ -70,6 +70,9 @@ class YellowCompany extends Component {
 
             const couponConfirmed = await greenBond.methods.couponDefined().call()
             this.setState({ couponConfirmed })
+
+            const issued = await greenBond.methods.issued().call()
+            this.setState({ issued })
 
             // Set coupon
             let coupon = await greenBond.methods.getCoupon().call()
@@ -129,13 +132,11 @@ class YellowCompany extends Component {
 
     payCoupon = (bonds) => {
         let amount = (bonds * this.state.coupon).toString()
-        console.log(amount)
         this.state.greenBond.methods.makeCouponPayment().send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
     }
 
     payPrincipal = (bonds) => {
         let amount = (bonds * this.state.faceValue).toString()
-        console.log(amount)
         this.state.greenBond.methods.payBackBond().send({ from: this.state.account, value: Web3.utils.toWei(amount, 'Wei') })
     }
 
@@ -145,7 +146,6 @@ class YellowCompany extends Component {
             account: '',
             contract: null,
             couponPaymentDates: [],
-
         }
     }
 
@@ -153,7 +153,17 @@ class YellowCompany extends Component {
         return (
             <>
                 <div className="container mr-auto ml-auto">
-                    <h2>Bond: {this.state.symbol}</h2>
+                    <Pagination />
+                    <div className="mt-4">
+                        {this.state.company == this.state.account
+                            ? <div className="alert alert-success text-center" role="alert">
+                                You're logged in as the borrowing company {this.state.company}
+                            </div>
+                            : <div className="alert alert-danger text-center" role="alert">
+                                This page is only for the borrowing company {this.state.company}
+                            </div>
+                        }
+                    </div>
                 </div>
 
                 <div className="container mr-auto ml-auto">
@@ -163,54 +173,102 @@ class YellowCompany extends Component {
                         </div>
                         : <div> </div>
                     }
-                    {this.state.couponConfirmed
-                        ? <div className="alert alert-success text-center" role="alert">
-                            Bond issue has been confirmed.
-                        </div>
-                        : <div className="alert alert-secondary text-center" role="alert">
-                            Bond issue has not been confirmed.
-                        </div>
-                    }
-                    <ButtonBack />
                 </div>
 
                 <hr />
+
                 <div className="container mr-auto ml-auto mb-5">
                     <h2>Pay coupon</h2>
-                    <form onSubmit={(event) => {
-                        event.preventDefault()
-                        const bonds = this.state.numberOfBonds
-                        this.payCoupon(bonds)
-                    }}>
-                        <input
-                            type='submit'
-                            className='btn btn-block btn-primary'
-                            value='Make coupon payment'
-                        />
-                    </form>
+                    <p><b>Coupon Dates:</b></p>
+                    <ul>{this.state.couponList}</ul>
+
+                    {this.state.account != this.state.company
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Functionality not available.
+                        </div>
+                        : <div> </div>
+                    }
+                    {!this.state.issued && this.state.account == this.state.company
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                            Bonds have not been issued yet.
+                        </div>
+                        : <div> </div>
+                    }
+                    {this.state.issued && this.state.account == this.state.company
+                        ? <div>
+                            {this.state.couponsPaid >= this.state.coupons
+                                ? <div className="alert alert-danger text-center" role="alert">
+                                    Note: all expected coupons have already been paid!
+                                </div>
+                                : <div></div>
+                            }
+                            <form onSubmit={(event) => {
+                                event.preventDefault()
+                                const bonds = this.state.numberOfBonds
+                                this.payCoupon(bonds)
+                            }}>
+                                <input
+                                    type='submit'
+                                    className='btn btn-block btn-primary'
+                                    value='Make coupon payment'
+                                />
+                            </form>
+                        </div>
+                        : <div> </div>
+                    }
+                   
+
                     <div className="mt-2">
                         <p>Coupons paid: {this.state.couponsPaid}/{this.state.coupons}</p>
                         <ul>{this.state.actualDatesList}</ul>
                     </div>
+
                 </div>
 
                 <hr />
 
                 <div className="container mr-auto ml-auto mb-5">
                     <h2>Pay Back Principal</h2>
-                    <p>Maturity Date: {this.state.maturityDate}</p>
-                    <form onSubmit={(event) => {
-                        event.preventDefault()
-                        const bonds = this.state.numberOfBonds
-                        this.payPrincipal(bonds)
-                    }}>
-                        <input
-                            type='submit'
-                            className='btn btn-block btn-primary'
-                            value='Make principal payment'
-                        />
+                    <p><b>Maturity Date:</b> {this.state.maturityDate}</p>
 
-                    </form>
+                    {this.state.account != this.state.company
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Functionality not available.
+                        </div>
+                        : <div> </div>
+                    }
+
+                    {this.state.principalPaymentMade
+                            ? <div className="alert alert-danger text-center" role="alert">
+                                Note: Principal was paid back on: <i> {this.state.principalPaymentDate} </i>
+                                </div>
+                            : <div></div>
+                    }
+                    {!this.state.issued && this.state.account == this.state.company
+                        ? <div className="alert alert-secondary text-center" role="alert">
+                        Bonds have not been issued yet. Can't make principal payment yet.
+                        </div>
+                        : <div></div>
+                    }
+                    {this.state.issued && this.state.account == this.state.company
+                        ? <div>
+                            <form onSubmit={(event) => {
+                                event.preventDefault()
+                                const bonds = this.state.numberOfBonds
+                                this.payPrincipal(bonds)
+                            }}>
+                                <input
+                                    type='submit'
+                                    className='btn btn-block btn-primary'
+                                    value='Make principal payment'
+                                />
+
+                            </form>
+                        </div>
+                        : <div> </div>
+                    }
+
+
 
                     <div className="mt-2">
                         {this.state.principalPaymentMade

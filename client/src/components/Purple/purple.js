@@ -178,7 +178,7 @@ class PurpleDetails extends Component {
 						</tr>
 						<tr>
 							<td>Term</td>
-							<td>{this.state.term} year</td>
+							<td>{this.state.term} days</td>
 						</tr>
 						<tr>
 							<td>Maturity Date</td>

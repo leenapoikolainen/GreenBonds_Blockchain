@@ -180,7 +180,7 @@ class YellowDetails extends Component {
 						</tr>
 						<tr>
 							<td>Term</td>
-							<td>{this.state.term} year</td>
+							<td>{this.state.term} years</td>
 						</tr>
 						<tr>
 							<td>Maturity Date</td>

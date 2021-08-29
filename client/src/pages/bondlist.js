@@ -308,7 +308,7 @@ class BondList extends Component {
                             <th>Status</th>
                             <th>Bidding</th>        
                             <th>Deadline</th>
-                            <th>Bond tokens hold</th>                                    
+                            <th>Your investement</th>                                    
                         </tr>
                     </thead>
                     <tbody>
@@ -324,6 +324,19 @@ class BondList extends Component {
                             }   
                             <td>{this.state.bidClosingTime}</td>  
                             <td>{this.state.tokensOwned}</td>                   
+                        </tr>
+                        <tr>
+                            <td><Link to="/yellow">Details</Link></td>
+                            <td>{this.state.company4}</td>
+                            <td>{this.state.project4}</td>
+                            <td>{this.state.symbol4}</td>
+                            <td>{this.state.status4}</td>
+                            {this.state.biddingOpen4
+                                ? <td className="text-success">Open</td>
+                                : <td className="text-danger">Closed</td>
+                            }   
+                            <td>{this.state.bidClosingTime4}</td>
+                            <td>{this.state.tokensOwned4}</td>   
                         </tr>
                         <tr>
                             <td><Link to="/blue">Details</Link></td>
@@ -351,25 +364,11 @@ class BondList extends Component {
                             <td>{this.state.bidClosingTime3}</td>
                             <td>{this.state.tokensOwned3}</td>   
                         </tr>
-                        <tr>
-                            <td><Link to="/yellow">Details</Link></td>
-                            <td>{this.state.company4}</td>
-                            <td>{this.state.project4}</td>
-                            <td>{this.state.symbol4}</td>
-                            <td>{this.state.status4}</td>
-                            {this.state.biddingOpen4
-                                ? <td className="text-success">Open</td>
-                                : <td className="text-danger">Closed</td>
-                            }   
-                            <td>{this.state.bidClosingTime4}</td>
-                            <td>{this.state.tokensOwned4}</td>   
-                        </tr>
                     </tbody>
                     </table>
                     </div>  
                 </div>
                 <hr />
-
             </>
 
 

@@ -85,6 +85,9 @@ class BondList extends Component {
             } else if (!confirmed) {
                 const status = "Unconfirmed"
                 this.setState({ status })
+            } else if (confirmed && tokens == 0) {
+                const status = "Waiting for issue"
+                this.setState({ status })
             } else if (tokens > 0) {
                 const status = "Active"
                 this.setState({ status })
@@ -146,6 +149,9 @@ class BondList extends Component {
             } else if (!confirmed) {
                 const status2 = "Unconfirmed"
                 this.setState({ status2 })
+            } else if (confirmed && tokens == 0) {
+                const status2 = "Waiting for issue"
+                this.setState({ status2 })
             } else if (tokens > 0) {
                 const status2 = "Active"
                 this.setState({ status2 })
@@ -205,6 +211,9 @@ class BondList extends Component {
             } else if (!confirmed) {
                 const status3= "Unconfirmed"
                 this.setState({ status3 })
+            } else if (confirmed && tokens == 0) {
+                const status3 = "Waiting for issue"
+                this.setState({ status3 })
             } else if (tokens > 0) {
                 const status3 = "Active"
                 this.setState({ status3 })
@@ -262,6 +271,9 @@ class BondList extends Component {
                 this.setState({ status4 })
             } else if (!confirmed) {
                 const status4= "Unconfirmed"
+                this.setState({ status4 })
+            } else if (confirmed && tokens == 0) {
+                const status4 = "Waiting for issue"
                 this.setState({ status4 })
             } else if (tokens > 0) {
                 const status4 = "Active"

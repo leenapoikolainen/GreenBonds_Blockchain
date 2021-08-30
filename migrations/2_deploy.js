@@ -67,8 +67,8 @@ let symbolBlue = "BLUE";
 let numberOfBondsBlue = 20;
 let minCouponBlue = 1;
 let maxCouponBlue = 5;
-let closingDateBlue = 1630234800; // Sunday August 29, 12:00
-let termBlue = 3; // 10 days
+let closingDateBlue = 1630321200; // Monday August 30, 12:00
+let termBlue = 2; // 2 days
 let couponsPerTermBlue = 1 // daily
 let baseURIBlue = "https://ipfs.io/ipfs/QmckYBJVzPM2ndTAnk4rrpVaQr5bq2ZPBRUture3xx6bLm";
 
@@ -78,7 +78,7 @@ let symbolPurple = "PURPLE";
 let numberOfBondsPurple = 10;
 let minCouponPurple = 1;
 let maxCouponPurple = 10;
-let closingDatePurple = 1630234800; // Sunday August 29, 12:00
+let closingDatePurple = 1630407600; // Tuesday August 31, 12:00
 let termPurple = 10; // 10 days
 let couponsPerTermPurple = 1 // daily
 let baseURIPurple = "https://ipfs.io/ipfs/QmVwes2xbTK98ms4Es737nqz3YRtuwy5CUpdauFGJVG9Lj";
@@ -109,6 +109,7 @@ let baseURIYellow = "https://ipfs.io/ipfs/QmNYTN7gbG7zrJkCa1ToDW6A8qJqqBKAf7JDfM
                   
 module.exports = async function (deployer) {
     // DEPLOYMENT TO GANACHE
+    
     /*
     // DAILY BONDS
     await deployer.deploy(BondBlue, companyGanache, nameBlue, symbolBlue, numberOfBondsBlue, 
@@ -117,6 +118,7 @@ module.exports = async function (deployer) {
     await deployer.deploy(BondPurple, companyGanache, namePurple, symbolPurple, numberOfBondsPurple, 
         minCouponPurple, maxCouponPurple, closingDatePurple, termPurple, couponsPerTermPurple, baseURIPurple)
 
+    
     // YEARLY BONDS
     await deployer.deploy(BondRed, companyGanache, nameRed, symbolRed, numberOfBondsRed, 
         minCouponRed, maxCouponRed, closingDateRed, termRed, couponsPerYearRed, baseURIRed);
@@ -148,37 +150,4 @@ module.exports = async function (deployer) {
     */
 }
 
-    // ROPSTEN BOND - daily
-    /*
-    await deployer.deploy(BondRopsten, company4, name4, symbol4, numberOfBondsSeeked4, minCoupon4, maxCoupon4, closingDate4,
-        term4, couponsPerTerm4, baseURI4);
-    */
    
-    // RED BOND - yearly
-    /*
-    await deployer.deploy(GreenBond2, company, name, symbol, numberOfBondsSeeked, minCoupon, maxCoupon, closingDate,
-        term, couponsPerYear, baseURI);
-    */    
-
-    //  BLUE - yearly
-    /*
-    await deployer.deploy(BondBlue, company2, name2, symbol2, numberOfBondsSeeked2, minCoupon2, maxCoupon2, closingDate2,
-        term2, couponsPerYear2, baseURI2);
-    */
-
-    // PURPLE BOND
-    /*
-    await deployer.deploy(BondPurple, company3, name3, symbol3, numberOfBondsSeeked3, minCoupon3, maxCoupon3, closingDate3,
-        term3, couponsPerTerm3, baseURI3)
-    
-    */
-    // GREEN VERIFICATION REPO
-    
-    /*
-    await deployer.deploy(GreenVerificationRepo);
-    */
-
-    // GREEN CERTIFICATION REPO - Deployed to Ropsten and Ganache on 19th August
-    /*
-    await deployer.deploy(GreenCertificationRepo)
-    */

@@ -1,5 +1,10 @@
+/**
+ * Replace ProjectID and wallet memonic with own details. 
+ * Store them somewhere safe and do not share with anyone.
+ */
 const { projectId, mnemonic } = require('./secret.json');
 const HDWalletProvider = require('@truffle/hdwallet-provider');
+
 /**
  * Use this file to configure your truffle project. It's seeded with some
  * common settings for different networks and features like migrations,
@@ -20,12 +25,6 @@ const HDWalletProvider = require('@truffle/hdwallet-provider');
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
-// const infuraKey = "fj4jll3k.....";
-//
-// const fs = require('fs');
-// const mnemonic = fs.readFileSync(".secret").toString().trim();
-
 module.exports = {
   plugins: [
     'truffle-plugin-verify',
@@ -35,9 +34,10 @@ module.exports = {
   api_keys: {
     etherscan: '159HVCR2QU83I399QCD7RZ8RB1TE6QSIWS'
   },
-  // ADDING THIS
-  //contracts_directory: './client/src/contracts/',
+
+  // Contract build directory
   contracts_build_directory: './client/src/contracts/',
+  
   /**
    * Networks define how you connect to your ethereum client and let you set the
    * defaults web3 uses to send transactions. If you don't specify one truffle

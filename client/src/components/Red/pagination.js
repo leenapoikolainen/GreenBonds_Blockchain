@@ -7,7 +7,7 @@ const Pagination = () => {
                 <div className="font-weight-bold">Bond Red</div>
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button className="btn btn-light">
-                        <Link to="/red" className="text-dark">Back Details</Link>
+                        <Link to="/red" className="text-dark">Bond Details</Link>
                     </button>
                     <button className="btn btn-light">
                         <Link to="/buyred" className="text-dark">Investor Page</Link>

@@ -17,12 +17,9 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#deployment">Deployment steps</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
@@ -67,4 +64,47 @@ This is an example of how to list things you need to use the software and how to
     npm install @openzeppelin/contracts
 
 * Metamask: Download from: https://metamask.io/download
- 
+
+### Deployment
+
+
+1. Install NPM packages
+   ```sh
+   npm install
+   ```
+2. Install truffle
+   ```sh
+   npm install -g truffle
+   ```
+3. Run Tests
+   * You need time traveling plugin for tests to work. Install:
+   ```sh
+   npm i ganache-time-traveler
+   ```
+   * Then run:
+   ```sh
+   npx truffle test
+   ```
+4. Deploy contracts to local Ganache blockchain
+   * Go to file migrations/2_deploy.js and edit the contract details
+   * Remove comments after 'DEPLOYMENT TO GANACHE' (leave Ropsten deployment commented as you need to setup own Ethereum wallet and Blockchain node details for that)
+   * Run:
+    ```sh
+   npx truffle migrate --reset
+   ```
+5. Start UI
+   * Install web3.js library
+   ```sh
+    npm install web3
+   ```
+   * Start the application
+    ```sh
+    cd client
+    npm run start
+    ```
+
+
+<!-- ACKNOWLEDGEMENTS -->
+## Acknowledgements
+* [Dapp University Tutorials](https://www.dappuniversity.com/)
+* [OpenZeppelin Library](https://openzeppelin.com/)

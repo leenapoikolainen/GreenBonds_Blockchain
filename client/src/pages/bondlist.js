@@ -78,6 +78,13 @@ class BondList extends Component {
             const cancelled = await bondRed.methods.cancelled().call()
             const confirmed = await bondRed.methods.couponDefined().call()
             const tokens = await bondRed.methods.bondCount().call()
+            const principalPaymentDate = await bondRed.methods.getActualPricipalPaymentDate().call()
+            let principalPaid;
+            if (principalPaymentDate == 0) {
+                principalPaid = false;
+            } else {
+                principalPaid = true;
+            }
 
             if (cancelled) {
                 const status = "Cancelled"
@@ -85,7 +92,7 @@ class BondList extends Component {
             } else if (!confirmed) {
                 const status = "Unconfirmed"
                 this.setState({ status })
-            } else if (confirmed && tokens == 0) {
+            } else if (confirmed && tokens == 0 && !principalPaid) {
                 const status = "Waiting for issue"
                 this.setState({ status })
             } else if (tokens > 0) {
@@ -142,6 +149,14 @@ class BondList extends Component {
             const cancelled = await bondBlue.methods.cancelled().call()
             const confirmed = await bondBlue.methods.couponDefined().call()
             const tokens = await bondBlue.methods.bondCount().call()
+            const principalPaymentDate = await bondBlue.methods.getActualPricipalPaymentDate().call()
+            let principalPaid;
+            if (principalPaymentDate == 0) {
+                principalPaid = false;
+            } else {
+                principalPaid = true;
+            }
+           
 
             if (cancelled) {
                 const status2 = "Cancelled"
@@ -149,7 +164,7 @@ class BondList extends Component {
             } else if (!confirmed) {
                 const status2 = "Unconfirmed"
                 this.setState({ status2 })
-            } else if (confirmed && tokens == 0) {
+            } else if (confirmed && tokens == 0 && !principalPaid) {
                 const status2 = "Waiting for issue"
                 this.setState({ status2 })
             } else if (tokens > 0) {
@@ -203,6 +218,13 @@ class BondList extends Component {
             const cancelled = await purpleBond.methods.cancelled().call()
             const confirmed = await purpleBond.methods.couponDefined().call()          
             const tokens = await purpleBond.methods.bondCount().call()
+            const principalPaymentDate = await purpleBond.methods.getActualPricipalPaymentDate().call()
+            let principalPaid;
+            if (principalPaymentDate == 0) {
+                principalPaid = false;
+            } else {
+                principalPaid = true;
+            }
 
 
             if (cancelled) {
@@ -211,7 +233,7 @@ class BondList extends Component {
             } else if (!confirmed) {
                 const status3= "Unconfirmed"
                 this.setState({ status3 })
-            } else if (confirmed && tokens == 0) {
+            } else if (confirmed && tokens == 0 && !principalPaid) {
                 const status3 = "Waiting for issue"
                 this.setState({ status3 })
             } else if (tokens > 0) {
@@ -265,6 +287,13 @@ class BondList extends Component {
             const cancelled = await yellowBond.methods.cancelled().call()
             const confirmed = await yellowBond.methods.couponDefined().call()         
             const tokens = await yellowBond.methods.bondCount().call()
+            const principalPaymentDate = await yellowBond.methods.getActualPricipalPaymentDate().call()
+            let principalPaid;
+            if (principalPaymentDate == 0) {
+                principalPaid = false;
+            } else {
+                principalPaid = true;
+            }
 
             if (cancelled) {
                 const status4 = "Cancelled"
@@ -272,7 +301,7 @@ class BondList extends Component {
             } else if (!confirmed) {
                 const status4= "Unconfirmed"
                 this.setState({ status4 })
-            } else if (confirmed && tokens == 0) {
+            } else if (confirmed && tokens == 0 && !principalPaid) {
                 const status4 = "Waiting for issue"
                 this.setState({ status4 })
             } else if (tokens > 0) {

@@ -45,6 +45,13 @@ import YellowIssuer from './pages/Yellow/yellowIssuer';
 import YellowCompany from './pages/Yellow/yellowCompany';
 import YellowRegulator from './pages/Yellow/yellowRegulator';
 
+// Pages for bond WHITE
+import White from './pages/White/white';
+import WhiteBuy from './pages/White/whiteBuy';
+import WhiteIssuer from './pages/White/whiteIssuer';
+import WhiteCompany from './pages/White/whiteCompany';
+import WhiteRegulator from './pages/White/whiteRegulator';
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -100,6 +107,12 @@ class App extends Component {
               <Route path='/issueryellow' component={YellowIssuer} />
               <Route path='/companyyellow' component={YellowCompany} />
               <Route path='/regulatoryellow' component={YellowRegulator} />
+
+              <Route path='/white' component={White} />
+              <Route path='/buywhite' component={WhiteBuy} />
+              <Route path='/issuerwhite' component={WhiteIssuer} />
+              <Route path='/companywhite' component={WhiteCompany} />
+              <Route path='/regulatorwhite' component={WhiteRegulator} />
 
             </Switch>
           </div>

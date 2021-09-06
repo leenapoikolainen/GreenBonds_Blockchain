@@ -6,6 +6,7 @@ import BondRed from '../contracts/BondRed.json';
 import BondPurple from '../contracts/BondPurple.json';
 import BondBlue from '../contracts/BondBlue.json';
 import BondYellow from '../contracts/BondYellow.json';
+import BondWhite from '../contracts/BondWhite.json';
 
 
 class BondList extends Component {
@@ -40,6 +41,7 @@ class BondList extends Component {
         const networkData2 = BondBlue.networks[networkId]
         const networkData3 = BondPurple.networks[networkId]
         const networkData4 = BondYellow.networks[networkId]
+        const networkData5 = BondWhite.networks[networkId]
 
         if (networkData) {
             // Get the Green bond contract
@@ -315,6 +317,74 @@ class BondList extends Component {
             const account = accounts[0];
             const tokensOwned4 = await yellowBond.methods.balanceOf(account).call()
 		    this.setState({ tokensOwned4 })
+        } 
+
+        if (networkData5) {
+            // Get the Green bond contract
+            const whiteBond = new web3.eth.Contract(BondWhite.abi, networkData5.address)
+            this.setState({ whiteBond })
+
+            // First bond
+            const company5 = await whiteBond.methods.getCompany().call()
+            this.setState({ company5 })
+
+            const project5 = await whiteBond.methods.name().call()
+            this.setState({ project5 })
+
+            const symbol5 = await whiteBond.methods.symbol().call()
+            this.setState({ symbol5 })
+
+            const bidClosingTimeStamp5 = await whiteBond.methods.getBidClosingTime().call()
+            const bidClosingTime5 = this.timeConverter(bidClosingTimeStamp5)
+            this.setState({ bidClosingTime5 })
+
+            const timeNow = Date.now()
+            let biddingOpen5
+            if (timeNow / 1000 - bidClosingTimeStamp5 > 0) {
+                biddingOpen5 = false
+            } else {
+                biddingOpen5 = true
+            }
+            this.setState({ biddingOpen5 })
+
+            const coupon5 = await whiteBond.methods.getCoupon().call()
+            this.setState({ coupon5 })
+
+            const maturityDateTimeStamp = await whiteBond.methods.getMaturityDate().call()
+            const maturityDate5 = this.timeConverter(maturityDateTimeStamp)
+            this.setState({ maturityDate5 })
+
+            const cancelled = await whiteBond.methods.cancelled().call()
+            const confirmed = await whiteBond.methods.couponDefined().call()         
+            const tokens = await whiteBond.methods.bondCount().call()
+            const principalPaymentDate = await whiteBond.methods.getActualPricipalPaymentDate().call()
+            let principalPaid;
+            if (principalPaymentDate == 0) {
+                principalPaid = false;
+            } else {
+                principalPaid = true;
+            }
+
+            if (cancelled) {
+                const status5 = "Cancelled"
+                this.setState({ status5 })
+            } else if (!confirmed) {
+                const status5= "Unconfirmed"
+                this.setState({ status5 })
+            } else if (confirmed && tokens == 0 && !principalPaid) {
+                const status5 = "Waiting for issue"
+                this.setState({ status5 })
+            } else if (tokens > 0) {
+                const status5 = "Active"
+                this.setState({ status5 })
+            } else {
+                const status5 = "Matured"
+                this.setState({ status5 })
+            }
+
+            const account = accounts[0];
+            const tokensOwned5 = await whiteBond.methods.balanceOf(account).call()
+		    this.setState({ tokensOwned5 })
         }  
     }
 
@@ -404,6 +474,19 @@ class BondList extends Component {
                             }   
                             <td>{this.state.bidClosingTime3}</td>
                             <td>{this.state.tokensOwned3}</td>   
+                        </tr>
+                        <tr>
+                            <td><Link to="/purple">Details</Link></td>
+                            <td>{this.state.company5}</td>
+                            <td>{this.state.project5}</td>
+                            <td>{this.state.symbol5}</td>
+                            <td>{this.state.status5}</td>
+                            {this.state.biddingOpen5
+                                ? <td className="text-success">Open</td>
+                                : <td className="text-danger">Closed</td>
+                            }   
+                            <td>{this.state.bidClosingTime5}</td>
+                            <td>{this.state.tokensOwned5}</td>   
                         </tr>
                     </tbody>
                     </table>

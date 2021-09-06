@@ -1,6 +1,7 @@
 // DAILY BONDS
 const BondPurple = artifacts.require("BondPurple");
 const BondBlue = artifacts.require("BondBlue");
+const BondWhite = artifacts.require("BondWhite")
 
 // YEARLY BONDS
 const BondRed = artifacts.require("BondRed");
@@ -60,11 +61,27 @@ let termYellow = 2; // 1 year
 let couponsPerYearYellow = 1 // annual
 let baseURIYellow = "https://ipfs.io/ipfs/QmNYTN7gbG7zrJkCa1ToDW6A8qJqqBKAf7JDfML6bgmDLT";
 
+// Additional daily bond
+// 4. WHITE
+let nameWhite = "Project Swiss";
+let symbolWhite = "WHITE";
+let numberOfBondsWhite = 10;
+let minCouponWhite = 1;
+let maxCouponWhite = 10;
+let closingDateWhite = 	1631098800; // Wednesday September 8, 12:00
+let termWhite = 5; // 5 days
+let couponsPerTermWhite = 1 // daily
+let baseURIWhite= "https://ipfs.io/ipfs/QmPBPBNLGAg75hrubbkL1Xf9qmgxsUbAAXgdThNMr8STfq";
+
                   
 module.exports = async function (deployer) {
     // DEPLOYMENT TO GANACHE
+   /*
+    await deployer.deploy(BondWhite, companyGanache, nameWhite, symbolWhite, numberOfBondsWhite,
+        minCouponWhite, maxCouponWhite, closingDateWhite, termWhite, couponsPerTermWhite, baseURIWhite)
     
-    /*
+    
+ 
     // DAILY BONDS
     await deployer.deploy(BondBlue, companyGanache, nameBlue, symbolBlue, numberOfBondsBlue, 
         minCouponBlue, maxCouponBlue, closingDateBlue, termBlue, couponsPerTermBlue ,baseURIBlue);
@@ -92,6 +109,12 @@ module.exports = async function (deployer) {
         minCouponPurple, maxCouponPurple, closingDatePurple, termPurple, couponsPerTermPurple, baseURIPurple)
     */
     
+    /*
+    await deployer.deploy(BondWhite, companyRopsten, nameWhite, symbolWhite, numberOfBondsWhite,
+        minCouponWhite, maxCouponWhite, closingDateWhite, termWhite, couponsPerTermWhite, baseURIWhite)
+    
+    */
+
     // YEARLY BONDS
     /*
     await deployer.deploy(BondRed, companyRopsten, nameRed, symbolRed, numberOfBondsRed, 

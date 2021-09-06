@@ -476,7 +476,7 @@ class BondList extends Component {
                             <td>{this.state.tokensOwned3}</td>   
                         </tr>
                         <tr>
-                            <td><Link to="/purple">Details</Link></td>
+                            <td><Link to="/white">Details</Link></td>
                             <td>{this.state.company5}</td>
                             <td>{this.state.project5}</td>
                             <td>{this.state.symbol5}</td>

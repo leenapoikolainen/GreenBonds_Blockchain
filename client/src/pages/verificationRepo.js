@@ -86,6 +86,7 @@ class VerificationRepo extends Component {
     }
 
     isVerifiedBond = async (symbol) => {
+        console.log(symbol)
         const verificationExists = await this.state.verificationRepository.methods.isVerifiedBond(symbol).call()
         let verificationStatus
 
@@ -119,6 +120,7 @@ class VerificationRepo extends Component {
             couponPaymentDates: [],
             finalScore: 0,
             resultList: [],
+            verificationStatus: '',
         }
     }
 
@@ -152,8 +154,8 @@ class VerificationRepo extends Component {
                         <h3>Has verification</h3>
                         <form onSubmit={(event) => {
                             event.preventDefault()
-                            const symbol = this.symbol.value
-                            this.isVerifiedBond(symbol)
+                            const bondSymbol = this.bondSymbol.value
+                            this.isVerifiedBond(bondSymbol)
                         }}>
                             <label for="symbol">Bond Symbol</label>
                             <input
@@ -161,7 +163,7 @@ class VerificationRepo extends Component {
                                 type='text'
                                 className='form-control mb-1'
                                 required
-                                ref={(input) => { this.symbol = input }}
+                                ref={(input) => { this.bondSymbol = input }}
                             />
                             <input
                                 type='submit'
@@ -179,8 +181,8 @@ class VerificationRepo extends Component {
                         <h3>Get verification address</h3>
                         <form onSubmit={(event) => {
                             event.preventDefault()
-                            const symbol = this.symbol.value
-                            this.getVerification(symbol)
+                            const symbol1 = this.symbol1.value
+                            this.getVerification(symbol1)
                         }}>
                             <label for="symbol">Bond Symbol</label>
                             <input
@@ -188,7 +190,7 @@ class VerificationRepo extends Component {
                                 type='text'
                                 className='form-control mb-1'
                                 required
-                                ref={(input) => { this.symbol = input }}
+                                ref={(input) => { this.symbol1 = input }}
                             />
                             <input
                                 type='submit'

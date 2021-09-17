@@ -1,6 +1,6 @@
 import './App.css';
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
 
 // Navbar and Footer
@@ -56,10 +56,8 @@ import WhiteRegulator from './pages/White/whiteRegulator';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 class App extends Component {
 
-  
   constructor(props) {
     super(props)
     this.state = {
@@ -114,6 +112,9 @@ class App extends Component {
               <Route path='/issuerwhite' component={WhiteIssuer} />
               <Route path='/companywhite' component={WhiteCompany} />
               <Route path='/regulatorwhite' component={WhiteRegulator} />
+
+              {/* add redirect for first page */}
+              <Redirect from="*" to="/" />
 
             </Switch>
           </div>

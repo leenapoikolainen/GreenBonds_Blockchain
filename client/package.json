@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "description": "Green Bond Platform",
-  "private": true,
+  "license": "MIT",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
@@ -55,5 +55,5 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "/greenbonds_production"
+  "homepage": "."
 }

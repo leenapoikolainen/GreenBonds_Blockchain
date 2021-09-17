@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 
-// Navbar
+// Navbar and Footer
 import Navbar from './components/Navbar/newNav';
+import Footer from './components/Footer/footer';
 
 // Pages
 import About from './pages/about';
@@ -72,7 +73,7 @@ class App extends Component {
           <div>
             <Navbar />
             <div className="container-fluid mt-5"></div>
-
+            
             <Switch>
               {/* Default path */}
               <Route path='/' exact component={About} />
@@ -116,6 +117,7 @@ class App extends Component {
 
             </Switch>
           </div>
+          <Footer />
         </Router>
       </>
     );

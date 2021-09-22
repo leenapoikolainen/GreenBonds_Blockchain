@@ -7,6 +7,8 @@ import {
     Nav,
 } from 'react-bootstrap'
 
+import { Link } from "react-router-dom";
+
 class Option3 extends Component {
     async componentDidMount() {
         await this.loadWeb3()
@@ -46,17 +48,31 @@ class Option3 extends Component {
         return (
             <Navbar bg="info" variant="dark" expand="lg" sticky="top">
         
-                <Navbar.Brand href="/">Green Bonds</Navbar.Brand>
-                <Navbar.Brand className=""><small>Logged in as: <br />{this.state.account}</small></Navbar.Brand>
+                <Navbar.Brand className="font-weight-bold">Green Bonds</Navbar.Brand>
+                <Navbar.Brand className="font-italic"><small>Logged in as: <br />{this.state.account}</small></Navbar.Brand>
                 
                 <Container>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
+                            <Link 
+                                className="text-white font-weight-bold mr-4 py-2 text-uppercase"
+                                to="/about">About</Link>
+                            <Link 
+                                className="text-white font-weight-bold mr-4 py-2 text-uppercase"
+                                to="/certifier">Certificates</Link>
+                            <Link 
+                                className="text-white font-weight-bold mr-4 py-2 text-uppercase"
+                                to="/verifications">Verifications</Link>
+                            <Link 
+                                className="text-white font-weight-bold mr-4 py-2 text-uppercase"
+                                to="/bondlist">Bond List</Link>
+                            {/*
                             <Nav.Link href="/about">About</Nav.Link>
                             <Nav.Link href="/certifier">Certificates</Nav.Link>
                             <Nav.Link href="/verifications">Verifications</Nav.Link>
                             <Nav.Link href="/bondlist">Bond List</Nav.Link>
+                            */}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

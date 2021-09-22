@@ -5,6 +5,7 @@ import {
     Navbar,
     Container,
     Nav,
+    NavDropdown
 } from 'react-bootstrap'
 
 import { Link } from "react-router-dom";
@@ -64,9 +65,28 @@ class Option3 extends Component {
                             <Link 
                                 className="text-white font-weight-bold mr-4 py-2 text-uppercase"
                                 to="/verifications">Verifications</Link>
-                            <Link 
-                                className="text-white font-weight-bold mr-4 py-2 text-uppercase"
-                                to="/bondlist">Bond List</Link>
+
+                            <NavDropdown title="BOND LIST" id="bond-dropdown" className="text-white font-weight-bold text-uppercase">
+                                <NavDropdown.Item>
+                                    <Link className="text-uppercase text-info" to="/bondlist">See All</Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item>
+                                    <Link className="text-uppercase text-info" to="/red">Red</Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    <Link className="text-uppercase text-info" to="/yellow">Yellow</Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    <Link className="text-uppercase text-info" to="/blue">Blue</Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    <Link className="text-uppercase text-info" to="/purple">Purple</Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    <Link className="text-uppercase text-info" to="/white">White</Link>
+                                </NavDropdown.Item>
+                            </NavDropdown>
                             {/*
                             <Nav.Link href="/about">About</Nav.Link>
                             <Nav.Link href="/certifier">Certificates</Nav.Link>

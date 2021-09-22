@@ -8,7 +8,7 @@ export default function Footer() {
           <div className="text-center">
             <div className="w-full">
              <h4 className="text-white">Green Bond Platform</h4>
-             <p className="text-white">For testing Green Bond issuance on public blockchain ledger.</p>
+             <p className="text-white">Supports Green Bonds and Green Accreditation on a public blockchain ledger.</p>
             </div>
           </div>     
           <hr className="my-6 border-white" />

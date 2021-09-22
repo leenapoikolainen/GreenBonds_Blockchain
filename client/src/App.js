@@ -1,7 +1,5 @@
 import './App.css';
-import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-
 
 // Navbar and Footer
 import Navbar from './components/Navbar/newNav';
@@ -117,76 +115,3 @@ function App() {
   );
 } export default App;
 
-{/*
-class App extends Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-    }
-  }
-
-  render() {
-    return (
-      <>
-        <Router>
-          <div>
-            <Navbar />
-            <div className="container-fluid mt-5"></div>
-            
-            <Switch>
-              
-              <Route path='/' exact component={About} />
-
-              <Route path='/about' component={About} />      
-              <Route path='/certifier' component={CertificationRepo} />
-              <Route path='/verifications' component={VerificationRepo} />
-
-              <Route path='/bondlist' component={BondList} />
-              <Route path='/bondlist2' component={BondListRopsten} />
-
-              <Route path='/blue' component={Blue} />
-              <Route path='/buyblue' component={BlueBuy} />
-              <Route path='/issuerblue' component={BlueIssuer} />
-              <Route path='/companyblue' component={BlueCompany} />
-              <Route path='/regulatorblue' component={BlueRegulator} />
-
-              <Route path='/purple' component={Purple} />
-              <Route path='/buypurple' component={PurpleBuy} />
-              <Route path='/issuerpurple' component={PurpleIssuer} />
-              <Route path='/companypurple' component={PurpleCompany} />
-              <Route path='/regulatorpurple' component={PurpleRegulator} />
-
-              <Route path='/red' component={Red} />
-              <Route path='/buyred' component={RedBuy} />
-              <Route path='/issuerred' component={RedIssuer} />
-              <Route path='/companyred' component={RedCompany} />
-              <Route path='/regulatorred' component={RedRegulator} />
-
-              <Route path='/yellow' component={Yellow} />
-              <Route path='/buyyellow' component={YellowBuy} />
-              <Route path='/issueryellow' component={YellowIssuer} />
-              <Route path='/companyyellow' component={YellowCompany} />
-              <Route path='/regulatoryellow' component={YellowRegulator} />
-
-              <Route path='/white' component={White} />
-              <Route path='/buywhite' component={WhiteBuy} />
-              <Route path='/issuerwhite' component={WhiteIssuer} />
-              <Route path='/companywhite' component={WhiteCompany} />
-              <Route path='/regulatorwhite' component={WhiteRegulator} />
-
-              
-              <Redirect from="*" to="/" />
-
-            </Switch>
-          </div>
-          <Footer />
-        </Router>
-      </>
-    );
-  }
-}
-
-export default App;
-
-*/}

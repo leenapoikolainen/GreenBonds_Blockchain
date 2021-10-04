@@ -82,6 +82,11 @@ This is an example of how to list things you need to use the software and how to
 3. Add your own MetaMask and Infure Project Id details
    - Create secret.json file to the root folder
    - Add two data points: "mnemonic" and "projectId"
+
+4. Install HD-wallet provider
+  ```sh
+  npm install @truffle/hdwallet-provider
+  ```
    
    
 5. Run Tests

@@ -63,7 +63,16 @@ This is an example of how to list things you need to use the software and how to
     ```sh
     npm install @openzeppelin/contracts
 
+* truffle/hdwallet-provider
+  - Use it to sign transactions for addresses derived
+  ```sh
+  npm install @truffle/hdwallet-provider
+
 * Metamask: Download from: https://metamask.io/download
+  - Create your metamaks account to deploy contracts to the public testnet
+
+* Infura Node Service: https://infura.io/ 
+  - Public node service to connect to Ethereum blockchain. You need to create your own project to add to the configuration details.
 
 ### Deployment
 
@@ -76,7 +85,18 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    npm install -g truffle
    ```
-3. Run Tests
+   
+3. Add your own MetaMask and Infura Project Id details
+   - Create secret.json file to the root folder
+   - Add two data points: "mnemonic" and "projectId"
+
+4. Install HD-wallet provider
+   ```sh
+   npm install @truffle/hdwallet-provider
+   ```
+   
+   
+5. Run Tests
    * You need time traveling plugin for tests to work. Install:
    ```sh
    npm i ganache-time-traveler

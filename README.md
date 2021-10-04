@@ -63,9 +63,16 @@ This is an example of how to list things you need to use the software and how to
     ```sh
     npm install @openzeppelin/contracts
 
+* truffle/hdwallet-provider
+  - Use it to sign transactions for addresses derived
+  ```sh
+  npm install @truffle/hdwallet-provider
+
 * Metamask: Download from: https://metamask.io/download
+  - Create your metamaks account to deploy contracts to the public testnet
 
 * Infura Node Service: https://infura.io/ 
+  - Public node service to connect to Ethereum blockchain. You need to create your own project to add to the configuration details.
 
 ### Deployment
 

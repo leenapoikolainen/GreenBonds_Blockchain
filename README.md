@@ -65,6 +65,8 @@ This is an example of how to list things you need to use the software and how to
 
 * Metamask: Download from: https://metamask.io/download
 
+* Infura Node Service: https://infura.io/ 
+
 ### Deployment
 
 
@@ -76,7 +78,13 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    npm install -g truffle
    ```
-3. Run Tests
+   
+3. Add your own MetaMask and Infure Project Id details
+   - Create secret.json file to the root folder
+   - Add two data points: "mnemonic" and "projectId"
+   
+   
+5. Run Tests
    * You need time traveling plugin for tests to work. Install:
    ```sh
    npm i ganache-time-traveler

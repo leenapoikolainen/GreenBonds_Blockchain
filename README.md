@@ -74,6 +74,8 @@ This is an example of how to list things you need to use the software and how to
 * Infura Node Service: https://infura.io/ 
   - Public node service to connect to Ethereum blockchain. You need to create your own project to add to the configuration details.
 
+* If you want to verify your contracts on Etherscan, fetch your Etherscan API-key
+
 ### Deployment
 
 
@@ -94,9 +96,9 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    npm install @truffle/hdwallet-provider
    ```
+5. Open Ganache blockchain on your computer
    
-   
-5. Run Tests
+6. Run Tests
    * You need time traveling plugin for tests to work. Install:
    ```sh
    npm i ganache-time-traveler
@@ -105,14 +107,14 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    npx truffle test
    ```
-4. Deploy contracts to local Ganache blockchain
-   * Go to file migrations/2_deploy.js and edit the contract details
+7. Deploy contracts to local Ganache blockchain
+   * Go to file migrations/2_deploy.js and edit the contract details (investment window closing date needs to be in the future)
    * Remove comments after 'DEPLOYMENT TO GANACHE' (leave Ropsten deployment commented as you need to setup own Ethereum wallet and Blockchain node details for that)
    * Run:
-    ```sh
+   ```sh
    npx truffle migrate --reset
    ```
-5. Start UI
+8. Start UI
    * Install web3.js library
    ```sh
     npm install web3
@@ -121,6 +123,18 @@ This is an example of how to list things you need to use the software and how to
     ```sh
     cd client
     npm run start
+    ```
+ 9. If you want to deploy contracts to Ropsten testnet
+    * Go to file migrations/2_deploy.js and edit the contract details (investment window closing date needs to be in the future)
+    * Remove comments for the Ropsten contract you want to deploy
+    * Run:
+    ```sh
+    npx truffle migrate --reset --network ropsten
+    ```
+    
+    * To verify on Ropesten testnet:
+    ```sh
+    npx truffle run verify {Contract Name, e.g. BondBlue} --network ropsten
     ```
 
 
